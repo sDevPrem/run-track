@@ -4,12 +4,15 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 
 object RunUtils {
 
@@ -81,6 +84,33 @@ object RunUtils {
             formattedString + ":" +
                     "${if (milliseconds < 10) "0" else ""}$milliseconds"
         }
+    }
+
+    fun getDistanceBetweenPathPoints(
+        pathPoint1: PathPoint,
+        pathPoint2: PathPoint
+    ): Int {
+        return if (pathPoint1 is PathPoint.LocationPoint && pathPoint2 is PathPoint.LocationPoint) {
+            val result = FloatArray(1)
+            Location.distanceBetween(
+                pathPoint1.latLng.latitude,
+                pathPoint1.latLng.longitude,
+                pathPoint2.latLng.latitude,
+                pathPoint2.latLng.longitude,
+                result
+            )
+            result[0].roundToInt()
+        } else 0
+    }
+
+    fun calculateDistanceCovered(pathPoints: List<PathPoint>): Int {
+        var distance = 0
+        pathPoints.forEachIndexed { i, pathPoint ->
+            if (i == pathPoints.size - 1)
+                return@forEachIndexed
+            distance += getDistanceBetweenPathPoints(pathPoint, pathPoints[i + 1])
+        }
+        return distance
     }
 
 }

@@ -79,8 +79,7 @@ fun CurrentRunScreen(
     viewModel: CurrentRunViewModel = hiltViewModel()
 ) {
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
-    val pathPoints by viewModel.pathPoints.collectAsStateWithLifecycle()
-    val isRunning by viewModel.isRunning.collectAsStateWithLifecycle()
+    val currentRunUIState by viewModel.currentRunState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         delay(ComposeUtils.slideDownInDuration + 200L)
@@ -88,7 +87,7 @@ fun CurrentRunScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Map(pathPoints = pathPoints)
+        Map(pathPoints = currentRunUIState.pathPoints)
         TopBar(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -105,8 +104,9 @@ fun CurrentRunScreen(
             RunningCard(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 24.dp),
-                isRunning = isRunning,
-                onPlayPauseButtonClick = viewModel::playPauseTracking
+                isRunning = currentRunUIState.isTracking,
+                onPlayPauseButtonClick = viewModel::playPauseTracking,
+                distanceRunInMeter = currentRunUIState.distanceInMeters
             )
         }
 
@@ -213,7 +213,7 @@ private fun TopBar(
 private fun RunningCard(
     modifier: Modifier = Modifier,
     durationInMillis: Long = 0L,
-    distanceRunInMeter: Long = 0,
+    distanceRunInMeter: Int = 0,
     caloriesBurnt: Int = 0,
     speedInKMH: Float = 0f,
     isRunning: Boolean = false,
