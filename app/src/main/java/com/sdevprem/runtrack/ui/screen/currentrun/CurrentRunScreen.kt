@@ -57,11 +57,13 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
 import com.sdevprem.runtrack.utils.RunUtils
 import kotlinx.coroutines.delay
+import java.math.RoundingMode
 
 @Composable
 @Preview(showBackground = true)
@@ -79,7 +81,7 @@ fun CurrentRunScreen(
     viewModel: CurrentRunViewModel = hiltViewModel()
 ) {
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
-    val currentRunUIState by viewModel.currentRunState.collectAsStateWithLifecycle()
+    val currentRunState by viewModel.currentRunState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         delay(ComposeUtils.slideDownInDuration + 200L)
@@ -87,7 +89,7 @@ fun CurrentRunScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Map(pathPoints = currentRunUIState.pathPoints)
+        Map(pathPoints = currentRunState.pathPoints)
         TopBar(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -104,9 +106,8 @@ fun CurrentRunScreen(
             RunningCard(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 24.dp),
-                isRunning = currentRunUIState.isTracking,
                 onPlayPauseButtonClick = viewModel::playPauseTracking,
-                distanceRunInMeter = currentRunUIState.distanceInMeters
+                currentRunState = currentRunState
             )
         }
 
@@ -213,10 +214,7 @@ private fun TopBar(
 private fun RunningCard(
     modifier: Modifier = Modifier,
     durationInMillis: Long = 0L,
-    distanceRunInMeter: Int = 0,
-    caloriesBurnt: Int = 0,
-    speedInKMH: Float = 0f,
-    isRunning: Boolean = false,
+    currentRunState: CurrentRunState,
     onPlayPauseButtonClick: () -> Unit = {}
 ) {
     ElevatedCard(
@@ -234,7 +232,7 @@ private fun RunningCard(
                 )
                 .fillMaxWidth(),
             durationInMillis = durationInMillis,
-            isRunning = isRunning,
+            isRunning = currentRunState.isTracking,
             onPlayPauseButtonClick = onPlayPauseButtonClick
         )
 
@@ -252,7 +250,7 @@ private fun RunningCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.running_boy),
                 unit = "km",
-                value = (distanceRunInMeter / 1000f).toString()
+                value = (currentRunState.distanceInMeters / 1000f).toString()
             )
             Box(
                 modifier = Modifier
@@ -268,7 +266,7 @@ private fun RunningCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.fire),
                 unit = "kcal",
-                value = caloriesBurnt.toString()
+                value = currentRunState.caloriesBurnt.toString()
             )
             Box(
                 modifier = Modifier
@@ -284,7 +282,7 @@ private fun RunningCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.bolt),
                 unit = "km/hr",
-                value = speedInKMH.toString()
+                value = currentRunState.speedInKMH.toString()
             )
         }
 
@@ -376,10 +374,13 @@ private fun RunningCardPreview() {
     var isRunning by rememberSaveable { mutableStateOf(true) }
     RunningCard(
         durationInMillis = 5400000,
-        distanceRunInMeter = 600,
-        caloriesBurnt = 634,
-        speedInKMH = 8.4f,
-        isRunning = isRunning,
+        currentRunState = CurrentRunState(
+            distanceInMeters = 600,
+            caloriesBurnt = 634,
+            speedInKMH = (6.935 /* m/s */ * 3.6).toBigDecimal().setScale(2, RoundingMode.HALF_UP)
+                .toFloat(),
+            isTracking = isRunning
+        ),
         onPlayPauseButtonClick = {
             isRunning = !isRunning
         }

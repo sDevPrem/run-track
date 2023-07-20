@@ -11,6 +11,7 @@ import com.sdevprem.runtrack.utils.RunUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import timber.log.Timber
+import java.math.RoundingMode
 import javax.inject.Inject
 
 class TrackingManager @Inject constructor(
@@ -57,7 +58,9 @@ class TrackingManager @Inject constructor(
                             pathPoint2 = pathPoints[pathPoints.size - 2]
                         )
                     distance
-                }
+                },
+                speedInKMH = (it.speed * 3.6f).toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_UP).toFloat()
             )
         }
     }
