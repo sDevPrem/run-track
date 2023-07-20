@@ -10,6 +10,7 @@ class CurrentRunViewModel @Inject constructor(
     private val trackingManager: TrackingManager
 ) : ViewModel() {
     val currentRunState = trackingManager.currentRunState
+    val runningDurationInMillis = trackingManager.trackingDurationInMs
 
     fun playPauseTracking() {
         if (currentRunState.value.isTracking)

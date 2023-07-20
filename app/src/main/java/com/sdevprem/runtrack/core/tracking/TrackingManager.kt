@@ -9,21 +9,31 @@ import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.utils.RunUtils
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import timber.log.Timber
 import java.math.RoundingMode
 import javax.inject.Inject
 
 class TrackingManager @Inject constructor(
-    private val locationTrackingManager: LocationTrackingManager
+    private val locationTrackingManager: LocationTrackingManager,
+    private val timeTracker: TimeTracker
 ) {
     private var isTracking = false
         set(value) {
             _currentRunState.update { it.copy(isTracking = value) }
             field = value
         }
+
     private val _currentRunState = MutableStateFlow(CurrentRunState())
     val currentRunState = _currentRunState
+
+    private val _trackingDurationInMs = MutableStateFlow(0L)
+    val trackingDurationInMs = _trackingDurationInMs.asStateFlow()
+
+    private val timeTrackerCallback = { timeElapsed: Long ->
+        _trackingDurationInMs.update { timeElapsed }
+    }
 
     private var isFirst = true
 
@@ -71,6 +81,7 @@ class TrackingManager @Inject constructor(
             isFirst = false
         }
         isTracking = true
+        timeTracker.startResumeTimer(timeTrackerCallback)
         locationTrackingManager.registerCallback(locationCallback)
     }
 
@@ -85,11 +96,13 @@ class TrackingManager @Inject constructor(
     fun pauseTracking() {
         isTracking = false
         locationTrackingManager.unRegisterCallback(locationCallback)
+        timeTracker.pauseTimer()
         addEmptyPolyLine()
     }
 
     fun stop() {
         postInitialValue()
+        timeTracker.stopTimer()
         locationTrackingManager.unRegisterCallback(locationCallback)
     }
 

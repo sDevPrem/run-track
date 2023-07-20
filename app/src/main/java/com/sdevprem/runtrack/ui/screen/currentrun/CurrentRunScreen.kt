@@ -82,6 +82,7 @@ fun CurrentRunScreen(
 ) {
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
     val currentRunState by viewModel.currentRunState.collectAsStateWithLifecycle()
+    val runningDurationInMillis by viewModel.runningDurationInMillis.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         delay(ComposeUtils.slideDownInDuration + 200L)
@@ -107,7 +108,8 @@ fun CurrentRunScreen(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 24.dp),
                 onPlayPauseButtonClick = viewModel::playPauseTracking,
-                currentRunState = currentRunState
+                currentRunState = currentRunState,
+                durationInMillis = runningDurationInMillis
             )
         }
 
