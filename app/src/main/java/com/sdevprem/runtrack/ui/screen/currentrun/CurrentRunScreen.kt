@@ -1,9 +1,13 @@
 package com.sdevprem.runtrack.ui.screen.currentrun
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -15,7 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -39,11 +46,18 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
 import com.sdevprem.runtrack.utils.RunUtils
@@ -61,23 +75,12 @@ private fun CurrentRunComposable() {
 
 @Composable
 fun CurrentRunScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: CurrentRunViewModel = hiltViewModel()
 ) {
-//    val singapore = LatLng(1.35, 103.87)
-//    val cameraPositionState = rememberCameraPositionState {
-//        position = CameraPosition.fromLatLngZoom(singapore, 10f)
-//    }
-
-    val mapUiSettings by remember {
-        mutableStateOf(
-            MapUiSettings(
-                mapToolbarEnabled = false,
-                compassEnabled = false,
-                zoomControlsEnabled = false
-            )
-        )
-    }
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
+    val pathPoints by viewModel.pathPoints.collectAsStateWithLifecycle()
+    val isRunning by viewModel.isRunning.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         delay(ComposeUtils.slideDownInDuration + 200L)
@@ -85,11 +88,7 @@ fun CurrentRunScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            uiSettings = mapUiSettings,
-//            cameraPositionState = cameraPositionState
-        )
+        Map(pathPoints = pathPoints)
         TopBar(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -106,9 +105,74 @@ fun CurrentRunScreen(
             RunningCard(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 24.dp),
+                isRunning = isRunning,
+                onPlayPauseButtonClick = viewModel::playPauseTracking
             )
         }
 
+    }
+}
+
+@Composable
+private fun BoxScope.Map(
+    modifier: Modifier = Modifier,
+    pathPoints: List<PathPoint>,
+) {
+    var isMapLoaded by remember { mutableStateOf(false) }
+    val cameraPositionState = rememberCameraPositionState {}
+    if (pathPoints.isNotEmpty() && pathPoints.last() is PathPoint.LocationPoint) {
+        cameraPositionState.position = CameraPosition
+            .fromLatLngZoom((pathPoints.last() as PathPoint.LocationPoint).latLng, 15f)
+    }
+    val mapUiSettings by remember {
+        mutableStateOf(
+            MapUiSettings(
+                mapToolbarEnabled = false,
+                compassEnabled = true,
+                zoomControlsEnabled = false
+            )
+        )
+    }
+
+    ShowMapLoadingProgressBar(isMapLoaded)
+    GoogleMap(
+        modifier = modifier.fillMaxSize(),
+        uiSettings = mapUiSettings,
+        cameraPositionState = cameraPositionState,
+        onMapLoaded = { isMapLoaded = true },
+
+        ) {
+        val latLngList = mutableListOf<LatLng>()
+        pathPoints.forEachIndexed { i, pathPoint ->
+            if (pathPoint is PathPoint.EmptyLocationPoint || i == pathPoints.size - 1) {
+                Polyline(
+                    points = latLngList.toList(),
+                    color = Color.Blue,
+                )
+                latLngList.clear()
+            } else if (pathPoint is PathPoint.LocationPoint) {
+                latLngList += pathPoint.latLng
+            }
+        }
+    }
+}
+
+@Composable
+private fun BoxScope.ShowMapLoadingProgressBar(
+    isMapLoaded: Boolean = false
+) {
+    AnimatedVisibility(
+        modifier = Modifier
+            .matchParentSize(),
+        visible = !isMapLoaded,
+        enter = EnterTransition.None,
+        exit = fadeOut(),
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .wrapContentSize()
+        )
     }
 }
 

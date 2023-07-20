@@ -68,7 +68,7 @@ fun LocationPermissionRequestDialog(
         },
         text = {
             Text(
-                text = "Location permission is needed to record you running status.",
+                text = "LocationPoint permission is needed to record you running status.",
                 style = MaterialTheme.typography.bodyMedium
             )
         },
