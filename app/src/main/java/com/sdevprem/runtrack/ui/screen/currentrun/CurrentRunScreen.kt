@@ -109,7 +109,8 @@ fun CurrentRunScreen(
                     .padding(vertical = 16.dp, horizontal = 24.dp),
                 onPlayPauseButtonClick = viewModel::playPauseTracking,
                 currentRunState = currentRunState,
-                durationInMillis = runningDurationInMillis
+                durationInMillis = runningDurationInMillis,
+                onFinish = viewModel::finishRun
             )
         }
 
@@ -217,7 +218,8 @@ private fun RunningCard(
     modifier: Modifier = Modifier,
     durationInMillis: Long = 0L,
     currentRunState: CurrentRunState,
-    onPlayPauseButtonClick: () -> Unit = {}
+    onPlayPauseButtonClick: () -> Unit = {},
+    onFinish: () -> Unit
 ) {
     ElevatedCard(
         modifier = modifier
@@ -235,7 +237,8 @@ private fun RunningCard(
                 .fillMaxWidth(),
             durationInMillis = durationInMillis,
             isRunning = currentRunState.isTracking,
-            onPlayPauseButtonClick = onPlayPauseButtonClick
+            onPlayPauseButtonClick = onPlayPauseButtonClick,
+            onFinish = onFinish
         )
 
         Row(
@@ -296,7 +299,8 @@ private fun RunningCardTime(
     modifier: Modifier = Modifier,
     durationInMillis: Long,
     isRunning: Boolean,
-    onPlayPauseButtonClick: () -> Unit
+    onPlayPauseButtonClick: () -> Unit,
+    onFinish: () -> Unit
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.weight(1f)) {
@@ -311,6 +315,29 @@ private fun RunningCardTime(
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
             )
+        }
+        if (!isRunning && durationInMillis > 0) {
+            IconButton(
+                onClick = onFinish,
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.error,
+                        shape = MaterialTheme.shapes.medium
+                    )
+                    .align(Alignment.CenterVertically)
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        id = R.drawable.ic_finish
+                    ),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(16.dp),
+                    tint = MaterialTheme.colorScheme.onError
+                )
+            }
+            Spacer(modifier = Modifier.size(16.dp))
         }
         IconButton(
             onClick = onPlayPauseButtonClick,
@@ -373,7 +400,7 @@ private fun RunningStatsItem(
 @Composable
 @Preview(showBackground = true)
 private fun RunningCardPreview() {
-    var isRunning by rememberSaveable { mutableStateOf(true) }
+    var isRunning by rememberSaveable { mutableStateOf(false) }
     RunningCard(
         durationInMillis = 5400000,
         currentRunState = CurrentRunState(
@@ -385,6 +412,7 @@ private fun RunningCardPreview() {
         ),
         onPlayPauseButtonClick = {
             isRunning = !isRunning
-        }
+        },
+        onFinish = {}
     )
 }
