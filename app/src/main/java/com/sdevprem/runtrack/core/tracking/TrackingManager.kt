@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import com.sdevprem.runtrack.core.tracking.service.TrackingServiceManager
 import com.sdevprem.runtrack.utils.RunUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,10 +15,13 @@ import kotlinx.coroutines.flow.update
 import timber.log.Timber
 import java.math.RoundingMode
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class TrackingManager @Inject constructor(
     private val locationTrackingManager: LocationTrackingManager,
-    private val timeTracker: TimeTracker
+    private val timeTracker: TimeTracker,
+    private val trackingServiceManager: TrackingServiceManager
 ) {
     private var isTracking = false
         set(value) {
@@ -52,6 +56,7 @@ class TrackingManager @Inject constructor(
         _currentRunState.update {
             CurrentRunState()
         }
+        _trackingDurationInMs.update { 0 }
     }
 
     private fun addPathPoints(location: Location?) = location?.let {
@@ -76,8 +81,11 @@ class TrackingManager @Inject constructor(
     }
 
     fun startResumeTracking() {
+        if (isTracking)
+            return
         if (isFirst) {
             postInitialValue()
+            trackingServiceManager.startService()
             isFirst = false
         }
         isTracking = true
@@ -101,9 +109,11 @@ class TrackingManager @Inject constructor(
     }
 
     fun stop() {
-        postInitialValue()
+        pauseTracking()
+        trackingServiceManager.stopService()
         timeTracker.stopTimer()
-        locationTrackingManager.unRegisterCallback(locationCallback)
+        postInitialValue()
+        isFirst = true
     }
 
 }

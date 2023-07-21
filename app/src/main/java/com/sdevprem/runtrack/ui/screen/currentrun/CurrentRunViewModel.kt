@@ -14,12 +14,8 @@ class CurrentRunViewModel @Inject constructor(
 
     fun playPauseTracking() {
         if (currentRunState.value.isTracking)
-            trackingManager.pauseTracking()
+        //TODO: create a stop button and pause the tracking here instead of stopping
+            trackingManager.stop()
         else trackingManager.startResumeTracking()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        trackingManager.stop()
     }
 }

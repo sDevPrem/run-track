@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.navigation.navDeepLink
 import com.sdevprem.runtrack.R
 
 sealed class Destination(val route: String) {
@@ -21,5 +22,12 @@ sealed class Destination(val route: String) {
 
     }
 
-    object CurrentRun : Destination("current_run")
+    object CurrentRun : Destination("current_run") {
+        val currentRunUriPattern = "https://runtrack.sdevprem.com/$route"
+        val deepLinks = listOf(
+            navDeepLink {
+                uriPattern = currentRunUriPattern
+            }
+        )
+    }
 }

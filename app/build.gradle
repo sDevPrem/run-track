@@ -89,7 +89,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
-
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 

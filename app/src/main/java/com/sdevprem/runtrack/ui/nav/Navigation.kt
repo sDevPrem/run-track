@@ -44,7 +44,8 @@ private fun SetupNavGraph(
         }
 
         composable(
-            route = CurrentRun.route
+            route = CurrentRun.route,
+            deepLinks = CurrentRun.deepLinks
         ) {
             CurrentRunScreen(navController)
         }
