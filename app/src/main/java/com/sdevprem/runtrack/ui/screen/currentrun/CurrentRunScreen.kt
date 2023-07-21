@@ -306,14 +306,13 @@ private fun RunningCardTime(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = "Running Time",
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Normal),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = RunUtils.getFormattedStopwatchTime(durationInMillis),
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
             )
         }
         if (!isRunning && durationInMillis > 0) {
@@ -386,12 +385,12 @@ private fun RunningStatsItem(
             Text(
                 text = value,
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
             )
             Text(
                 text = unit,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }
