@@ -1,7 +1,10 @@
 package com.sdevprem.runtrack.di
 
 import android.content.Context
+import androidx.room.Room
 import com.google.android.gms.location.LocationServices
+import com.sdevprem.runtrack.core.data.db.RunTrackDB
+import com.sdevprem.runtrack.core.data.db.RunTrackDB.Companion.RUN_TRACK_DB_NAME
 import com.sdevprem.runtrack.core.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.notification.DefaultNotificationHelper
@@ -27,6 +30,20 @@ abstract class AppModule {
             @ApplicationContext context: Context
         ) = LocationServices
             .getFusedLocationProviderClient(context)
+
+        @Provides
+        @Singleton
+        fun provideRunningDB(
+            @ApplicationContext context: Context
+        ): RunTrackDB = Room.databaseBuilder(
+            context,
+            RunTrackDB::class.java,
+            RUN_TRACK_DB_NAME
+        ).build()
+
+        @Singleton
+        @Provides
+        fun provideRunDao(db: RunTrackDB) = db.getRunDao()
     }
 
     @Binds

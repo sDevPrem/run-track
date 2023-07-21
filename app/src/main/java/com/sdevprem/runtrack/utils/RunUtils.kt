@@ -4,12 +4,17 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.graphics.Bitmap
 import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.geometry.Offset
 import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLngBounds
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -111,6 +116,55 @@ object RunUtils {
             distance += getDistanceBetweenPathPoints(pathPoint, pathPoints[i + 1])
         }
         return distance
+    }
+
+    fun takeSnapshot(
+        map: GoogleMap,
+        pathPoints: List<PathPoint>,
+        mapCenter: Offset,
+        onSnapshot: (Bitmap) -> Unit,
+        snapshotSideLength: Float
+    ) {
+        val boundsBuilder = LatLngBounds.Builder()
+        pathPoints.forEach {
+            if (it is PathPoint.LocationPoint)
+                boundsBuilder.include(it.latLng)
+        }
+        map.moveCamera(
+            CameraUpdateFactory
+                .newLatLngBounds(
+                    boundsBuilder.build(),
+                    snapshotSideLength.toInt(),
+                    snapshotSideLength.toInt(),
+                    (snapshotSideLength * 0.05).toInt()
+                )
+        )
+
+        //since move camera bounds them map in the specified LatLng
+        //from the center withing the bounding box (of side snapshotSideLength)
+        //so get the coordinate of the starting point of the box
+        val startOffset = mapCenter - Offset(snapshotSideLength / 2, snapshotSideLength / 2)
+
+        map.snapshot {
+            it?.let {
+                //crop to get a square image which fits the user path
+                val croppedBitmap = Bitmap.createBitmap(
+                    it,
+                    startOffset.x.toInt(), //start x
+                    startOffset.y.toInt(), //start y
+                    snapshotSideLength.toInt(), //width
+                    snapshotSideLength.toInt() //height
+                )
+                onSnapshot(croppedBitmap)
+            }
+        }
+    }
+
+    fun List<PathPoint>.lasLocationPoint(): PathPoint.LocationPoint? {
+        for (i in lastIndex downTo 0)
+            if (get(i) is PathPoint.LocationPoint)
+                return get(i) as PathPoint.LocationPoint
+        return null
     }
 
 }

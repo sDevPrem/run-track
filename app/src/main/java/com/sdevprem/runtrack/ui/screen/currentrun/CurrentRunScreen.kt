@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.currentrun
 
+import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
@@ -37,7 +38,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -53,7 +57,9 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapEffect
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.sdevprem.runtrack.R
@@ -62,6 +68,8 @@ import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
 import com.sdevprem.runtrack.utils.RunUtils
+import com.sdevprem.runtrack.utils.RunUtils.lasLocationPoint
+import com.sdevprem.runtrack.utils.RunUtils.takeSnapshot
 import kotlinx.coroutines.delay
 import java.math.RoundingMode
 
@@ -80,6 +88,7 @@ fun CurrentRunScreen(
     navController: NavController,
     viewModel: CurrentRunViewModel = hiltViewModel()
 ) {
+    var isRunningFinished by rememberSaveable { mutableStateOf(false) }
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
     val currentRunState by viewModel.currentRunState.collectAsStateWithLifecycle()
     val runningDurationInMillis by viewModel.runningDurationInMillis.collectAsStateWithLifecycle()
@@ -90,7 +99,13 @@ fun CurrentRunScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Map(pathPoints = currentRunState.pathPoints)
+        Map(
+            pathPoints = currentRunState.pathPoints,
+            isRunningFinished = isRunningFinished,
+        ) {
+            viewModel.finishRun(it)
+            navController.navigateUp()
+        }
         TopBar(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -110,24 +125,25 @@ fun CurrentRunScreen(
                 onPlayPauseButtonClick = viewModel::playPauseTracking,
                 currentRunState = currentRunState,
                 durationInMillis = runningDurationInMillis,
-                onFinish = viewModel::finishRun
+                onFinish = { isRunningFinished = true }
             )
         }
 
     }
 }
 
+@OptIn(MapsComposeExperimentalApi::class)
 @Composable
 private fun BoxScope.Map(
     modifier: Modifier = Modifier,
     pathPoints: List<PathPoint>,
+    isRunningFinished: Boolean,
+    onSnapshot: (Bitmap) -> Unit,
 ) {
+    var mapSize by remember { mutableStateOf(Size(0f, 0f)) }
+    var mapCenter by remember { mutableStateOf(Offset(0f, 0f)) }
     var isMapLoaded by remember { mutableStateOf(false) }
     val cameraPositionState = rememberCameraPositionState {}
-    if (pathPoints.isNotEmpty() && pathPoints.last() is PathPoint.LocationPoint) {
-        cameraPositionState.position = CameraPosition
-            .fromLatLngZoom((pathPoints.last() as PathPoint.LocationPoint).latLng, 15f)
-    }
     val mapUiSettings by remember {
         mutableStateOf(
             MapUiSettings(
@@ -138,9 +154,17 @@ private fun BoxScope.Map(
         )
     }
 
+    pathPoints.lasLocationPoint()?.let {
+        cameraPositionState.position = CameraPosition.fromLatLngZoom(it.latLng, 15f)
+    }
     ShowMapLoadingProgressBar(isMapLoaded)
     GoogleMap(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .drawBehind {
+                mapSize = size
+                mapCenter = center
+            },
         uiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
         onMapLoaded = { isMapLoaded = true },
@@ -157,6 +181,17 @@ private fun BoxScope.Map(
             } else if (pathPoint is PathPoint.LocationPoint) {
                 latLngList += pathPoint.latLng
             }
+        }
+
+        MapEffect(key1 = isRunningFinished) { map ->
+            if (isRunningFinished)
+                takeSnapshot(
+                    map,
+                    pathPoints,
+                    mapCenter,
+                    onSnapshot,
+                    snapshotSideLength = mapSize.width / 2
+                )
         }
     }
 }

@@ -2,6 +2,7 @@ buildscript {
     ext {
         nav_version = "2.6.0"
         hilt_version = "2.46.1"
+        room_version = "2.5.2"
     }
 }
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
