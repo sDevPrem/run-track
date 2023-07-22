@@ -77,9 +77,11 @@ class MainActivity : ComponentActivity() {
             )
         LaunchedEffect(key1 = Unit) {
             when {
-                hasAllPermission() -> permissionLauncher.launch(RunUtils.allPermissions)
+                hasAllPermission() -> return@LaunchedEffect
                 RunUtils.locationPermissions.any { shouldShowRequestPermissionRationale(it) } -> showRationale =
                     true
+
+                else -> permissionLauncher.launch(RunUtils.allPermissions)
             }
         }
     }
