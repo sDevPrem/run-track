@@ -3,6 +3,7 @@ package com.sdevprem.runtrack.ui.screen.home
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -50,22 +51,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.ui.nav.Destination
+import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.formatToHomeRunItem
 import java.util.Date
 
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
-    bottomPadding: Dp = 0.dp
+    bottomPadding: Dp = 0.dp,
+    navController: NavController
 ) {
     val runList by homeViewModel.runList.collectAsStateWithLifecycle()
+    val currentRunState by homeViewModel.currentRunState.collectAsStateWithLifecycle()
+    val durationInMillis by homeViewModel.durationInMillis.collectAsStateWithLifecycle()
     Column {
         TopBar(
             modifier = Modifier
                 .zIndex(1f)
         )
+        if (durationInMillis > 0)
+            CurrentRunningCard(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 28.dp)
+                    .clickable {
+                        navController.navigate(Destination.CurrentRun.route)
+                    },
+                durationInMillis = durationInMillis,
+                currentRunState = currentRunState,
+            )
         Row(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.surface)
@@ -135,6 +154,81 @@ fun HomeScreen(
     }
 
 
+}
+
+@Composable
+private fun CurrentRunningCard(
+    modifier: Modifier = Modifier,
+    currentRunState: CurrentRunState = CurrentRunState(),
+    durationInMillis: Long = 0
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(
+                    topStartPercent = 50,
+                    topEndPercent = 50,
+                    bottomEndPercent = 50,
+                    bottomStartPercent = 50
+                )
+            )
+            .padding(horizontal = 24.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = CircleShape
+                ),
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.running_boy),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp)
+                    .offset(x = 8.dp)
+            )
+        }
+        Spacer(modifier = Modifier.size(16.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+        ) {
+            Text(
+                text = "Current Session",
+                style = MaterialTheme.typography.labelMedium.copy(
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+            Spacer(modifier = Modifier.size(2.dp))
+            Text(
+                text = RunUtils.getFormattedStopwatchTime(durationInMillis),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+        Column(
+            modifier = Modifier
+        ) {
+            Text(
+                text = "${currentRunState.distanceInMeters / 1000f} km",
+                style = MaterialTheme.typography.labelMedium.copy(
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+            Spacer(modifier = Modifier.size(2.dp))
+            Text(
+                text = "${currentRunState.caloriesBurnt} kcal",
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+    }
 }
 
 @Composable
