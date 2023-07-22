@@ -34,7 +34,7 @@ private fun SetupNavGraph(
         composable(
             route = BottomNavDestination.Home.route
         ) {
-            HomeScreen()
+            HomeScreen(bottomPadding = paddingValues.calculateBottomPadding())
         }
 
         composable(

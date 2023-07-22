@@ -16,6 +16,9 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
@@ -166,5 +169,10 @@ object RunUtils {
                 return get(i) as PathPoint.LocationPoint
         return null
     }
+
+    fun Date.formatToHomeRunItem(): String =
+        SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+            .format(this)
+
 
 }
