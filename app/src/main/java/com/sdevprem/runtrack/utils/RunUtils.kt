@@ -170,7 +170,7 @@ object RunUtils {
         return null
     }
 
-    fun Date.formatToHomeRunItem(): String =
+    fun Date.getDisplayDate(): String =
         SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
             .format(this)
 

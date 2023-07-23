@@ -34,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -65,7 +66,7 @@ import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.utils.RunUtils
-import com.sdevprem.runtrack.utils.RunUtils.formatToHomeRunItem
+import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 import java.util.Date
 
 @Composable
@@ -77,6 +78,7 @@ fun HomeScreen(
     val runList by homeViewModel.runList.collectAsStateWithLifecycle()
     val currentRunState by homeViewModel.currentRunState.collectAsStateWithLifecycle()
     val durationInMillis by homeViewModel.durationInMillis.collectAsStateWithLifecycle()
+    var currentRun by homeViewModel.currentRunInfo
     Column {
         TopBar(
             modifier = Modifier
@@ -126,8 +128,22 @@ fun HomeScreen(
                     modifier = Modifier
                 )
             else
-                RecentRunList(runList = runList)
+                RecentRunList(runList = runList) {
+                    currentRun = it
+                }
         }
+    }
+    currentRun?.let {
+        RunInfoDialog(
+            run = it,
+            onDismiss = {
+                currentRun = null
+            },
+            onDelete = { run ->
+                currentRun = null
+                homeViewModel.deleteRun(run)
+            }
+        )
     }
 }
 
@@ -135,6 +151,7 @@ fun HomeScreen(
 private fun RecentRunList(
     modifier: Modifier = Modifier,
     runList: List<Run>,
+    onItemClick: (Run) -> Unit,
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -144,21 +161,21 @@ private fun RecentRunList(
             .wrapContentHeight()
     ) {
         Column {
-            Spacer(modifier = Modifier.size(16.dp))
-
             val maxIndex = minOf(2/*runList.lastIndex*/, runList.lastIndex)
             runList.subList(0, maxIndex + 1).forEachIndexed { i, run ->
 
-                Column {
+                Column(
+                    modifier = Modifier
+                ) {
                     RunItem(
                         run = run,
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
+                            .clickable { onItemClick(run) }
+                            .padding(16.dp)
                     )
                     if (i < maxIndex)
                         Box(
                             modifier = Modifier
-                                .padding(vertical = 16.dp)
                                 .height(1.dp)
                                 .width(200.dp)
                                 .background(
@@ -168,8 +185,6 @@ private fun RecentRunList(
                                 )
                                 .align(Alignment.CenterHorizontally)
                         )
-                    else
-                        Spacer(modifier = Modifier.size(16.dp))
                 }
             }
         }
@@ -506,7 +521,7 @@ private fun RunInfo(
 ) {
     Column(modifier) {
         Text(
-            text = run.timestamp.formatToHomeRunItem(),
+            text = run.timestamp.getDisplayDate(),
             style = MaterialTheme.typography.labelSmall.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Normal

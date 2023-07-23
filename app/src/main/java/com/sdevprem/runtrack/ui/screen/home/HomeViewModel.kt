@@ -1,19 +1,30 @@
 package com.sdevprem.runtrack.ui.screen.home
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.repository.AppRepository
 import com.sdevprem.runtrack.core.data.utils.RunSortOrder
 import com.sdevprem.runtrack.core.tracking.TrackingManager
+import com.sdevprem.runtrack.di.ApplicationScope
+import com.sdevprem.runtrack.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    repository: AppRepository,
+    private val repository: AppRepository,
     trackingManager: TrackingManager,
+    @ApplicationScope
+    private val externalScope: CoroutineScope,
+    @IoDispatcher
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     val runList = repository.getSortedAllRun(RunSortOrder.DATE)
         .stateIn(
@@ -23,5 +34,10 @@ class HomeViewModel @Inject constructor(
         )
     val durationInMillis = trackingManager.trackingDurationInMs
     val currentRunState = trackingManager.currentRunState
+    val currentRunInfo = mutableStateOf<Run?>(null)
+
+    fun deleteRun(run: Run) = externalScope.launch(ioDispatcher) {
+        repository.deleteRun(run)
+    }
 
 }

@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,7 +42,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -65,6 +63,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import com.sdevprem.runtrack.ui.common.RunningStatsItem
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
 import com.sdevprem.runtrack.utils.RunUtils
@@ -396,40 +395,6 @@ private fun RunningCardTime(
     }
 }
 
-@Composable
-private fun RunningStatsItem(
-    modifier: Modifier,
-    painter: Painter,
-    unit: String,
-    value: String
-) {
-    Row(modifier = modifier.padding(4.dp)) {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .size(20.dp)
-        )
-        Spacer(modifier = Modifier.size(12.dp))
-        Column(
-            modifier = Modifier
-                .padding(top = 8.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            Text(
-                text = value,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-            )
-            Text(
-                text = unit,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
-    }
-}
 
 @Composable
 @Preview(showBackground = true)
