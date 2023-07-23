@@ -7,7 +7,7 @@ import java.util.Date
 
 @Entity(tableName = "running_table")
 data class Run(
-    var img: Bitmap? = null,
+    var img: Bitmap,
     var timestamp: Date = Date(),
     var avgSpeedInKMH: Float = 0f,
     var distanceInMeters: Int = 0,

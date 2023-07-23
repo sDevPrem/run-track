@@ -477,7 +477,7 @@ private fun RunItem(
             .fillMaxWidth()
     ) {
         Image(
-            bitmap = run.img!!.asImageBitmap(),
+            bitmap = run.img.asImageBitmap(),
             contentDescription = null,
             modifier = Modifier
                 .size(70.dp),
