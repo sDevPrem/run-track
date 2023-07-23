@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,19 +38,32 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.ui.common.RunningStatsItem
 
 @Composable
-@Preview
 fun ProfileScreen(
     bottomPadding: Dp = 0.dp
 ) {
+    val viewModel: ProfileViewModel = hiltViewModel()
+    val state by viewModel.profileScreenState.collectAsStateWithLifecycle()
+    ProfileScreenContent(
+        bottomPadding = bottomPadding,
+        profileScreenState = state
+    )
+}
+
+@Composable
+private fun ProfileScreenContent(
+    bottomPadding: Dp = 0.dp,
+    profileScreenState: ProfileScreenState
+) {
     Column {
-        TopBar()
+        TopBar(state = profileScreenState)
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -91,9 +105,9 @@ fun ProfileScreen(
 }
 
 @Composable
-@Preview(showBackground = true)
 private fun TopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: ProfileScreenState
 ) {
     Box(
         modifier = modifier
@@ -114,7 +128,7 @@ private fun TopBar(
                 modifier = Modifier.background(color = Color.Transparent)
             )
             Spacer(modifier = Modifier.size(32.dp))
-            TotalProgressCard()
+            TotalProgressCard(state = state)
         }
     }
 
@@ -173,6 +187,7 @@ private fun TopBarProfile(
 @Composable
 private fun TotalProgressCard(
     modifier: Modifier = Modifier,
+    state: ProfileScreenState,
 ) {
     ElevatedCard(
         modifier = modifier,
@@ -218,7 +233,7 @@ private fun TotalProgressCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.running_boy),
                 unit = "km",
-                value = "103.2"
+                value = state.totalDistanceInKm.toString()
             )
             Box(
                 modifier = Modifier
@@ -234,7 +249,7 @@ private fun TotalProgressCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.stopwatch),
                 unit = "hr",
-                value = "15.2"
+                value = state.totalDurationInHr.toString()
             )
             Box(
                 modifier = Modifier
@@ -250,7 +265,7 @@ private fun TotalProgressCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.fire),
                 unit = "kcal",
-                value = "1.5k"
+                value = state.totalCaloriesBurnt.toString()
             )
         }
     }
