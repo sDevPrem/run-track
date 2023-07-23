@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RunningStatsItem(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     painter: Painter,
     unit: String,
     value: String

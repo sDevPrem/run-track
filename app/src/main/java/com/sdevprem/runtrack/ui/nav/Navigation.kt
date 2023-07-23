@@ -43,7 +43,7 @@ private fun SetupNavGraph(
         composable(
             route = BottomNavDestination.Profile.route
         ) {
-            ProfileScreen()
+            ProfileScreen(paddingValues.calculateBottomPadding())
         }
 
         composable(
