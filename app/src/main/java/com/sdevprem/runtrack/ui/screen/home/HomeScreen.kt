@@ -19,12 +19,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -118,6 +118,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .weight(1f)
+                .verticalScroll(rememberScrollState())
                 .padding(bottom = bottomPadding)
         ) {
             if (runList.isEmpty())
@@ -125,8 +126,7 @@ fun HomeScreen(
                     modifier = Modifier
                 )
             else
-                RecentRunList(runList = runList, bottomPadding = bottomPadding)
-            Spacer(modifier = Modifier.size(bottomPadding + 8.dp))
+                RecentRunList(runList = runList)
         }
     }
 }
@@ -135,21 +135,20 @@ fun HomeScreen(
 private fun RecentRunList(
     modifier: Modifier = Modifier,
     runList: List<Run>,
-    bottomPadding: Dp = 0.dp
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = modifier
             .padding(horizontal = 24.dp)
-            .padding(bottom = bottomPadding + 8.dp)
+            .padding(bottom = 8.dp)
             .wrapContentHeight()
     ) {
-        LazyColumn() {
-            item {
-                Spacer(modifier = Modifier.size(16.dp))
-            }
+        Column {
+            Spacer(modifier = Modifier.size(16.dp))
+
             val maxIndex = minOf(2/*runList.lastIndex*/, runList.lastIndex)
-            itemsIndexed(items = runList.subList(0, maxIndex + 1)) { i, run ->
+            runList.subList(0, maxIndex + 1).forEachIndexed { i, run ->
+
                 Column {
                     RunItem(
                         run = run,
