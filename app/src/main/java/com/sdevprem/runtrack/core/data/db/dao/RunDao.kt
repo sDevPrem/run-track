@@ -34,13 +34,13 @@ interface RunDao {
 
 
     //for statistics
-    @Query("SELECT SUM(durationInMillis) FROM running_table")
+    @Query("SELECT TOTAL(durationInMillis) FROM running_table")
     fun getTotalRunningDuration(): Flow<Long>
 
-    @Query("SELECT SUM(caloriesBurned) FROM running_table")
+    @Query("SELECT TOTAL(caloriesBurned) FROM running_table")
     fun getTotalCaloriesBurned(): Flow<Long>
 
-    @Query("SELECT SUM(distanceInMeters) FROM running_table")
+    @Query("SELECT TOTAL(distanceInMeters) FROM running_table")
     fun getTotalDistance(): Flow<Long>
 
     @Query("SELECT AVG(avgSpeedInKMH) FROM running_table")
