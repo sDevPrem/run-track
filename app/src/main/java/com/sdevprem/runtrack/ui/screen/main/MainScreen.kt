@@ -204,7 +204,7 @@ private fun RowScope.BottomNavItem(
         onClick = {
             navController.navigate(item.route) {
                 popUpTo(navController.graph.findStartDestination().id) {
-                    inclusive = true
+                    this.saveState = true
                 }
                 restoreState = true
                 launchSingleTop = true
