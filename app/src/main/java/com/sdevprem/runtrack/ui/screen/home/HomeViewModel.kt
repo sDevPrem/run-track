@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.repository.AppRepository
+import com.sdevprem.runtrack.core.data.repository.UserRepository
 import com.sdevprem.runtrack.core.data.utils.RunSortOrder
 import com.sdevprem.runtrack.core.tracking.TrackingManager
 import com.sdevprem.runtrack.di.ApplicationScope
@@ -24,7 +25,8 @@ class HomeViewModel @Inject constructor(
     @ApplicationScope
     private val externalScope: CoroutineScope,
     @IoDispatcher
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    userRepository: UserRepository
 ) : ViewModel() {
     val runList = repository.getSortedAllRun(RunSortOrder.DATE)
         .stateIn(
@@ -35,6 +37,12 @@ class HomeViewModel @Inject constructor(
     val durationInMillis = trackingManager.trackingDurationInMs
     val currentRunState = trackingManager.currentRunState
     val currentRunInfo = mutableStateOf<Run?>(null)
+    val doesUserExist = userRepository.doesUserExist
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Lazily,
+            null
+        )
 
     fun deleteRun(run: Run) = externalScope.launch(ioDispatcher) {
         repository.deleteRun(run)

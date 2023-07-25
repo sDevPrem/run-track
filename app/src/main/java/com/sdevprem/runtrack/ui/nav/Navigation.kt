@@ -9,6 +9,7 @@ import com.sdevprem.runtrack.ui.nav.Destination.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination.CurrentRun
 import com.sdevprem.runtrack.ui.screen.currentrun.CurrentRunScreen
 import com.sdevprem.runtrack.ui.screen.home.HomeScreen
+import com.sdevprem.runtrack.ui.screen.onboard.OnBoardScreen
 import com.sdevprem.runtrack.ui.screen.profile.ProfileScreen
 
 @Composable
@@ -51,6 +52,12 @@ private fun SetupNavGraph(
             deepLinks = CurrentRun.deepLinks
         ) {
             CurrentRunScreen(navController)
+        }
+
+        composable(
+            route = Destination.OnBoardingDestination.route
+        ) {
+            OnBoardScreen(navController = navController)
         }
     }
 

@@ -208,7 +208,7 @@ private fun TotalProgressCard(
                     .weight(1f)
             )
             Image(
-                painter = painterResource(id = R.drawable.arrow_toward_right),
+                painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
@@ -303,7 +303,7 @@ private fun SettingsItem(
                     .weight(1f)
             )
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.arrow_toward_right),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = null,
                 modifier = Modifier
                     .size(16.dp),

@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -60,15 +62,20 @@ private fun MainScreenPreview() {
 }
 
 @Composable
-fun MainScreen(navHostController: NavHostController) {
+fun MainScreen(
+    navHostController: NavHostController,
+    viewModel: MainScreenViewModel = hiltViewModel()
+) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
 
-    var shouldShowBottomNav by rememberSaveable { mutableStateOf(true) }
-    var shouldShowFAB by rememberSaveable { mutableStateOf(true) }
+    var shouldShowBottomNav by rememberSaveable { mutableStateOf(false) }
+    var shouldShowFAB by rememberSaveable { mutableStateOf(false) }
     var hideBottomItems by rememberSaveable { mutableStateOf(true) }
+    val doesUserExist by viewModel.doesUserExist.collectAsStateWithLifecycle()
 
     hideBottomItems = when (navBackStackEntry?.destination?.route) {
         Destination.CurrentRun.route -> true
+        Destination.OnBoardingDestination.route -> true
         else -> false
     }
 
@@ -87,14 +94,13 @@ fun MainScreen(navHostController: NavHostController) {
     Scaffold(
         bottomBar = {
             ComposeUtils.SlideDownAnimatedVisibility(
-                visible = shouldShowBottomNav,
-
-                ) {
+                visible = shouldShowBottomNav && doesUserExist == true,
+            ) {
                 BottomBar(navController = navHostController)
             }
         },
         floatingActionButton = {
-            ShrinkAnimatedVisibility(visible = shouldShowFAB) {
+            ShrinkAnimatedVisibility(visible = shouldShowFAB && doesUserExist == true) {
                 FloatingActionButton(
                     onClick = {
                         navHostController.navigate(

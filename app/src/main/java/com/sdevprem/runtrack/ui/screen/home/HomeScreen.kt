@@ -33,6 +33,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -75,10 +76,32 @@ fun HomeScreen(
     bottomPadding: Dp = 0.dp,
     navController: NavController
 ) {
+    val doesUserExist by homeViewModel.doesUserExist.collectAsStateWithLifecycle()
+    if (doesUserExist == true)
+        HomeScreenContent(
+            homeViewModel = homeViewModel,
+            navController = navController,
+            bottomPadding = bottomPadding
+        )
+
+    LaunchedEffect(key1 = doesUserExist) {
+        if (doesUserExist == false)
+            Destination.BottomNavDestination.Home
+                .navigateToOnBoardingScreen(navController)
+    }
+}
+
+@Composable
+fun HomeScreenContent(
+    homeViewModel: HomeViewModel,
+    bottomPadding: Dp = 0.dp,
+    navController: NavController
+) {
     val runList by homeViewModel.runList.collectAsStateWithLifecycle()
     val currentRunState by homeViewModel.currentRunState.collectAsStateWithLifecycle()
     val durationInMillis by homeViewModel.durationInMillis.collectAsStateWithLifecycle()
     var currentRun by homeViewModel.currentRunInfo
+
     Column {
         TopBar(
             modifier = Modifier
@@ -433,7 +456,7 @@ private fun WeeklyGoalCard(
                     .weight(1f)
             )
             Image(
-                painter = painterResource(id = R.drawable.arrow_toward_right),
+                painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
@@ -505,7 +528,7 @@ private fun RunItem(
             run = run
         )
         Image(
-            painter = painterResource(id = R.drawable.arrow_toward_right),
+            painter = painterResource(id = R.drawable.ic_arrow_forward),
             contentDescription = "More info",
             modifier = Modifier
                 .size(16.dp)
