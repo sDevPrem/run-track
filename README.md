@@ -38,7 +38,7 @@ between screens and deep linking.
 statistics.  
 [Google Maps API](https://developers.google.com/maps/documentation/android-sdk) : To track user's
 running activity such as speed, distance and path on
-the map.
+the map.  
 [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) : For injecting
 dependencies.
 
