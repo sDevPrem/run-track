@@ -33,7 +33,7 @@ while storing essential statistics using Room database.
 [Kotlin](https://kotlinlang.org/) : As the programming language.  
 [Jetpack Compose](https://developer.android.com/jetpack/compose) : To build UI.  
 [Jetpack Navigation](https://developer.android.com/jetpack/compose/navigation) : For navigation
-between screens and deep linking.
+between screens and deep linking.  
 [Room](https://developer.android.com/jetpack/androidx/releases/room) : To store and manage running
 statistics.  
 [Google Maps API](https://developers.google.com/maps/documentation/android-sdk) : To track user's
