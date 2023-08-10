@@ -35,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -69,19 +68,27 @@ import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 import java.util.Date
+import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
     bottomPadding: Dp = 0.dp,
     navController: NavController
 ) {
-    val doesUserExist by homeViewModel.doesUserExist.collectAsStateWithLifecycle()
+    val doesUserExist by viewModel.doesUserExist.collectAsStateWithLifecycle()
+    val state by viewModel.homeScreenState.collectAsStateWithLifecycle()
+    val durationInMillis by viewModel.durationInMillis.collectAsStateWithLifecycle()
+
     if (doesUserExist == true)
         HomeScreenContent(
-            homeViewModel = homeViewModel,
-            navController = navController,
-            bottomPadding = bottomPadding
+            bottomPadding = bottomPadding,
+            state = state,
+            durationInMillis = durationInMillis,
+            deleteRun = viewModel::deleteRun,
+            showRun = viewModel::showRun,
+            dismissDialog = viewModel::dismissRunDialog,
+            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) }
         )
 
     LaunchedEffect(key1 = doesUserExist) {
@@ -93,30 +100,29 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    homeViewModel: HomeViewModel,
     bottomPadding: Dp = 0.dp,
-    navController: NavController
+    state: HomeScreenState,
+    durationInMillis: Long,
+    deleteRun: (Run) -> Unit,
+    showRun: (Run) -> Unit,
+    dismissDialog: () -> Unit,
+    navigateToRunScreen: () -> Unit
 ) {
-    val runList by homeViewModel.runList.collectAsStateWithLifecycle()
-    val currentRunState by homeViewModel.currentRunState.collectAsStateWithLifecycle()
-    val durationInMillis by homeViewModel.durationInMillis.collectAsStateWithLifecycle()
-    var currentRun by homeViewModel.currentRunInfo
-
     Column {
         TopBar(
             modifier = Modifier
-                .zIndex(1f)
+                .zIndex(1f),
+            userName = state.user.name,
+            weeklyGoalInKm = state.user.weeklyGoalInKM,
         )
         if (durationInMillis > 0)
             CurrentRunningCard(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .padding(top = 28.dp)
-                    .clickable {
-                        navController.navigate(Destination.CurrentRun.route)
-                    },
+                    .clickable(onClick = navigateToRunScreen),
                 durationInMillis = durationInMillis,
-                currentRunState = currentRunState,
+                currentRunState = state.currentRunState,
             )
         Row(
             modifier = Modifier
@@ -146,26 +152,22 @@ fun HomeScreenContent(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = bottomPadding)
         ) {
-            if (runList.isEmpty())
+            if (state.runList.isEmpty())
                 EmptyRunListView(
                     modifier = Modifier
                 )
             else
-                RecentRunList(runList = runList) {
-                    currentRun = it
-                }
+                RecentRunList(
+                    runList = state.runList,
+                    onItemClick = showRun
+                )
         }
     }
-    currentRun?.let {
+    state.currentRunInfo?.let {
         RunInfoDialog(
             run = it,
-            onDismiss = {
-                currentRun = null
-            },
-            onDelete = { run ->
-                currentRun = null
-                homeViewModel.deleteRun(run)
-            }
+            onDismiss = dismissDialog,
+            onDelete = deleteRun
         )
     }
 }
@@ -344,7 +346,10 @@ private fun CurrentRunningCard(
 @Composable
 @Preview(showBackground = true)
 private fun TopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userName: String = "",
+    weeklyGoalInKm: Float = 00.0f,
+    userDistanceCoveredInCurrentWeek: Float = 00.0f
 ) {
     Box(
         modifier = modifier
@@ -362,12 +367,13 @@ private fun TopBar(
         Column(modifier = modifier.padding(horizontal = 24.dp)) {
             Spacer(modifier = Modifier.size(24.dp))
             TopBarProfile(
-                modifier = Modifier.background(color = Color.Transparent)
+                modifier = Modifier.background(color = Color.Transparent),
+                userName = userName
             )
             Spacer(modifier = Modifier.size(32.dp))
             WeeklyGoalCard(
-                weeklyGoalInKm = 50,
-                weeklyGoalDoneInKm = 23.5f
+                weeklyGoalInKm = weeklyGoalInKm.roundToInt(),
+                weeklyGoalDoneInKm = userDistanceCoveredInCurrentWeek
             )
         }
     }
@@ -376,7 +382,8 @@ private fun TopBar(
 
 @Composable
 private fun TopBarProfile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userName: String = ""
 ) {
     Row(
         modifier = modifier
@@ -398,7 +405,7 @@ private fun TopBarProfile(
                 withStyle(
                     style = SpanStyle(fontWeight = FontWeight.SemiBold),
                 ) {
-                    append("Andrew")
+                    append(userName)
                 }
             },
             style = MaterialTheme.typography.bodyMedium.copy(
@@ -482,7 +489,12 @@ private fun WeeklyGoalCard(
                     )
                 )
                 Text(
-                    text = "${weeklyGoalInKm - weeklyGoalDoneInKm} km left",
+                    text = "${
+                        (weeklyGoalInKm - weeklyGoalDoneInKm).coerceIn(
+                            0f,
+                            weeklyGoalInKm.toFloat()
+                        )
+                    } km left",
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -1,5 +1,8 @@
 package com.sdevprem.runtrack.ui.screen.profile
 
+import android.widget.Toast
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,12 +18,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -28,42 +36,67 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.ui.common.RunningStatsItem
+import com.sdevprem.runtrack.ui.utils.bottomBorder
 
 @Composable
 fun ProfileScreen(
     bottomPadding: Dp = 0.dp
 ) {
+    val context = LocalContext.current
     val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.profileScreenState.collectAsStateWithLifecycle()
     ProfileScreenContent(
         bottomPadding = bottomPadding,
-        profileScreenState = state
+        profileScreenState = state,
+        onDoneButtonClick = viewModel::saveUser,
+        onEditButtonClick = viewModel::startEditing,
+        onUserNameChange = viewModel::updateUserName
     )
+
+    LaunchedEffect(key1 = state.errorMsg) {
+        if (state.errorMsg.isNullOrBlank().not())
+            Toast.makeText(context, state.errorMsg.toString(), Toast.LENGTH_SHORT).show()
+    }
 }
 
 @Composable
 private fun ProfileScreenContent(
     bottomPadding: Dp = 0.dp,
-    profileScreenState: ProfileScreenState
+    profileScreenState: ProfileScreenState,
+    onEditButtonClick: () -> Unit,
+    onDoneButtonClick: () -> Unit,
+    onUserNameChange: (String) -> Unit
 ) {
     Column {
-        TopBar(state = profileScreenState)
+        TopBar(
+            state = profileScreenState,
+            onEditButtonClick = onEditButtonClick,
+            onDoneButtonClick = onDoneButtonClick,
+            onUserNameChange = onUserNameChange
+        )
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -107,7 +140,10 @@ private fun ProfileScreenContent(
 @Composable
 private fun TopBar(
     modifier: Modifier = Modifier,
-    state: ProfileScreenState
+    state: ProfileScreenState,
+    onDoneButtonClick: () -> Unit,
+    onEditButtonClick: () -> Unit,
+    onUserNameChange: (String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -125,7 +161,12 @@ private fun TopBar(
         Column(modifier = modifier.padding(horizontal = 24.dp)) {
             Spacer(modifier = Modifier.size(24.dp))
             TopBarProfile(
-                modifier = Modifier.background(color = Color.Transparent)
+                modifier = Modifier.background(color = Color.Transparent),
+                onDoneButtonClick = onDoneButtonClick,
+                onEditButtonClick = onEditButtonClick,
+                userName = state.user.name,
+                isEditMode = state.isEditMode,
+                onUserNameChange = onUserNameChange
             )
             Spacer(modifier = Modifier.size(32.dp))
             TotalProgressCard(state = state)
@@ -136,8 +177,14 @@ private fun TopBar(
 
 @Composable
 private fun TopBarProfile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userName: String,
+    isEditMode: Boolean,
+    onEditButtonClick: () -> Unit,
+    onDoneButtonClick: () -> Unit,
+    onUserNameChange: (String) -> Unit
 ) {
+    val userNameFocusRequester = remember { FocusRequester() }
     Box() {
         Column(
             modifier = modifier
@@ -151,35 +198,89 @@ private fun TopBarProfile(
                 modifier = Modifier
             )
             Spacer(modifier = Modifier.size(24.dp))
-            Image(
-                painter = painterResource(id = R.drawable.demo_profile_pic),
-                modifier = Modifier
-                    .size(84.dp)
-                    .clip(CircleShape),
-                contentDescription = "User profile"
-            )
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.demo_profile_pic),
+                    modifier = Modifier
+                        .size(84.dp)
+                        .clip(CircleShape),
+                    contentDescription = "User profile"
+                )
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = isEditMode,
+                    enter = scaleIn(),
+                    exit = scaleOut(),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                ) {
+                    IconButton(
+                        onClick = {},
+                        modifier = Modifier
+                            .requiredSize(24.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.tertiaryContainer,
+                                shape = CircleShape
+                            )
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                            contentDescription = "Change Photo",
+                            tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                            modifier = Modifier
+                                .size(16.dp)
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.size(12.dp))
 
-            Text(
-                text = "Andrew",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                ),
-                modifier = Modifier
+            val userNameStyle = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center
             )
+
+            if (!isEditMode)
+                Text(
+                    text = userName,
+                    style = userNameStyle
+                )
+            else
+                BasicTextField(
+                    value = userName,
+                    onValueChange = onUserNameChange,
+                    textStyle = userNameStyle,
+                    modifier = Modifier
+                        .focusRequester(userNameFocusRequester)
+                        .wrapContentHeight()
+                        .width(200.dp)
+                        .padding(bottom = 4.dp)
+                        .bottomBorder(1.dp, MaterialTheme.colorScheme.onPrimary),
+                    maxLines = 1,
+                    singleLine = true,
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary)
+                )
         }
+
         IconButton(
-            onClick = {},
+            onClick = if (!isEditMode) onEditButtonClick else onDoneButtonClick,
             modifier = Modifier
                 .size(24.dp)
                 .align(Alignment.TopEnd)
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                imageVector = if (!isEditMode)
+                    ImageVector.vectorResource(id = R.drawable.ic_edit)
+                else
+                    Icons.Default.Done,
                 contentDescription = "Settings",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
+        }
+
+        LaunchedEffect(key1 = isEditMode) {
+            if (isEditMode)
+                userNameFocusRequester.requestFocus()
         }
     }
 }

@@ -10,6 +10,24 @@ import com.sdevprem.runtrack.R
 
 sealed class Destination(val route: String) {
 
+    sealed class BottomNavDestination(
+        route: String,
+        @DrawableRes
+        val icon: Int
+    ) : Destination(route) {
+        @Composable
+        fun getIconVector() = ImageVector.vectorResource(icon)
+
+        object Home : BottomNavDestination(route = "home", icon = R.drawable.ic_menu) {
+            fun navigateToOnBoardingScreen(navController: NavController) {
+                navController.navigate(OnBoardingDestination.route)
+            }
+        }
+
+        object Profile : BottomNavDestination(route = "profile", icon = R.drawable.ic_profile)
+
+    }
+
     object OnBoardingDestination : Destination("on_boarding") {
         fun navigateToHome(navController: NavController) {
             navController.navigate(BottomNavDestination.Home.route) {
@@ -21,25 +39,6 @@ sealed class Destination(val route: String) {
         }
     }
 
-    sealed class BottomNavDestination(
-        route: String,
-        @DrawableRes
-        val icon: Int
-    ) : Destination(route) {
-
-        object Home : BottomNavDestination(route = "home", icon = R.drawable.ic_menu) {
-            fun navigateToOnBoardingScreen(navController: NavController) {
-                navController.navigate(OnBoardingDestination.route)
-            }
-        }
-
-        object Profile : BottomNavDestination(route = "profile", icon = R.drawable.ic_profile)
-
-        @Composable
-        fun getIconVector() = ImageVector.vectorResource(icon)
-
-    }
-
     object CurrentRun : Destination("current_run") {
         val currentRunUriPattern = "https://runtrack.sdevprem.com/$route"
         val deepLinks = listOf(
@@ -48,4 +47,11 @@ sealed class Destination(val route: String) {
             }
         )
     }
+
+    companion object {
+        fun navigateToCurrentRunScreen(navController: NavController) {
+            navController.navigate(CurrentRun.route)
+        }
+    }
+
 }
