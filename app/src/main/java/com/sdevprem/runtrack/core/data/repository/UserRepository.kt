@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.core.data.repository
 
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -21,6 +22,7 @@ class UserRepository @Inject constructor(
         val USER_GENDER = stringPreferencesKey("user_gender")
         val USER_WEIGHT_IN_KG = floatPreferencesKey("user_weight_in_kg")
         val USER_WEEKLY_GOAL_IN_KM = floatPreferencesKey("user_weekly_goal_in_km")
+        val USER_IMG_URI = stringPreferencesKey("user_img_uri")
     }
 
     val user = dataStore.data.map {
@@ -29,6 +31,7 @@ class UserRepository @Inject constructor(
             gender = Gender.valueOf(it[USER_GENDER] ?: Gender.MALE.name),
             weightInKg = it[USER_WEIGHT_IN_KG] ?: 0.0f,
             weeklyGoalInKM = it[USER_WEEKLY_GOAL_IN_KM] ?: 0.0f,
+            imgUri = it[USER_IMG_URI]?.toUri()
         )
     }
 
@@ -41,5 +44,6 @@ class UserRepository @Inject constructor(
         it[USER_GENDER] = user.gender.name
         it[USER_WEEKLY_GOAL_IN_KM] = user.weeklyGoalInKM
         it[USER_WEIGHT_IN_KG] = user.weightInKg
+        user.imgUri?.toString()?.let { stringUri -> it[USER_IMG_URI] = stringUri }
     }
 }

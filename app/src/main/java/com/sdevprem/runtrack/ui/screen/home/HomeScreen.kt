@@ -63,8 +63,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.core.data.model.User
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.ui.nav.Destination
+import com.sdevprem.runtrack.ui.utils.UserProfilePic
 import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 import java.util.Date
@@ -112,7 +114,7 @@ fun HomeScreenContent(
         TopBar(
             modifier = Modifier
                 .zIndex(1f),
-            userName = state.user.name,
+            user = state.user,
             weeklyGoalInKm = state.user.weeklyGoalInKM,
         )
         if (durationInMillis > 0)
@@ -347,7 +349,7 @@ private fun CurrentRunningCard(
 @Preview(showBackground = true)
 private fun TopBar(
     modifier: Modifier = Modifier,
-    userName: String = "",
+    user: User = User(),
     weeklyGoalInKm: Float = 00.0f,
     userDistanceCoveredInCurrentWeek: Float = 00.0f
 ) {
@@ -368,7 +370,7 @@ private fun TopBar(
             Spacer(modifier = Modifier.size(24.dp))
             TopBarProfile(
                 modifier = Modifier.background(color = Color.Transparent),
-                userName = userName
+                user = user
             )
             Spacer(modifier = Modifier.size(32.dp))
             WeeklyGoalCard(
@@ -383,19 +385,19 @@ private fun TopBar(
 @Composable
 private fun TopBarProfile(
     modifier: Modifier = Modifier,
-    userName: String = ""
+    user: User
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.demo_profile_pic),
+        UserProfilePic(
+            imgUri = user.imgUri,
+            gender = user.gender,
             modifier = Modifier
                 .size(40.dp)
-                .clip(CircleShape),
-            contentDescription = "User profile"
+                .clip(CircleShape)
         )
         Spacer(modifier = Modifier.size(12.dp))
 
@@ -405,7 +407,7 @@ private fun TopBarProfile(
                 withStyle(
                     style = SpanStyle(fontWeight = FontWeight.SemiBold),
                 ) {
-                    append(userName)
+                    append(user.name)
                 }
             },
             style = MaterialTheme.typography.bodyMedium.copy(

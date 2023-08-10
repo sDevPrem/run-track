@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.profile
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.core.data.repository.AppRepository
@@ -65,5 +66,9 @@ class ProfileViewModel @Inject constructor(
 
     fun updateUserName(newName: String) {
         _profileScreenState.update { it.copy(user = it.user.copy(name = newName)) }
+    }
+
+    fun updateImgUri(newUri: Uri?) {
+        _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri)) }
     }
 }
