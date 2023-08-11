@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -70,5 +71,16 @@ class ProfileViewModel @Inject constructor(
 
     fun updateImgUri(newUri: Uri?) {
         _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri)) }
+    }
+
+    fun cancelEditing() {
+        viewModelScope.launch {
+            _profileScreenState.update {
+                it.copy(
+                    user = userRepository.user.first(),
+                    isEditMode = false
+                )
+            }
+        }
     }
 }

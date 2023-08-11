@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -87,7 +88,8 @@ fun ProfileScreen(
         onDoneButtonClick = viewModel::saveUser,
         onEditButtonClick = viewModel::startEditing,
         onUserNameChange = viewModel::updateUserName,
-        onImgUriSelected = viewModel::updateImgUri
+        onImgUriSelected = viewModel::updateImgUri,
+        onCloseButtonClick = viewModel::cancelEditing
     )
 
     LaunchedEffect(key1 = state.errorMsg) {
@@ -103,7 +105,8 @@ private fun ProfileScreenContent(
     onEditButtonClick: () -> Unit,
     onDoneButtonClick: () -> Unit,
     onUserNameChange: (String) -> Unit,
-    onImgUriSelected: (Uri?) -> Unit
+    onImgUriSelected: (Uri?) -> Unit,
+    onCloseButtonClick: () -> Unit
 ) {
     Column {
         TopBar(
@@ -111,7 +114,8 @@ private fun ProfileScreenContent(
             onEditButtonClick = onEditButtonClick,
             onDoneButtonClick = onDoneButtonClick,
             onUserNameChange = onUserNameChange,
-            onImgUriSelected = onImgUriSelected
+            onImgUriSelected = onImgUriSelected,
+            onCloseButtonClick = onCloseButtonClick
         )
         Column(
             modifier = Modifier
@@ -160,7 +164,8 @@ private fun TopBar(
     onDoneButtonClick: () -> Unit,
     onEditButtonClick: () -> Unit,
     onUserNameChange: (String) -> Unit,
-    onImgUriSelected: (Uri?) -> Unit
+    onImgUriSelected: (Uri?) -> Unit,
+    onCloseButtonClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -184,7 +189,8 @@ private fun TopBar(
                 user = state.user,
                 isEditMode = state.isEditMode,
                 onUserNameChange = onUserNameChange,
-                onImgUriSelected = onImgUriSelected
+                onImgUriSelected = onImgUriSelected,
+                onCloseButtonClick = onCloseButtonClick
             )
             Spacer(modifier = Modifier.size(32.dp))
             TotalProgressCard(state = state)
@@ -201,7 +207,8 @@ private fun TopBarProfile(
     onEditButtonClick: () -> Unit,
     onDoneButtonClick: () -> Unit,
     onUserNameChange: (String) -> Unit,
-    onImgUriSelected: (Uri?) -> Unit
+    onImgUriSelected: (Uri?) -> Unit,
+    onCloseButtonClick: () -> Unit
 ) {
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -308,6 +315,26 @@ private fun TopBarProfile(
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isEditMode,
+            enter = scaleIn(),
+            exit = scaleOut(),
+            modifier = Modifier
+                .align(Alignment.TopStart)
+        ) {
+            IconButton(
+                onClick = onCloseButtonClick,
+                modifier = Modifier
+                    .size(24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Cancel Editing",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
 
