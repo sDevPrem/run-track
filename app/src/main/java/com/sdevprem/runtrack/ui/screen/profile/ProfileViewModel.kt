@@ -22,7 +22,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     appRepository: AppRepository,
     private val userRepository: UserRepository
-) : ViewModel() {
+) : ViewModel(), ProfileEditActions {
 
     private val _profileScreenState = MutableStateFlow(ProfileScreenState())
     val profileScreenState = combine(
@@ -52,9 +52,9 @@ class ProfileViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun startEditing() = _profileScreenState.update { it.copy(isEditMode = true) }
+    override fun startEditing() = _profileScreenState.update { it.copy(isEditMode = true) }
 
-    fun saveUser() {
+    override fun saveUser() {
         if (_profileScreenState.value.user.name.isBlank()) {
             _profileScreenState.update { it.copy(errorMsg = "Name can't be empty") }
             return
@@ -65,15 +65,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateUserName(newName: String) {
+    override fun updateUserName(newName: String) {
         _profileScreenState.update { it.copy(user = it.user.copy(name = newName)) }
     }
 
-    fun updateImgUri(newUri: Uri?) {
+    override fun updateImgUri(newUri: Uri?) {
         _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri)) }
     }
 
-    fun cancelEditing() {
+    override fun cancelEditing() {
         viewModelScope.launch {
             _profileScreenState.update {
                 it.copy(
