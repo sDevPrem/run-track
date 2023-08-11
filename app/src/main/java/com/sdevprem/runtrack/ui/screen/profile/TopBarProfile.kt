@@ -4,19 +4,17 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -155,6 +153,7 @@ private fun TopBarProfileContent(
                 exit = scaleOut() + fadeOut(),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
+                    .offset(x = 8.dp, y = 8.dp)
             ) {
                 IconButton(
                     onClick = {
@@ -163,7 +162,6 @@ private fun TopBarProfileContent(
                         )
                     },
                     modifier = Modifier
-                        .requiredSize(24.dp)
                         .background(
                             color = MaterialTheme.colorScheme.tertiaryContainer,
                             shape = CircleShape
@@ -208,11 +206,7 @@ private fun TopBarProfileContent(
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary)
             )
 
-        AnimatedVisibility(
-            visible = isEditMode && user.imgUri != null,
-            enter = expandVertically(),
-            exit = shrinkVertically()
-        ) {
+        AnimatedVisibility(isEditMode && user.imgUri != null) {
             Spacer(modifier = Modifier.size(4.dp))
 
             OutlinedButton(
