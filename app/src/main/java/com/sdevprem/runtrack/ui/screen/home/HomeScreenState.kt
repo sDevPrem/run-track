@@ -9,4 +9,5 @@ data class HomeScreenState(
     val currentRunState: CurrentRunState = CurrentRunState(),
     val currentRunInfo: Run? = null,
     val user: User = User(),
+    val distanceCoveredInKmInThisWeek: Float = 0.0f
 )

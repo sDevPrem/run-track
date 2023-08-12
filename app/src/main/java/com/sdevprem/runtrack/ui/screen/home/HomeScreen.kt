@@ -116,6 +116,7 @@ fun HomeScreenContent(
                 .zIndex(1f),
             user = state.user,
             weeklyGoalInKm = state.user.weeklyGoalInKM,
+            distanceCoveredInCurrentWeekInKm = state.distanceCoveredInKmInThisWeek
         )
         if (durationInMillis > 0)
             CurrentRunningCard(
@@ -188,9 +189,7 @@ private fun RecentRunList(
             .wrapContentHeight()
     ) {
         Column {
-            val maxIndex = minOf(2/*runList.lastIndex*/, runList.lastIndex)
-            runList.subList(0, maxIndex + 1).forEachIndexed { i, run ->
-
+            runList.forEachIndexed { i, run ->
                 Column(
                     modifier = Modifier
                 ) {
@@ -200,7 +199,7 @@ private fun RecentRunList(
                             .clickable { onItemClick(run) }
                             .padding(16.dp)
                     )
-                    if (i < maxIndex)
+                    if (i < runList.lastIndex)
                         Box(
                             modifier = Modifier
                                 .height(1.dp)
@@ -350,8 +349,8 @@ private fun CurrentRunningCard(
 private fun TopBar(
     modifier: Modifier = Modifier,
     user: User = User(),
-    weeklyGoalInKm: Float = 00.0f,
-    userDistanceCoveredInCurrentWeek: Float = 00.0f
+    weeklyGoalInKm: Float = 0f,
+    distanceCoveredInCurrentWeekInKm: Float = 0f
 ) {
     Box(
         modifier = modifier
@@ -375,7 +374,7 @@ private fun TopBar(
             Spacer(modifier = Modifier.size(32.dp))
             WeeklyGoalCard(
                 weeklyGoalInKm = weeklyGoalInKm.roundToInt(),
-                weeklyGoalDoneInKm = userDistanceCoveredInCurrentWeek
+                weeklyGoalDoneInKm = distanceCoveredInCurrentWeekInKm
             )
         }
     }

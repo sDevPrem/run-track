@@ -5,10 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.repository.AppRepository
 import com.sdevprem.runtrack.core.data.repository.UserRepository
-import com.sdevprem.runtrack.core.data.utils.RunSortOrder
 import com.sdevprem.runtrack.core.tracking.TrackingManager
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
+import com.sdevprem.runtrack.utils.setDateToWeekFirstDay
+import com.sdevprem.runtrack.utils.setDateToWeekLastDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,40 +32,36 @@ class HomeViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     userRepository: UserRepository
 ) : ViewModel() {
-    //    val runList = repository.getSortedAllRun(RunSortOrder.DATE)
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.Lazily,
-//            emptyList()
-//        )
+
     val durationInMillis = trackingManager.trackingDurationInMs
 
-    //    val currentRunState = trackingManager.currentRunState
-//    val currentRunInfo = mutableStateOf<Run?>(null)
     val doesUserExist = userRepository.doesUserExist
         .stateIn(
             viewModelScope,
             SharingStarted.Lazily,
             null
         )
-//    val user = userRepository.user
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.Lazily,
-//            User()
-//        )
+
+    private val calendar = Calendar.getInstance()
+
+    private val distanceCoveredInThisWeekInMeter = repository.getTotalDistance(
+        calendar.setDateToWeekFirstDay().time,
+        calendar.setDateToWeekLastDay().time
+    )
 
     private val _homeScreenState = MutableStateFlow(HomeScreenState())
     val homeScreenState = combine(
-        repository.getSortedAllRun(RunSortOrder.DATE),
+        repository.getRunByDescDateWithLimit(3),
         trackingManager.currentRunState,
         userRepository.user,
-        _homeScreenState
-    ) { runList, currentRunState, user, state ->
+        distanceCoveredInThisWeekInMeter,
+        _homeScreenState,
+    ) { runList, currentRunState, user, distanceInMeter, state ->
         state.copy(
             runList = runList,
             currentRunState = currentRunState,
             user = user,
+            distanceCoveredInKmInThisWeek = distanceInMeter / 1000f
         )
     }.stateIn(
         viewModelScope,
