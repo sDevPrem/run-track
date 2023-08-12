@@ -2,14 +2,19 @@ package com.sdevprem.runtrack.ui.screen.currentrun
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.repository.AppRepository
 import com.sdevprem.runtrack.core.tracking.TrackingManager
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
+import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.util.Date
@@ -22,13 +27,19 @@ class CurrentRunViewModel @Inject constructor(
     @ApplicationScope
     private val appCoroutineScope: CoroutineScope,
     @IoDispatcher
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
 ) : ViewModel() {
-    val currentRunState = trackingManager.currentRunState
+    val currentRunStateWithCalories = getCurrentRunStateWithCaloriesUseCase()
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Lazily,
+            CurrentRunStateWithCalories()
+        )
     val runningDurationInMillis = trackingManager.trackingDurationInMs
 
     fun playPauseTracking() {
-        if (currentRunState.value.isTracking)
+        if (currentRunStateWithCalories.value.currentRunState.isTracking)
             trackingManager.pauseTracking()
         else trackingManager.startResumeTracking()
     }
@@ -38,13 +49,15 @@ class CurrentRunViewModel @Inject constructor(
         saveRun(
             Run(
                 img = bitmap,
-                avgSpeedInKMH = currentRunState.value.distanceInMeters.toBigDecimal()
+                avgSpeedInKMH = currentRunStateWithCalories.value.currentRunState.distanceInMeters
+                    .toBigDecimal()
                     .multiply(3600.toBigDecimal())
                     .divide(runningDurationInMillis.value.toBigDecimal(), 2, RoundingMode.HALF_UP)
                     .toFloat(),
-                distanceInMeters = currentRunState.value.distanceInMeters,
+                distanceInMeters = currentRunStateWithCalories.value.currentRunState.distanceInMeters,
                 durationInMillis = runningDurationInMillis.value,
                 timestamp = Date(),
+                caloriesBurned = currentRunStateWithCalories.value.caloriesBurnt
             )
         )
         trackingManager.stop()

@@ -64,7 +64,7 @@ import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.model.User
-import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.ui.utils.UserProfilePic
 import com.sdevprem.runtrack.utils.RunUtils
@@ -125,7 +125,7 @@ fun HomeScreenContent(
                     .padding(top = 28.dp)
                     .clickable(onClick = navigateToRunScreen),
                 durationInMillis = durationInMillis,
-                currentRunState = state.currentRunState,
+                runState = state.currentRunStateWithCalories,
             )
         Row(
             modifier = Modifier
@@ -272,7 +272,7 @@ private fun EmptyRunListView(
 @Composable
 private fun CurrentRunningCard(
     modifier: Modifier = Modifier,
-    currentRunState: CurrentRunState = CurrentRunState(),
+    runState: CurrentRunStateWithCalories,
     durationInMillis: Long = 0
 ) {
     Row(
@@ -328,14 +328,14 @@ private fun CurrentRunningCard(
             modifier = Modifier
         ) {
             Text(
-                text = "${currentRunState.distanceInMeters / 1000f} km",
+                text = "${runState.currentRunState.distanceInMeters / 1000f} km",
                 style = MaterialTheme.typography.labelMedium.copy(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = "${currentRunState.caloriesBurnt} kcal",
+                text = "${runState.caloriesBurnt} kcal",
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = MaterialTheme.colorScheme.onPrimary
                 )

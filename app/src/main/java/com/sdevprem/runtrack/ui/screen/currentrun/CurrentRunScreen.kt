@@ -63,6 +63,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.ui.common.RunningStatsItem
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
@@ -89,7 +90,7 @@ fun CurrentRunScreen(
 ) {
     var isRunningFinished by rememberSaveable { mutableStateOf(false) }
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
-    val currentRunState by viewModel.currentRunState.collectAsStateWithLifecycle()
+    val runState by viewModel.currentRunStateWithCalories.collectAsStateWithLifecycle()
     val runningDurationInMillis by viewModel.runningDurationInMillis.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
@@ -99,7 +100,7 @@ fun CurrentRunScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Map(
-            pathPoints = currentRunState.pathPoints,
+            pathPoints = runState.currentRunState.pathPoints,
             isRunningFinished = isRunningFinished,
         ) {
             viewModel.finishRun(it)
@@ -122,7 +123,7 @@ fun CurrentRunScreen(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 24.dp),
                 onPlayPauseButtonClick = viewModel::playPauseTracking,
-                currentRunState = currentRunState,
+                runState = runState,
                 durationInMillis = runningDurationInMillis,
                 onFinish = { isRunningFinished = true }
             )
@@ -251,7 +252,7 @@ private fun TopBar(
 private fun RunningCard(
     modifier: Modifier = Modifier,
     durationInMillis: Long = 0L,
-    currentRunState: CurrentRunState,
+    runState: CurrentRunStateWithCalories,
     onPlayPauseButtonClick: () -> Unit = {},
     onFinish: () -> Unit
 ) {
@@ -270,7 +271,7 @@ private fun RunningCard(
                 )
                 .fillMaxWidth(),
             durationInMillis = durationInMillis,
-            isRunning = currentRunState.isTracking,
+            isRunning = runState.currentRunState.isTracking,
             onPlayPauseButtonClick = onPlayPauseButtonClick,
             onFinish = onFinish
         )
@@ -289,7 +290,7 @@ private fun RunningCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.running_boy),
                 unit = "km",
-                value = (currentRunState.distanceInMeters / 1000f).toString()
+                value = (runState.currentRunState.distanceInMeters / 1000f).toString()
             )
             Box(
                 modifier = Modifier
@@ -305,7 +306,7 @@ private fun RunningCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.fire),
                 unit = "kcal",
-                value = currentRunState.caloriesBurnt.toString()
+                value = runState.caloriesBurnt.toString()
             )
             Box(
                 modifier = Modifier
@@ -321,7 +322,7 @@ private fun RunningCard(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.bolt),
                 unit = "km/hr",
-                value = currentRunState.speedInKMH.toString()
+                value = runState.currentRunState.speedInKMH.toString()
             )
         }
 
@@ -402,12 +403,15 @@ private fun RunningCardPreview() {
     var isRunning by rememberSaveable { mutableStateOf(false) }
     RunningCard(
         durationInMillis = 5400000,
-        currentRunState = CurrentRunState(
-            distanceInMeters = 600,
-            caloriesBurnt = 634,
-            speedInKMH = (6.935 /* m/s */ * 3.6).toBigDecimal().setScale(2, RoundingMode.HALF_UP)
-                .toFloat(),
-            isTracking = isRunning
+        runState = CurrentRunStateWithCalories(
+            currentRunState = CurrentRunState(
+                distanceInMeters = 600,
+                speedInKMH = (6.935 /* m/s */ * 3.6).toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_UP)
+                    .toFloat(),
+                isTracking = isRunning
+            ),
+            caloriesBurnt = 532
         ),
         onPlayPauseButtonClick = {
             isRunning = !isRunning

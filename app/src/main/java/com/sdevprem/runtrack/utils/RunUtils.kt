@@ -143,7 +143,7 @@ object RunUtils {
                 )
         )
 
-        //since move camera bounds them map in the specified LatLng
+        //since move camera bounds the map in the specified LatLng
         //from the center withing the bounding box (of side snapshotSideLength)
         //so get the coordinate of the starting point of the box
         val startOffset = mapCenter - Offset(snapshotSideLength / 2, snapshotSideLength / 2)
@@ -173,6 +173,10 @@ object RunUtils {
     fun Date.getDisplayDate(): String =
         SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
             .format(this)
+
+    fun calculateCaloriesBurnt(distanceInMeters: Int, weightInKg: Float) =
+        //from chat gpt
+        (0.75f * weightInKg) * (distanceInMeters / 1000f)
 
 
 }

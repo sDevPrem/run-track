@@ -8,6 +8,7 @@ import com.sdevprem.runtrack.core.data.repository.UserRepository
 import com.sdevprem.runtrack.core.tracking.TrackingManager
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
+import com.sdevprem.runtrack.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import com.sdevprem.runtrack.utils.setDateToWeekFirstDay
 import com.sdevprem.runtrack.utils.setDateToWeekLastDay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +31,8 @@ class HomeViewModel @Inject constructor(
     private val externalScope: CoroutineScope,
     @IoDispatcher
     private val ioDispatcher: CoroutineDispatcher,
-    userRepository: UserRepository
+    userRepository: UserRepository,
+    getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
 ) : ViewModel() {
 
     val durationInMillis = trackingManager.trackingDurationInMs
@@ -52,14 +54,14 @@ class HomeViewModel @Inject constructor(
     private val _homeScreenState = MutableStateFlow(HomeScreenState())
     val homeScreenState = combine(
         repository.getRunByDescDateWithLimit(3),
-        trackingManager.currentRunState,
+        getCurrentRunStateWithCaloriesUseCase(),
         userRepository.user,
         distanceCoveredInThisWeekInMeter,
         _homeScreenState,
-    ) { runList, currentRunState, user, distanceInMeter, state ->
+    ) { runList, runState, user, distanceInMeter, state ->
         state.copy(
             runList = runList,
-            currentRunState = currentRunState,
+            currentRunStateWithCalories = runState,
             user = user,
             distanceCoveredInKmInThisWeek = distanceInMeter / 1000f
         )
