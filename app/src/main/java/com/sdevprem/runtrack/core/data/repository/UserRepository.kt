@@ -26,12 +26,13 @@ class UserRepository @Inject constructor(
     }
 
     val user = dataStore.data.map {
+        val dbImgUri = it[USER_IMG_URI]
         User(
             name = it[USER_NAME] ?: "",
             gender = Gender.valueOf(it[USER_GENDER] ?: Gender.MALE.name),
             weightInKg = it[USER_WEIGHT_IN_KG] ?: 0.0f,
             weeklyGoalInKM = it[USER_WEEKLY_GOAL_IN_KM] ?: 0.0f,
-            imgUri = it[USER_IMG_URI]?.toUri()
+            imgUri = if (dbImgUri.isNullOrBlank()) null else dbImgUri.toUri()
         )
     }
 
@@ -44,6 +45,6 @@ class UserRepository @Inject constructor(
         it[USER_GENDER] = user.gender.name
         it[USER_WEEKLY_GOAL_IN_KM] = user.weeklyGoalInKM
         it[USER_WEIGHT_IN_KG] = user.weightInKg
-        user.imgUri?.toString()?.let { stringUri -> it[USER_IMG_URI] = stringUri }
+        it[USER_IMG_URI] = user.imgUri?.toString() ?: ""
     }
 }
