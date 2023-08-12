@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.ui.common.RunningStatsItem
+import com.sdevprem.runtrack.ui.utils.RunningStatsItem
 
 @Composable
 fun ProfileScreen(

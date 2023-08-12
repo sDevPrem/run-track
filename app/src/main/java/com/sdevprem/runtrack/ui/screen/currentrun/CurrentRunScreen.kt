@@ -64,9 +64,9 @@ import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
-import com.sdevprem.runtrack.ui.common.RunningStatsItem
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
+import com.sdevprem.runtrack.ui.utils.RunningStatsItem
 import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.lasLocationPoint
 import com.sdevprem.runtrack.utils.RunUtils.takeSnapshot
