@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,23 +19,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,27 +43,39 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.ui.common.RunningStatsItem
+import com.sdevprem.runtrack.ui.utils.RunningStatsItem
 
 @Composable
 fun ProfileScreen(
     bottomPadding: Dp = 0.dp
 ) {
+    val context = LocalContext.current
     val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.profileScreenState.collectAsStateWithLifecycle()
+
     ProfileScreenContent(
         bottomPadding = bottomPadding,
-        profileScreenState = state
+        profileScreenState = state,
+        profileEditActions = viewModel
     )
+
+    LaunchedEffect(key1 = state.errorMsg) {
+        if (state.errorMsg.isNullOrBlank().not())
+            Toast.makeText(context, state.errorMsg.toString(), Toast.LENGTH_SHORT).show()
+    }
 }
 
 @Composable
 private fun ProfileScreenContent(
     bottomPadding: Dp = 0.dp,
-    profileScreenState: ProfileScreenState
+    profileScreenState: ProfileScreenState,
+    profileEditActions: ProfileEditActions
 ) {
     Column {
-        TopBar(state = profileScreenState)
+        TopBar(
+            state = profileScreenState,
+            profileEditActions = profileEditActions
+        )
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -107,7 +119,8 @@ private fun ProfileScreenContent(
 @Composable
 private fun TopBar(
     modifier: Modifier = Modifier,
-    state: ProfileScreenState
+    state: ProfileScreenState,
+    profileEditActions: ProfileEditActions
 ) {
     Box(
         modifier = modifier
@@ -125,63 +138,16 @@ private fun TopBar(
         Column(modifier = modifier.padding(horizontal = 24.dp)) {
             Spacer(modifier = Modifier.size(24.dp))
             TopBarProfile(
-                modifier = Modifier.background(color = Color.Transparent)
+                modifier = Modifier.background(color = Color.Transparent),
+                user = state.user,
+                isEditMode = state.isEditMode,
+                profileEditActions = profileEditActions
             )
             Spacer(modifier = Modifier.size(32.dp))
             TotalProgressCard(state = state)
         }
     }
 
-}
-
-@Composable
-private fun TopBarProfile(
-    modifier: Modifier = Modifier
-) {
-    Box() {
-        Column(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Profile",
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-            )
-            Spacer(modifier = Modifier.size(24.dp))
-            Image(
-                painter = painterResource(id = R.drawable.demo_profile_pic),
-                modifier = Modifier
-                    .size(84.dp)
-                    .clip(CircleShape),
-                contentDescription = "User profile"
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-
-            Text(
-                text = "Andrew",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                ),
-                modifier = Modifier
-            )
-        }
-        IconButton(
-            onClick = {},
-            modifier = Modifier
-                .size(24.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
-                contentDescription = "Settings",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-    }
 }
 
 @Composable
@@ -208,7 +174,7 @@ private fun TotalProgressCard(
                     .weight(1f)
             )
             Image(
-                painter = painterResource(id = R.drawable.arrow_toward_right),
+                painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
@@ -303,7 +269,7 @@ private fun SettingsItem(
                     .weight(1f)
             )
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.arrow_toward_right),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = null,
                 modifier = Modifier
                     .size(16.dp),

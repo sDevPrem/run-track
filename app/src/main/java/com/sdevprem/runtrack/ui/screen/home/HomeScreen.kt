@@ -33,8 +33,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -63,37 +63,69 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.core.data.model.User
+import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.ui.nav.Destination
+import com.sdevprem.runtrack.ui.utils.UserProfilePic
 import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 import java.util.Date
+import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
     bottomPadding: Dp = 0.dp,
     navController: NavController
 ) {
-    val runList by homeViewModel.runList.collectAsStateWithLifecycle()
-    val currentRunState by homeViewModel.currentRunState.collectAsStateWithLifecycle()
-    val durationInMillis by homeViewModel.durationInMillis.collectAsStateWithLifecycle()
-    var currentRun by homeViewModel.currentRunInfo
+    val doesUserExist by viewModel.doesUserExist.collectAsStateWithLifecycle()
+    val state by viewModel.homeScreenState.collectAsStateWithLifecycle()
+    val durationInMillis by viewModel.durationInMillis.collectAsStateWithLifecycle()
+
+    if (doesUserExist == true)
+        HomeScreenContent(
+            bottomPadding = bottomPadding,
+            state = state,
+            durationInMillis = durationInMillis,
+            deleteRun = viewModel::deleteRun,
+            showRun = viewModel::showRun,
+            dismissDialog = viewModel::dismissRunDialog,
+            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) }
+        )
+
+    LaunchedEffect(key1 = doesUserExist) {
+        if (doesUserExist == false)
+            Destination.BottomNavDestination.Home
+                .navigateToOnBoardingScreen(navController)
+    }
+}
+
+@Composable
+fun HomeScreenContent(
+    bottomPadding: Dp = 0.dp,
+    state: HomeScreenState,
+    durationInMillis: Long,
+    deleteRun: (Run) -> Unit,
+    showRun: (Run) -> Unit,
+    dismissDialog: () -> Unit,
+    navigateToRunScreen: () -> Unit
+) {
     Column {
         TopBar(
             modifier = Modifier
-                .zIndex(1f)
+                .zIndex(1f),
+            user = state.user,
+            weeklyGoalInKm = state.user.weeklyGoalInKM,
+            distanceCoveredInCurrentWeekInKm = state.distanceCoveredInKmInThisWeek
         )
         if (durationInMillis > 0)
             CurrentRunningCard(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .padding(top = 28.dp)
-                    .clickable {
-                        navController.navigate(Destination.CurrentRun.route)
-                    },
+                    .clickable(onClick = navigateToRunScreen),
                 durationInMillis = durationInMillis,
-                currentRunState = currentRunState,
+                runState = state.currentRunStateWithCalories,
             )
         Row(
             modifier = Modifier
@@ -123,26 +155,22 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = bottomPadding)
         ) {
-            if (runList.isEmpty())
+            if (state.runList.isEmpty())
                 EmptyRunListView(
                     modifier = Modifier
                 )
             else
-                RecentRunList(runList = runList) {
-                    currentRun = it
-                }
+                RecentRunList(
+                    runList = state.runList,
+                    onItemClick = showRun
+                )
         }
     }
-    currentRun?.let {
+    state.currentRunInfo?.let {
         RunInfoDialog(
             run = it,
-            onDismiss = {
-                currentRun = null
-            },
-            onDelete = { run ->
-                currentRun = null
-                homeViewModel.deleteRun(run)
-            }
+            onDismiss = dismissDialog,
+            onDelete = deleteRun
         )
     }
 }
@@ -161,9 +189,7 @@ private fun RecentRunList(
             .wrapContentHeight()
     ) {
         Column {
-            val maxIndex = minOf(2/*runList.lastIndex*/, runList.lastIndex)
-            runList.subList(0, maxIndex + 1).forEachIndexed { i, run ->
-
+            runList.forEachIndexed { i, run ->
                 Column(
                     modifier = Modifier
                 ) {
@@ -173,7 +199,7 @@ private fun RecentRunList(
                             .clickable { onItemClick(run) }
                             .padding(16.dp)
                     )
-                    if (i < maxIndex)
+                    if (i < runList.lastIndex)
                         Box(
                             modifier = Modifier
                                 .height(1.dp)
@@ -246,7 +272,7 @@ private fun EmptyRunListView(
 @Composable
 private fun CurrentRunningCard(
     modifier: Modifier = Modifier,
-    currentRunState: CurrentRunState = CurrentRunState(),
+    runState: CurrentRunStateWithCalories,
     durationInMillis: Long = 0
 ) {
     Row(
@@ -302,14 +328,14 @@ private fun CurrentRunningCard(
             modifier = Modifier
         ) {
             Text(
-                text = "${currentRunState.distanceInMeters / 1000f} km",
+                text = "${runState.currentRunState.distanceInMeters / 1000f} km",
                 style = MaterialTheme.typography.labelMedium.copy(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = "${currentRunState.caloriesBurnt} kcal",
+                text = "${runState.caloriesBurnt} kcal",
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -321,7 +347,10 @@ private fun CurrentRunningCard(
 @Composable
 @Preview(showBackground = true)
 private fun TopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User = User(),
+    weeklyGoalInKm: Float = 0f,
+    distanceCoveredInCurrentWeekInKm: Float = 0f
 ) {
     Box(
         modifier = modifier
@@ -339,12 +368,13 @@ private fun TopBar(
         Column(modifier = modifier.padding(horizontal = 24.dp)) {
             Spacer(modifier = Modifier.size(24.dp))
             TopBarProfile(
-                modifier = Modifier.background(color = Color.Transparent)
+                modifier = Modifier.background(color = Color.Transparent),
+                user = user
             )
             Spacer(modifier = Modifier.size(32.dp))
             WeeklyGoalCard(
-                weeklyGoalInKm = 50,
-                weeklyGoalDoneInKm = 23.5f
+                weeklyGoalInKm = weeklyGoalInKm.roundToInt(),
+                weeklyGoalDoneInKm = distanceCoveredInCurrentWeekInKm
             )
         }
     }
@@ -353,19 +383,20 @@ private fun TopBar(
 
 @Composable
 private fun TopBarProfile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.demo_profile_pic),
+        UserProfilePic(
+            imgUri = user.imgUri,
+            gender = user.gender,
             modifier = Modifier
                 .size(40.dp)
-                .clip(CircleShape),
-            contentDescription = "User profile"
+                .clip(CircleShape)
         )
         Spacer(modifier = Modifier.size(12.dp))
 
@@ -375,7 +406,7 @@ private fun TopBarProfile(
                 withStyle(
                     style = SpanStyle(fontWeight = FontWeight.SemiBold),
                 ) {
-                    append("Andrew")
+                    append(user.name)
                 }
             },
             style = MaterialTheme.typography.bodyMedium.copy(
@@ -433,7 +464,7 @@ private fun WeeklyGoalCard(
                     .weight(1f)
             )
             Image(
-                painter = painterResource(id = R.drawable.arrow_toward_right),
+                painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
@@ -459,7 +490,12 @@ private fun WeeklyGoalCard(
                     )
                 )
                 Text(
-                    text = "${weeklyGoalInKm - weeklyGoalDoneInKm} km left",
+                    text = "${
+                        (weeklyGoalInKm - weeklyGoalDoneInKm).coerceIn(
+                            0f,
+                            weeklyGoalInKm.toFloat()
+                        )
+                    } km left",
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -505,7 +541,7 @@ private fun RunItem(
             run = run
         )
         Image(
-            painter = painterResource(id = R.drawable.arrow_toward_right),
+            painter = painterResource(id = R.drawable.ic_arrow_forward),
             contentDescription = "More info",
             modifier = Modifier
                 .size(16.dp)

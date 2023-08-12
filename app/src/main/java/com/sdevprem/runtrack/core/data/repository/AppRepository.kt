@@ -4,6 +4,7 @@ import com.sdevprem.runtrack.core.data.db.dao.RunDao
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.utils.RunSortOrder
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,12 +24,18 @@ class AppRepository @Inject constructor(
         RunSortOrder.DISTANCE -> runDao.getAllRunSortByDistance()
     }
 
-    fun getTotalRunningDuration(): Flow<Long> = runDao.getTotalRunningDuration()
+    fun getRunByDescDateWithLimit(limit: Int) = runDao.getRunByDescDateWithLimit(limit)
 
-    fun getTotalCaloriesBurned(): Flow<Long> = runDao.getTotalCaloriesBurned()
+    fun getTotalRunningDuration(fromDate: Date? = null, toDate: Date? = null): Flow<Long> =
+        runDao.getTotalRunningDuration(fromDate, toDate)
 
-    fun getTotalDistance(): Flow<Long> = runDao.getTotalDistance()
+    fun getTotalCaloriesBurned(fromDate: Date? = null, toDate: Date? = null): Flow<Long> =
+        runDao.getTotalCaloriesBurned(fromDate, toDate)
 
-    fun getTotalAvgSpeed(): Flow<Float> = runDao.getTotalAvgSpeed()
+    fun getTotalDistance(fromDate: Date? = null, toDate: Date? = null): Flow<Long> =
+        runDao.getTotalDistance(fromDate, toDate)
+
+    fun getTotalAvgSpeed(fromDate: Date? = null, toDate: Date? = null): Flow<Float> =
+        runDao.getTotalAvgSpeed(fromDate, toDate)
 
 }

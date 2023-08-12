@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.sdevprem.runtrack.core.data.model.Run
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface RunDao {
@@ -32,18 +33,41 @@ interface RunDao {
     @Query("SELECT * FROM running_table ORDER BY distanceInMeters DESC")
     fun getAllRunSortByDistance(): Flow<List<Run>>
 
+    @Query("SELECT * FROM running_table ORDER BY timestamp DESC LIMIT :limit")
+    fun getRunByDescDateWithLimit(limit: Int): Flow<List<Run>>
+
 
     //for statistics
-    @Query("SELECT TOTAL(durationInMillis) FROM running_table")
-    fun getTotalRunningDuration(): Flow<Long>
+    @Query(
+        "SELECT TOTAL(durationInMillis) FROM running_table WHERE " +
+                "(:fromDate IS NULL OR timestamp >= :fromDate) AND " +
+                "(:toDate IS NULL OR timestamp <= :toDate) " +
+                "ORDER BY timestamp DESC"
+    )
+    fun getTotalRunningDuration(fromDate: Date?, toDate: Date?): Flow<Long>
 
-    @Query("SELECT TOTAL(caloriesBurned) FROM running_table")
-    fun getTotalCaloriesBurned(): Flow<Long>
+    @Query(
+        "SELECT TOTAL(caloriesBurned) FROM running_table WHERE " +
+                "(:fromDate IS NULL OR timestamp >= :fromDate) AND " +
+                "(:toDate IS NULL OR timestamp <= :toDate) " +
+                "ORDER BY timestamp DESC"
+    )
+    fun getTotalCaloriesBurned(fromDate: Date?, toDate: Date?): Flow<Long>
 
-    @Query("SELECT TOTAL(distanceInMeters) FROM running_table")
-    fun getTotalDistance(): Flow<Long>
+    @Query(
+        "SELECT TOTAL(distanceInMeters) FROM running_table WHERE " +
+                "(:fromDate IS NULL OR timestamp >= :fromDate) AND " +
+                "(:toDate IS NULL OR timestamp <= :toDate) " +
+                "ORDER BY timestamp DESC"
+    )
+    fun getTotalDistance(fromDate: Date?, toDate: Date?): Flow<Long>
 
-    @Query("SELECT AVG(avgSpeedInKMH) FROM running_table")
-    fun getTotalAvgSpeed(): Flow<Float>
+    @Query(
+        "SELECT AVG(avgSpeedInKMH) FROM running_table WHERE " +
+                "(:fromDate IS NULL OR timestamp >= :fromDate) AND " +
+                "(:toDate IS NULL OR timestamp <= :toDate) " +
+                "ORDER BY timestamp DESC"
+    )
+    fun getTotalAvgSpeed(fromDate: Date?, toDate: Date?): Flow<Float>
 
 }

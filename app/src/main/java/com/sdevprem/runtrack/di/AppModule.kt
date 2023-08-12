@@ -1,6 +1,12 @@
 package com.sdevprem.runtrack.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.google.android.gms.location.LocationServices
 import com.sdevprem.runtrack.core.data.db.RunTrackDB
@@ -17,6 +23,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.plus
 import javax.inject.Singleton
 
 @Module
@@ -24,6 +34,9 @@ import javax.inject.Singleton
 abstract class AppModule {
 
     companion object {
+
+        private const val USER_PREFERENCES_FILE_NAME = "user_preferences"
+
         @Singleton
         @Provides
         fun provideFusedLocationProviderClient(
@@ -44,6 +57,21 @@ abstract class AppModule {
         @Singleton
         @Provides
         fun provideRunDao(db: RunTrackDB) = db.getRunDao()
+
+        @Provides
+        @Singleton
+        fun providesPreferenceDataStore(
+            @ApplicationContext context: Context,
+            @ApplicationScope scope: CoroutineScope,
+            @IoDispatcher ioDispatcher: CoroutineDispatcher
+        ): DataStore<Preferences> =
+            PreferenceDataStoreFactory.create(
+                corruptionHandler = ReplaceFileCorruptionHandler(
+                    produceNewData = { emptyPreferences() }
+                ),
+                produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES_FILE_NAME) },
+                scope = scope.plus(ioDispatcher + SupervisorJob())
+            )
     }
 
     @Binds
@@ -63,5 +91,6 @@ abstract class AppModule {
     abstract fun provideNotificationHelper(
         notificationHelper: DefaultNotificationHelper
     ): NotificationHelper
+
 
 }
