@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.profile
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,6 +40,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -112,9 +114,16 @@ private fun TopBarProfileContent(
     isEditMode: Boolean,
     profileEditActions: ProfileEditActions
 ) {
+    val context = LocalContext.current
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { it?.let(profileEditActions::updateImgUri) }
+        onResult = {
+            it?.let {
+                context.contentResolver
+                    .takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                profileEditActions.updateImgUri(it)
+            }
+        }
     )
     val userNameFocusRequester = remember { FocusRequester() }
 
