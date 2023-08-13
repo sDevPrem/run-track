@@ -65,6 +65,25 @@ pattern.
 HLD of tracking architecture is shown in the below image:
 ![](image/tracking_architecture.png)
 
+## Installation
+
+Simple clone this app and open in Android Studio.
+
+### Google Map Integration
+
+Do these steps if you want to show google maps. The tracking
+functionalities will work as usual even if you don't do
+these step.
+
+1. Create and Get Google Maps API key by using this official
+   [guide](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
+2. Open `local.properties` file.
+3. Enter your API key like this:
+
+```
+MAPS_API_KEY=your_maps_api_key
+```
+
 ## Project Status
 
 These features are left to be implemented:
