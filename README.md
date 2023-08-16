@@ -19,10 +19,10 @@ while storing essential statistics using Room database.
 
 ## Screenshot
 
-|                                         |                                          |
-|-----------------------------------------|------------------------------------------|
-| ![](image/runtrack_home_ss.png)         | ![](image/runtrack_live_tracking_ss.png) |
-| ![](image/runtrack_running_info_ss.png) | ![](image/runtrack_profile_ss.png)       |
+|                                                                                                                          |                                                                                                                           |
+|--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| ![runtrack_home_ss](https://github.com/sDevPrem/run-track/assets/130966261/1e7828dc-555f-49a6-92aa-c7caea944cb2)         | ![runtrack_live_tracking_ss](https://github.com/sDevPrem/run-track/assets/130966261/4cd52d04-7745-484b-b5be-f6b2c0c72f71) |
+| ![runtrack_running_info_ss](https://github.com/sDevPrem/run-track/assets/130966261/b684d4a5-e443-4413-a832-0f63992fe89c) | ![runtrack_profile_ss](https://github.com/sDevPrem/run-track/assets/130966261/bfa0db6b-7ad6-4b22-abcf-d6f6393178f1)       |
 
 ## Package Structure
 
@@ -63,7 +63,7 @@ To load image asynchronously.
 This app follows MVVM architecture, Uni Directional Flow (UDF) pattern and Single architecture
 pattern.
 HLD of tracking architecture is shown in the below image:
-![](image/tracking_architecture.png)
+![tracking_architecture](https://github.com/sDevPrem/run-track/assets/130966261/932e9df7-cf34-4902-aa84-73a6431ca236)
 
 ## Installation
 
