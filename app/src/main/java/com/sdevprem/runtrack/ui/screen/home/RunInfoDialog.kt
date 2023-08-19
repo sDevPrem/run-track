@@ -154,7 +154,7 @@ private fun RunImage(
             }
             Spacer(modifier = Modifier.size(4.dp))
             IconButton(
-                onClick = { onDelete(run) },
+                onClick = { },
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.secondaryContainer,
