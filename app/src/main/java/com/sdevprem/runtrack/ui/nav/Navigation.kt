@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import com.sdevprem.runtrack.ui.nav.Destination.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination.CurrentRun
 import com.sdevprem.runtrack.ui.screen.currentrun.CurrentRunScreen
-import com.sdevprem.runtrack.ui.screen.home.HomeScreen
 import com.sdevprem.runtrack.ui.screen.onboard.OnBoardScreen
 import com.sdevprem.runtrack.ui.screen.profile.ProfileScreen
 
@@ -32,14 +31,7 @@ private fun SetupNavGraph(
         navController = navController,
         startDestination = BottomNavDestination.Home.route
     ) {
-        composable(
-            route = BottomNavDestination.Home.route
-        ) {
-            HomeScreen(
-                bottomPadding = paddingValues.calculateBottomPadding(),
-                navController = navController
-            )
-        }
+        homeNavigation(navController, paddingValues)
 
         composable(
             route = BottomNavDestination.Profile.route

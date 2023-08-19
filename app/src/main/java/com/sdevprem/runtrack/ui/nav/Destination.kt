@@ -48,6 +48,14 @@ sealed class Destination(val route: String) {
         )
     }
 
+    object RecentRun : Destination("recent_run") {
+        fun navigateToRunningHistoryScreen(navController: NavController) {
+            navController.navigate(RunningHistory.route)
+        }
+    }
+
+    object RunningHistory : Destination("running_history")
+
     companion object {
         fun navigateToCurrentRunScreen(navController: NavController) {
             navController.navigate(CurrentRun.route)

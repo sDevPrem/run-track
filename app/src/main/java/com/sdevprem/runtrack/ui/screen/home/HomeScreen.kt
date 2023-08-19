@@ -47,6 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
@@ -90,7 +91,10 @@ fun HomeScreen(
             deleteRun = viewModel::deleteRun,
             showRun = viewModel::showRun,
             dismissDialog = viewModel::dismissRunDialog,
-            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) }
+            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) },
+            navigateToRunningHistoryScreen = {
+                Destination.RecentRun.navigateToRunningHistoryScreen(navController)
+            }
         )
 
     LaunchedEffect(key1 = doesUserExist) {
@@ -108,7 +112,8 @@ fun HomeScreenContent(
     deleteRun: (Run) -> Unit,
     showRun: (Run) -> Unit,
     dismissDialog: () -> Unit,
-    navigateToRunScreen: () -> Unit
+    navigateToRunScreen: () -> Unit,
+    navigateToRunningHistoryScreen: () -> Unit
 ) {
     Column {
         TopBar(
@@ -146,6 +151,8 @@ fun HomeScreenContent(
                     color = MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
+                    .clickable(onClick = navigateToRunningHistoryScreen, role = Role.Button)
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
             )
         }
 
