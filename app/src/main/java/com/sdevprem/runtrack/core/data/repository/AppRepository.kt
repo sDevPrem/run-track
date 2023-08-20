@@ -1,5 +1,7 @@
 package com.sdevprem.runtrack.core.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.sdevprem.runtrack.core.data.db.dao.RunDao
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.utils.RunSortOrder
@@ -16,12 +18,16 @@ class AppRepository @Inject constructor(
 
     suspend fun deleteRun(run: Run) = runDao.deleteRun(run)
 
-    fun getSortedAllRun(sortingOrder: RunSortOrder) = when (sortingOrder) {
-        RunSortOrder.DATE -> runDao.getAllRunSortByDate()
-        RunSortOrder.DURATION -> runDao.getAllRunSortByDuration()
-        RunSortOrder.CALORIES_BURNED -> runDao.getAllRunSortByCaloriesBurned()
-        RunSortOrder.AVG_SPEED -> runDao.getAllRunSortByAvgSpeed()
-        RunSortOrder.DISTANCE -> runDao.getAllRunSortByDistance()
+    fun getSortedAllRun(sortingOrder: RunSortOrder) = Pager(
+        config = PagingConfig(pageSize = 20),
+    ) {
+        when (sortingOrder) {
+            RunSortOrder.DATE -> runDao.getAllRunSortByDate()
+            RunSortOrder.DURATION -> runDao.getAllRunSortByDuration()
+            RunSortOrder.CALORIES_BURNED -> runDao.getAllRunSortByCaloriesBurned()
+            RunSortOrder.AVG_SPEED -> runDao.getAllRunSortByAvgSpeed()
+            RunSortOrder.DISTANCE -> runDao.getAllRunSortByDistance()
+        }
     }
 
     fun getRunByDescDateWithLimit(limit: Int) = runDao.getRunByDescDateWithLimit(limit)

@@ -1,6 +1,5 @@
 package com.sdevprem.runtrack.ui.screen.home
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,12 +40,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
@@ -65,11 +62,12 @@ import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.model.User
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination
-import com.sdevprem.runtrack.ui.utils.UserProfilePic
+import com.sdevprem.runtrack.ui.utils.component.RunInfoDialog
+import com.sdevprem.runtrack.ui.utils.component.RunItem
+import com.sdevprem.runtrack.ui.utils.component.UserProfilePic
 import com.sdevprem.runtrack.utils.RunUtils
-import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
-import java.util.Date
 import kotlin.math.roundToInt
 
 @Composable
@@ -90,12 +88,15 @@ fun HomeScreen(
             deleteRun = viewModel::deleteRun,
             showRun = viewModel::showRun,
             dismissDialog = viewModel::dismissRunDialog,
-            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) }
+            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) },
+            navigateToRunningHistoryScreen = {
+                BottomNavDestination.Home.RecentRun.navigateToRunningHistoryScreen(navController)
+            }
         )
 
     LaunchedEffect(key1 = doesUserExist) {
         if (doesUserExist == false)
-            Destination.BottomNavDestination.Home
+            BottomNavDestination.Home
                 .navigateToOnBoardingScreen(navController)
     }
 }
@@ -108,7 +109,8 @@ fun HomeScreenContent(
     deleteRun: (Run) -> Unit,
     showRun: (Run) -> Unit,
     dismissDialog: () -> Unit,
-    navigateToRunScreen: () -> Unit
+    navigateToRunScreen: () -> Unit,
+    navigateToRunningHistoryScreen: () -> Unit
 ) {
     Column {
         TopBar(
@@ -146,6 +148,8 @@ fun HomeScreenContent(
                     color = MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
+                    .clickable(onClick = navigateToRunningHistoryScreen, role = Role.Button)
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
             )
         }
 
@@ -516,94 +520,4 @@ private fun WeeklyGoalCard(
         }
     }
 
-}
-
-@Composable
-private fun RunItem(
-    modifier: Modifier = Modifier,
-    run: Run
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Image(
-            bitmap = run.img.asImageBitmap(),
-            contentDescription = null,
-            modifier = Modifier
-                .size(70.dp),
-            contentScale = ContentScale.Fit
-        )
-        Spacer(modifier = Modifier.size(16.dp))
-        RunInfo(
-            modifier = Modifier
-                .weight(1f),
-            run = run
-        )
-        Image(
-            painter = painterResource(id = R.drawable.ic_arrow_forward),
-            contentDescription = "More info",
-            modifier = Modifier
-                .size(16.dp)
-                .align(Alignment.CenterVertically)
-        )
-    }
-}
-
-@Composable
-private fun RunInfo(
-    modifier: Modifier = Modifier,
-    run: Run
-) {
-    Column(modifier) {
-        Text(
-            text = run.timestamp.getDisplayDate(),
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Normal
-            ),
-        )
-        Spacer(modifier = Modifier.size(12.dp))
-        Text(
-            text = "${(run.distanceInMeters / 1000f)} km",
-            style = MaterialTheme.typography.labelLarge.copy(
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        )
-        Spacer(modifier = Modifier.size(12.dp))
-        Row {
-            Text(
-                text = "${run.caloriesBurned} kcal",
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.Normal
-                ),
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = "${run.avgSpeedInKMH} km/hr",
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.Normal
-                ),
-            )
-        }
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun RunItemPrev() {
-    RunItem(
-        run = Run(
-            img = BitmapFactory.decodeResource(
-                LocalContext.current.resources,
-                R.drawable.running_boy
-            ),
-            timestamp = Date(),
-            avgSpeedInKMH = 13.56f,
-            distanceInMeters = 10120,
-            caloriesBurned = 701
-        )
-    )
 }

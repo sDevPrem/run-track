@@ -52,6 +52,7 @@ android {
 dependencies {
     implementation 'com.google.accompanist:accompanist-permissions:0.31.5-beta'
     def lifecycle_version = "2.6.1"
+    def paging_version = "3.2.0"
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')
@@ -99,6 +100,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
 
     //datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
@@ -106,6 +108,8 @@ dependencies {
     //coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-compose:3.2.0"
 }
 
 kapt {

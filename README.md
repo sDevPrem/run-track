@@ -5,17 +5,18 @@ Jetpack Compose, MVVM architecture, and Google Maps API. The app allows users to
 track their running activities, displaying real-time routes on an interactive map
 while storing essential statistics using Room database.
 
-## Feature
-
+## Features
 1. Live tracking of running activity using GPS.
 2. Tracking of user's running path in Map using Google Map Compose library.
 3. Using Foreground Service, even the user closed the app and remove
    from the background, this app stills continue to track user running stats.
 4. Room database to store and manage running statistics.
 5. Deep linking using jetpack navigation component.
-6. Handling conditional navigation to on boarding screen.
-7. New Jetpack Compose image picker - helps to pick image
+6. Handling nested navigation.
+7. Handling conditional navigation to on boarding screen.
+8. New Jetpack Compose image picker - helps to pick image
    without any permission.
+9. Paging3 integration.
 
 ## Screenshot
 
@@ -26,11 +27,17 @@ while storing essential statistics using Room database.
 
 ## Package Structure
 
-- `core`: Handles the backend of the app like tracking and database related work.
-- `domain`: Contains common use cases.
-- `ui`: Handles the user interface components including navigation.
-- `utils`: Includes utility classes and helper functions used across the app.
-- `di` : Contains hilt modules.
+* `core`
+    * `data`: Contains entity and database related classes.
+    * `tracking`: Classes that handles tracking.
+* `di` : Hilt Modules.
+* `domain`: Common use cases.
+* `ui`
+    * `nav`: Contains app navigation and destinations.
+    * `screen`: Contains UI.
+    * `theme`: Material3 theme.
+    * `utils`: UI utility classes and common components.
+* `utils`: Utility class used across the app.
 
 ## Build With
 
@@ -89,4 +96,5 @@ MAPS_API_KEY=your_maps_api_key
 These features are left to be implemented:
 
 1. Show user running statistics on a chart.
-2. Unit Tests
+2. Profile menu implementation.
+3. Unit Tests

@@ -36,15 +36,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.ui.nav.Navigation
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
+import com.sdevprem.runtrack.ui.utils.navigateToBottomNavDestination
 import kotlinx.coroutines.delay
 
 @Composable
@@ -167,8 +168,8 @@ private fun BottomBar(
         BottomNavBar(
             navController = navController,
             items = listOf(
-                Destination.BottomNavDestination.Home,
-                Destination.BottomNavDestination.Profile
+                BottomNavDestination.Home,
+                BottomNavDestination.Profile
             ),
             modifier = Modifier
         )
@@ -179,7 +180,7 @@ private fun BottomBar(
 private fun BottomNavBar(
     navController: NavController,
     modifier: Modifier = Modifier,
-    items: List<Destination.BottomNavDestination>
+    items: List<BottomNavDestination>
 ) {
     BottomNavigation(
         modifier = modifier,
@@ -196,7 +197,7 @@ private fun BottomNavBar(
 
 @Composable
 private fun RowScope.BottomNavItem(
-    item: Destination.BottomNavDestination,
+    item: BottomNavDestination,
     navController: NavController,
     currentDestination: NavDestination?
 ) {
@@ -207,15 +208,7 @@ private fun RowScope.BottomNavItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == item.route
         } == true,
-        onClick = {
-            navController.navigate(item.route) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    this.saveState = true
-                }
-                restoreState = true
-                launchSingleTop = true
-            }
-        },
+        onClick = { navController.navigateToBottomNavDestination(item) },
         unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
         selectedContentColor = MaterialTheme.colorScheme.primary,
     )

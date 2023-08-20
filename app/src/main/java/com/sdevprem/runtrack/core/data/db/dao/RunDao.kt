@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.core.data.db.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -19,19 +20,19 @@ interface RunDao {
     suspend fun deleteRun(run: Run)
 
     @Query("SELECT * FROM running_table ORDER BY timestamp DESC")
-    fun getAllRunSortByDate(): Flow<List<Run>>
+    fun getAllRunSortByDate(): PagingSource<Int, Run>
 
     @Query("SELECT * FROM running_table ORDER BY durationInMillis DESC")
-    fun getAllRunSortByDuration(): Flow<List<Run>>
+    fun getAllRunSortByDuration(): PagingSource<Int, Run>
 
     @Query("SELECT * FROM running_table ORDER BY caloriesBurned DESC")
-    fun getAllRunSortByCaloriesBurned(): Flow<List<Run>>
+    fun getAllRunSortByCaloriesBurned(): PagingSource<Int, Run>
 
     @Query("SELECT * FROM running_table ORDER BY avgSpeedInKMH DESC")
-    fun getAllRunSortByAvgSpeed(): Flow<List<Run>>
+    fun getAllRunSortByAvgSpeed(): PagingSource<Int, Run>
 
     @Query("SELECT * FROM running_table ORDER BY distanceInMeters DESC")
-    fun getAllRunSortByDistance(): Flow<List<Run>>
+    fun getAllRunSortByDistance(): PagingSource<Int, Run>
 
     @Query("SELECT * FROM running_table ORDER BY timestamp DESC LIMIT :limit")
     fun getRunByDescDateWithLimit(limit: Int): Flow<List<Run>>
