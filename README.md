@@ -5,8 +5,7 @@ Jetpack Compose, MVVM architecture, and Google Maps API. The app allows users to
 track their running activities, displaying real-time routes on an interactive map
 while storing essential statistics using Room database.
 
-## Feature
-
+## Features
 1. Live tracking of running activity using GPS.
 2. Tracking of user's running path in Map using Google Map Compose library.
 3. Using Foreground Service, even the user closed the app and remove
@@ -28,11 +27,17 @@ while storing essential statistics using Room database.
 
 ## Package Structure
 
-- `core`: Handles the backend of the app like tracking and database related work.
-- `domain`: Contains common use cases.
-- `ui`: Handles the user interface components including navigation.
-- `utils`: Includes utility classes and helper functions used across the app.
-- `di` : Contains hilt modules.
+* `core`
+    * `data`: Contains entity and database related classes.
+    * `tracking`: Classes that handles tracking.
+* `di` : Hilt Modules.
+* `domain`: Common use cases.
+* `ui`
+    * `nav`: Contains app navigation and destinations.
+    * `screen`: Contains UI.
+    * `theme`: Material3 theme.
+    * `utils`: UI utility classes and common components.
+* `utils`: Utility class used across the app.
 
 ## Build With
 
