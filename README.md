@@ -13,9 +13,11 @@ while storing essential statistics using Room database.
    from the background, this app stills continue to track user running stats.
 4. Room database to store and manage running statistics.
 5. Deep linking using jetpack navigation component.
-6. Handling conditional navigation to on boarding screen.
-7. New Jetpack Compose image picker - helps to pick image
+6. Handling nested navigation.
+7. Handling conditional navigation to on boarding screen.
+8. New Jetpack Compose image picker - helps to pick image
    without any permission.
+9. Paging3 integration.
 
 ## Screenshot
 
@@ -89,4 +91,5 @@ MAPS_API_KEY=your_maps_api_key
 These features are left to be implemented:
 
 1. Show user running statistics on a chart.
-2. Unit Tests
+2. Profile menu implementation.
+3. Unit Tests
