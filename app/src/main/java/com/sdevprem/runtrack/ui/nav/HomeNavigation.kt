@@ -28,7 +28,10 @@ fun NavGraphBuilder.homeNavigation(
         composable(
             route = Destination.RunningHistory.route
         ) {
-            RunningHistoryScreen()
+            RunningHistoryScreen(
+                paddingValues = paddingValues,
+                navController = navController
+            )
         }
 
     }

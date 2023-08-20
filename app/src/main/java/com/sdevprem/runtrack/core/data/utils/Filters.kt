@@ -5,5 +5,12 @@ enum class RunSortOrder {
     DURATION,
     CALORIES_BURNED,
     AVG_SPEED,
-    DISTANCE
+    DISTANCE;
+
+    override fun toString(): String {
+        return super.toString()
+            .lowercase()
+            .replace('_', ' ')
+            .replaceFirstChar { it.uppercase() }
+    }
 }
