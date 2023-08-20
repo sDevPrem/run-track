@@ -62,6 +62,7 @@ import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.model.User
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.ui.utils.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.utils.component.RunItem
@@ -89,13 +90,13 @@ fun HomeScreen(
             dismissDialog = viewModel::dismissRunDialog,
             navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) },
             navigateToRunningHistoryScreen = {
-                Destination.RecentRun.navigateToRunningHistoryScreen(navController)
+                BottomNavDestination.Home.RecentRun.navigateToRunningHistoryScreen(navController)
             }
         )
 
     LaunchedEffect(key1 = doesUserExist) {
         if (doesUserExist == false)
-            Destination.BottomNavDestination.Home
+            BottomNavDestination.Home
                 .navigateToOnBoardingScreen(navController)
     }
 }

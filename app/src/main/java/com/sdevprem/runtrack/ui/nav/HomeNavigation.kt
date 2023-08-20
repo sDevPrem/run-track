@@ -13,11 +13,11 @@ fun NavGraphBuilder.homeNavigation(
     paddingValues: PaddingValues
 ) {
     navigation(
-        startDestination = Destination.RecentRun.route,
-        route = Destination.BottomNavDestination.Home.route
+        startDestination = BottomNavDestination.Home.RecentRun.route,
+        route = BottomNavDestination.Home.route
     ) {
         composable(
-            route = Destination.RecentRun.route
+            route = BottomNavDestination.Home.RecentRun.route
         ) {
             HomeScreen(
                 navController = navController,
@@ -26,7 +26,7 @@ fun NavGraphBuilder.homeNavigation(
         }
 
         composable(
-            route = Destination.RunningHistory.route
+            route = BottomNavDestination.Home.RunningHistory.route
         ) {
             RunningHistoryScreen(
                 paddingValues = paddingValues,

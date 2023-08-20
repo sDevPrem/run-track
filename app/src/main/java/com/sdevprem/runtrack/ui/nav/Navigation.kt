@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.sdevprem.runtrack.ui.nav.Destination.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination.CurrentRun
 import com.sdevprem.runtrack.ui.screen.currentrun.CurrentRunScreen
 import com.sdevprem.runtrack.ui.screen.onboard.OnBoardScreen
