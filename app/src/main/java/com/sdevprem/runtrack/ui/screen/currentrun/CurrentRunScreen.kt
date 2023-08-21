@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.currentrun
 
+import android.app.Activity
 import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -43,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -61,6 +63,7 @@ import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.core.tracking.location.LocationUtils
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
@@ -88,6 +91,11 @@ fun CurrentRunScreen(
     navController: NavController,
     viewModel: CurrentRunViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        LocationUtils.checkAndRequestLocationSetting(context as Activity)
+    }
     var isRunningFinished by rememberSaveable { mutableStateOf(false) }
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
     val runState by viewModel.currentRunStateWithCalories.collectAsStateWithLifecycle()
