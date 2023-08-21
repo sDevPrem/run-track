@@ -1,6 +1,9 @@
 package com.sdevprem.runtrack.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -17,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.sdevprem.runtrack.core.tracking.location.LocationUtils
 import com.sdevprem.runtrack.ui.screen.main.MainScreen
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.LocationPermissionRequestDialog
@@ -83,6 +87,18 @@ class MainActivity : ComponentActivity() {
 
                 else -> permissionLauncher.launch(RunUtils.allPermissions)
             }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == LocationUtils.LOCATION_ENABLE_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
+            Toast.makeText(
+                this,
+                "Please enable GPS to get proper running statistics.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }
