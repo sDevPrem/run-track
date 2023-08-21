@@ -11,12 +11,12 @@ while storing essential statistics using Room database.
 3. Using Foreground Service, even the user closed the app and remove
    from the background, this app stills continue to track user running stats.
 4. Room database to store and manage running statistics.
-5. Deep linking using jetpack navigation component.
-6. Handling nested navigation.
-7. Handling conditional navigation to on boarding screen.
-8. New Jetpack Compose image picker - helps to pick image
+5. Handling nested navigation, Deep linking, conditional navigation to on
+   boarding screen using Jetpack Navigation Component.
+6. New Jetpack Compose image picker - helps to pick image
    without any permission.
-9. Paging3 integration.
+7. Paging3 integration.
+8. Dynamic color support in dark and light theme.
 
 ## Screenshot
 
