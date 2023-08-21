@@ -122,9 +122,10 @@ fun MainScreen(
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true
     ) {
-        Box(
+        Surface(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
             Navigation(navHostController, it)
         }

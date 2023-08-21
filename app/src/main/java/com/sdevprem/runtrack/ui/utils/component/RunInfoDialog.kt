@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.ui.theme.md_theme_light_onSurface
 import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 
@@ -126,7 +127,7 @@ private fun RunImage(
                 imageVector = Icons.Default.Close,
                 contentDescription = "close run info",
                 modifier = Modifier,
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = md_theme_light_onSurface
             )
 
         }

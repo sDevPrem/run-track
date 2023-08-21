@@ -173,12 +173,13 @@ private fun TotalProgressCard(
                 modifier = Modifier
                     .weight(1f)
             )
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrow_forward),
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
