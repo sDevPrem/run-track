@@ -18,6 +18,8 @@ object LocationUtils {
             LOCATION_UPDATE_INTERVAL
         )
 
+    const val LOCATION_ENABLE_REQUEST_CODE = 5234
+
     fun checkAndRequestLocationSetting(activity: Activity) {
         val locationRequest = locationRequestBuilder.build()
         val builder = LocationSettingsRequest.Builder()
@@ -30,7 +32,7 @@ object LocationUtils {
                     try {
                         exception.startResolutionForResult(
                             activity,
-                            locationRequest.priority
+                            LOCATION_ENABLE_REQUEST_CODE
                         )
                     } catch (_: IntentSender.SendIntentException) {
                     }
