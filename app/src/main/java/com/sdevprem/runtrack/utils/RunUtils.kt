@@ -57,7 +57,7 @@ object RunUtils {
         }
 
     fun Context.hasAllPermission() =
-        allPermissions.any {
+        allPermissions.all {
             ContextCompat.checkSelfPermission(
                 this,
                 it
