@@ -9,11 +9,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 fun bitmapDescriptorFromVector(
     context: Context,
-    vectorResId: Int
+    vectorResId: Int,
+    tint: Int? = null
 ): BitmapDescriptor {
-    val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
+    val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)!!
+    tint?.let { vectorDrawable.setTint(it) }
 
-    vectorDrawable!!.setBounds(
+    vectorDrawable.setBounds(
         0,
         0,
         vectorDrawable.intrinsicWidth,

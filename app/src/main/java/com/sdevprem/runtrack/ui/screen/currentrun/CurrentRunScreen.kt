@@ -4,6 +4,11 @@ import android.app.Activity
 import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +47,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -192,7 +198,7 @@ private fun BoxScope.Map(
 
         ) {
 
-        DrawPathPoints(pathPoints = pathPoints)
+        DrawPathPoints(pathPoints = pathPoints, isRunningFinished = isRunningFinished)
 
         MapEffect(key1 = isRunningFinished) { map ->
             if (isRunningFinished)
@@ -209,8 +215,14 @@ private fun BoxScope.Map(
 
 @Composable
 @GoogleMapComposable
-private fun DrawPathPoints(pathPoints: List<PathPoint>) {
+private fun DrawPathPoints(
+    pathPoints: List<PathPoint>,
+    isRunningFinished: Boolean,
+) {
     val latLngList = mutableListOf<LatLng>()
+    val lastMarkerState = rememberMarkerState()
+    val lastLocationPoint = pathPoints.lasLocationPoint()
+    lastLocationPoint?.let { lastMarkerState.position = it.latLng }
 
     pathPoints.forEachIndexed { i, pathPoint ->
         if (pathPoint is PathPoint.EmptyLocationPoint || i == pathPoints.size - 1) {
@@ -224,6 +236,28 @@ private fun DrawPathPoints(pathPoints: List<PathPoint>) {
         }
     }
 
+    val infiniteTransition = rememberInfiniteTransition()
+    val lastMarkerPointColor by infiniteTransition.animateColor(
+        initialValue = md_theme_light_primary,
+        targetValue = md_theme_light_primary.copy(alpha = 0.8f),
+        animationSpec = infiniteRepeatable(
+            tween(1000),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+
+    Marker(
+        icon = bitmapDescriptorFromVector(
+            context = LocalContext.current,
+            vectorResId = R.drawable.ic_circle,
+            tint = (if (isRunningFinished) md_theme_light_primary else lastMarkerPointColor).toArgb()
+        ),
+        state = lastMarkerState,
+        anchor = Offset(0.5f, 0.5f),
+        visible = lastLocationPoint != null
+    )
+
     var firstPoint by remember {
         mutableStateOf<PathPoint.LocationPoint?>(null)
     }
@@ -231,13 +265,13 @@ private fun DrawPathPoints(pathPoints: List<PathPoint>) {
     firstPoint = pathPoints.firstLocationPoint()
 
     firstPoint?.let {
-        val markerState = rememberMarkerState(position = it.latLng)
         Marker(
             icon = bitmapDescriptorFromVector(
-                LocalContext.current,
-                R.drawable.ic_circle_hollow
+                context = LocalContext.current,
+                vectorResId = if (isRunningFinished) R.drawable.ic_circle else R.drawable.ic_circle_hollow,
+                tint = if (isRunningFinished) md_theme_light_primary.toArgb() else null
             ),
-            state = markerState,
+            state = rememberMarkerState(position = it.latLng),
             anchor = Offset(0.5f, 0.5f)
         )
     }
