@@ -219,13 +219,17 @@ private fun DrawPathPoints(
     pathPoints: List<PathPoint>,
     isRunningFinished: Boolean,
 ) {
-    val latLngList = mutableListOf<LatLng>()
     val lastMarkerState = rememberMarkerState()
     val lastLocationPoint = pathPoints.lasLocationPoint()
     lastLocationPoint?.let { lastMarkerState.position = it.latLng }
 
-    pathPoints.forEachIndexed { i, pathPoint ->
-        if (pathPoint is PathPoint.EmptyLocationPoint || i == pathPoints.size - 1) {
+    val firstLocationPoint = pathPoints.firstLocationPoint()
+    val firstPoint = remember(key1 = firstLocationPoint) { firstLocationPoint }
+
+    val latLngList = mutableListOf<LatLng>()
+
+    pathPoints.forEach { pathPoint ->
+        if (pathPoint is PathPoint.EmptyLocationPoint) {
             Polyline(
                 points = latLngList.toList(),
                 color = md_theme_light_primary,
@@ -235,6 +239,13 @@ private fun DrawPathPoints(
             latLngList += pathPoint.latLng
         }
     }
+
+    //add the last path points
+    if (latLngList.isNotEmpty())
+        Polyline(
+            points = latLngList.toList(),
+            color = md_theme_light_primary
+        )
 
     val infiniteTransition = rememberInfiniteTransition()
     val lastMarkerPointColor by infiniteTransition.animateColor(
@@ -246,7 +257,6 @@ private fun DrawPathPoints(
         )
     )
 
-
     Marker(
         icon = bitmapDescriptorFromVector(
             context = LocalContext.current,
@@ -257,12 +267,6 @@ private fun DrawPathPoints(
         anchor = Offset(0.5f, 0.5f),
         visible = lastLocationPoint != null
     )
-
-    var firstPoint by remember {
-        mutableStateOf<PathPoint.LocationPoint?>(null)
-    }
-
-    firstPoint = pathPoints.firstLocationPoint()
 
     firstPoint?.let {
         Marker(
