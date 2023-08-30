@@ -57,11 +57,14 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.GoogleMapComposable
 import com.google.maps.android.compose.MapEffect
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MapsComposeExperimentalApi
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.tracking.location.LocationUtils
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
@@ -69,8 +72,10 @@ import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
+import com.sdevprem.runtrack.ui.utils.bitmapDescriptorFromVector
 import com.sdevprem.runtrack.ui.utils.component.RunningStatsItem
 import com.sdevprem.runtrack.utils.RunUtils
+import com.sdevprem.runtrack.utils.RunUtils.firstLocationPoint
 import com.sdevprem.runtrack.utils.RunUtils.lasLocationPoint
 import com.sdevprem.runtrack.utils.RunUtils.takeSnapshot
 import kotlinx.coroutines.delay
@@ -178,18 +183,8 @@ private fun BoxScope.Map(
         onMapLoaded = { isMapLoaded = true },
 
         ) {
-        val latLngList = mutableListOf<LatLng>()
-        pathPoints.forEachIndexed { i, pathPoint ->
-            if (pathPoint is PathPoint.EmptyLocationPoint || i == pathPoints.size - 1) {
-                Polyline(
-                    points = latLngList.toList(),
-                    color = Color.Blue,
-                )
-                latLngList.clear()
-            } else if (pathPoint is PathPoint.LocationPoint) {
-                latLngList += pathPoint.latLng
-            }
-        }
+
+        DrawPathPoints(pathPoints = pathPoints)
 
         MapEffect(key1 = isRunningFinished) { map ->
             if (isRunningFinished)
@@ -203,6 +198,43 @@ private fun BoxScope.Map(
         }
     }
 }
+
+@Composable
+@GoogleMapComposable
+private fun DrawPathPoints(pathPoints: List<PathPoint>) {
+    val latLngList = mutableListOf<LatLng>()
+
+    pathPoints.forEachIndexed { i, pathPoint ->
+        if (pathPoint is PathPoint.EmptyLocationPoint || i == pathPoints.size - 1) {
+            Polyline(
+                points = latLngList.toList(),
+                color = Color.Blue,
+            )
+            latLngList.clear()
+        } else if (pathPoint is PathPoint.LocationPoint) {
+            latLngList += pathPoint.latLng
+        }
+    }
+
+    var firstPoint by remember {
+        mutableStateOf<PathPoint.LocationPoint?>(null)
+    }
+
+    firstPoint = pathPoints.firstLocationPoint()
+
+    firstPoint?.let {
+        val markerState = rememberMarkerState(position = it.latLng)
+        Marker(
+            icon = bitmapDescriptorFromVector(
+                LocalContext.current,
+                R.drawable.ic_circle_hollow
+            ),
+            state = markerState,
+            anchor = Offset(0.5f, 0.5f)
+        )
+    }
+}
+
 
 @Composable
 private fun BoxScope.ShowMapLoadingProgressBar(

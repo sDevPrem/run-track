@@ -170,6 +170,10 @@ object RunUtils {
         return null
     }
 
+    fun List<PathPoint>.firstLocationPoint() =
+        find { it is PathPoint.LocationPoint } as? PathPoint.LocationPoint
+
+
     fun Date.getDisplayDate(): String =
         SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
             .format(this)
