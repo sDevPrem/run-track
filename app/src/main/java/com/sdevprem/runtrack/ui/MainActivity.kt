@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sdevprem.runtrack.core.tracking.location.LocationUtils
 import com.sdevprem.runtrack.ui.screen.main.MainScreen
 import com.sdevprem.runtrack.ui.theme.AppTheme
-import com.sdevprem.runtrack.ui.utils.LocationPermissionRequestDialog
+import com.sdevprem.runtrack.ui.utils.component.LocationPermissionRequestDialog
 import com.sdevprem.runtrack.utils.RunUtils
 import com.sdevprem.runtrack.utils.RunUtils.hasAllPermission
 import com.sdevprem.runtrack.utils.RunUtils.hasLocationPermission
