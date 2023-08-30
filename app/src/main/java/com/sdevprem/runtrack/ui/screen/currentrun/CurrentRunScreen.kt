@@ -42,7 +42,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -72,6 +71,7 @@ import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.ui.theme.AppTheme
+import com.sdevprem.runtrack.ui.theme.md_theme_light_primary
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
 import com.sdevprem.runtrack.ui.utils.bitmapDescriptorFromVector
 import com.sdevprem.runtrack.ui.utils.component.RunningStatsItem
@@ -216,7 +216,7 @@ private fun DrawPathPoints(pathPoints: List<PathPoint>) {
         if (pathPoint is PathPoint.EmptyLocationPoint || i == pathPoints.size - 1) {
             Polyline(
                 points = latLngList.toList(),
-                color = Color.Blue,
+                color = md_theme_light_primary,
             )
             latLngList.clear()
         } else if (pathPoint is PathPoint.LocationPoint) {
