@@ -54,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -167,8 +168,15 @@ private fun BoxScope.Map(
         )
     }
 
-    pathPoints.lasLocationPoint()?.let {
-        cameraPositionState.position = CameraPosition.fromLatLngZoom(it.latLng, 15f)
+    LaunchedEffect(key1 = pathPoints.lasLocationPoint()) {
+        pathPoints.lasLocationPoint()?.let {
+            cameraPositionState.animate(
+                CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.fromLatLngZoom(it.latLng, 15f)
+                )
+            )
+        }
+
     }
     ShowMapLoadingProgressBar(isMapLoaded)
     GoogleMap(
