@@ -12,5 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "RunTrack"
-include ':app'
+
+rootProject.name = "MyMovies"
+include(":app")
