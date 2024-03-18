@@ -24,10 +24,14 @@ import kotlin.math.roundToInt
 
 object RunUtils {
 
-    val locationPermissions = listOf(
+    val locationPermissions = mutableListOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ).toTypedArray()
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    ).apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            add(Manifest.permission.FOREGROUND_SERVICE_LOCATION)
+        }
+    }.toTypedArray()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     val notificationPermission = Manifest.permission.POST_NOTIFICATIONS
