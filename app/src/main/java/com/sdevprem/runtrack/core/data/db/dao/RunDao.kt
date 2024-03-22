@@ -37,6 +37,14 @@ interface RunDao {
     @Query("SELECT * FROM running_table ORDER BY timestamp DESC LIMIT :limit")
     fun getRunByDescDateWithLimit(limit: Int): Flow<List<Run>>
 
+    @Query(
+        "SELECT * FROM running_table WHERE " +
+                "(:fromDate IS NULL OR timestamp >= :fromDate) AND " +
+                "(:toDate IS NULL OR timestamp <= :toDate) " +
+                "ORDER BY timestamp DESC"
+    )
+    suspend fun getRunStatsInDateRange(fromDate: Date?, toDate: Date?): List<Run>
+
 
     //for statistics
     @Query(
