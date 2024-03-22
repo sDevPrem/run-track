@@ -118,6 +118,11 @@ dependencies {
 
     //permission
     implementation(libs.accompanist.permissions)
+
+    //vico
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
 }
 
 kapt {

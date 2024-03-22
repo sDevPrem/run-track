@@ -77,6 +77,7 @@ fun MainScreen(
     hideBottomItems = when (navBackStackEntry?.destination?.route) {
         Destination.CurrentRun.route -> true
         Destination.OnBoardingDestination.route -> true
+        Destination.RunStats.route -> true
         else -> false
     }
 

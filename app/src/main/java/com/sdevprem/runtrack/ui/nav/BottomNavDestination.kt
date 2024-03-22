@@ -22,6 +22,10 @@ sealed class BottomNavDestination(
             navController.navigate(OnBoardingDestination.route)
         }
 
+        fun navigateToRunStats(navController: NavController) {
+            navController.navigate(RunStats.route)
+        }
+
         object RecentRun : Destination("recent_run") {
             fun navigateToRunningHistoryScreen(navController: NavController) {
                 navController.navigate(RunningHistory.route)
