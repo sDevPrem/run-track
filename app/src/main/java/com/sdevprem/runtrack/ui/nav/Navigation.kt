@@ -53,7 +53,9 @@ private fun SetupNavGraph(
         }
 
         composable(route = Destination.RunStats.route) {
-            RunStatsScreen()
+            RunStatsScreen(
+                navigateUp = { navController.navigateUp() }
+            )
         }
     }
 

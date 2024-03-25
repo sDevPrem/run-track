@@ -75,4 +75,8 @@ class RunStatsViewModel @Inject constructor(
         }
         fetchRunInDate()
     }
+
+    fun selectStatisticToShow(statistic: RunStatsUiState.Statistic) {
+        _state.update { it.copy(statisticToShow = statistic) }
+    }
 }

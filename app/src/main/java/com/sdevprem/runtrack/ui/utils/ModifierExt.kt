@@ -17,3 +17,12 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = drawBehind {
         strokeWidth = strokeWidth.toPx()
     )
 }
+
+fun Modifier.conditional(
+    condition: Boolean,
+    ifFalse: () -> Modifier = { Modifier },
+    ifTrue: () -> Modifier
+): Modifier = run {
+    if (condition) then(ifTrue())
+    else then(ifFalse())
+}
