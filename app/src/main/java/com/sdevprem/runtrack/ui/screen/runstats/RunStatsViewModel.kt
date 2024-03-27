@@ -59,7 +59,8 @@ class RunStatsViewModel @Inject constructor(
                 add(Calendar.WEEK_OF_MONTH, 1)
             }
             it.copy(
-                dateRange = nextWeekDate.setDateToWeekFirstDay().time..nextWeekDate.setDateToWeekLastDay().time,
+                dateRange = nextWeekDate.setDateToWeekFirstDay().time..
+                        nextWeekDate.setDateToWeekLastDay().time,
             )
         }
         fetchRunInDate()
@@ -67,13 +68,14 @@ class RunStatsViewModel @Inject constructor(
 
     fun decrementWeekRange() {
         _state.update {
-            val date = Calendar.getInstance().apply {
+            val previousWeekDate = Calendar.getInstance().apply {
                 time = it.dateRange.start
+                add(Calendar.WEEK_OF_MONTH, -1)
             }
-            date.add(Calendar.WEEK_OF_MONTH, -1)
 
             it.copy(
-                dateRange = date.setDateToWeekFirstDay().time..date.setDateToWeekLastDay().time,
+                dateRange = previousWeekDate.setDateToWeekFirstDay().time..
+                        previousWeekDate.setDateToWeekLastDay().time,
             )
         }
         fetchRunInDate()

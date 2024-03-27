@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -101,7 +100,7 @@ private fun RunStatsContent(
             )
             DateRangeCard(
                 dateList = dateList.map { it.time },
-                isDataAvailable = { state.runStatisticsOnDate.containsKey(it) /*true*/ },
+                isDataAvailable = { state.runStatisticsOnDate.containsKey(it) },
                 incrementDateRange = incrementDateRange,
                 decrementDateRange = decrementDateRange
             )
@@ -113,8 +112,7 @@ private fun RunStatsContent(
                 runStats = state.runStatisticsOnDate,
                 dateRange = state.dateRange,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .fillMaxWidth(),
                 statisticsToShow = state.statisticToShow
             )
         }
@@ -234,7 +232,7 @@ private fun DateRangeColumn(
     isDataAvailable: Boolean,
     isTodayDate: Boolean,
 ) {
-    val dayFormatter: SimpleDateFormat = remember { SimpleDateFormat("EEEE", Locale.getDefault()) }
+    val dayFormatter = remember { SimpleDateFormat("EEEE", Locale.getDefault()) }
     val dateFormatter = remember { SimpleDateFormat("d", Locale.getDefault()) }
     val primaryColor = MaterialTheme.colorScheme.primary
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
@@ -264,33 +262,26 @@ private fun DateRangeColumn(
                     condition = isDataAvailable || isTodayDate,
                 ) {
                     Modifier
-                        .conditional(
-                            condition = isDataAvailable || isTodayDate
-                        ) {
-                            Modifier
-                                .drawBehind {
-                                    if (isDataAvailable) {
-                                        drawCircle(
-                                            color = primaryColor,
-                                            radius = size.maxDimension / 2
-                                        )
-                                    }
-                                    if (isTodayDate) {
-                                        drawCircle(
-                                            color = onSurfaceColor,
-                                            radius = size.maxDimension / 2,
-                                            style = Stroke(
-                                                width = 2.dp.toPx()
-                                            )
-                                        )
-                                    }
+                        .drawBehind {
+                            if (isDataAvailable) {
+                                drawCircle(
+                                    color = primaryColor,
+                                    radius = size.maxDimension / 2
+                                )
+                            }
+                            if (isTodayDate) {
+                                drawCircle(
+                                    color = onSurfaceColor,
+                                    radius = size.maxDimension / 2,
+                                    style = Stroke(
+                                        width = 2.dp.toPx()
+                                    )
+                                )
+                            }
 
-                                }
                         }
-
                 }
                 .padding(4.dp)
-
         )
     }
 }

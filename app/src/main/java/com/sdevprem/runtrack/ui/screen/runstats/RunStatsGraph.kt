@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,8 +20,8 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -107,8 +106,17 @@ private fun RunStatsGraph(
     val dateList = remember(dateRange) {
         (dateRange.start.toCalendar()..dateRange.endInclusive.toCalendar()).toList()
     }
-    val marker = remember(graphPrimaryColor) { createMarker(color = graphPrimaryColor) }
-    val markers = remember(runStats, marker, statisticsToShow) {
+    val markerIndicatorSize = LocalDensity.current.run { 3.dp.toPx() }
+    val marker = remember(graphPrimaryColor, markerIndicatorSize) {
+        MarkerComponent(
+            indicator = ShapeComponent(
+                shape = Shapes.pillShape,
+                color = graphPrimaryColor.toArgb(),
+            ),
+            label = TextComponent.build { textSizeSp = 0f }
+        ).apply { indicatorSizeDp = markerIndicatorSize }
+    }
+    val markers = remember(runStats, marker) {
         buildMap {
             dateList.forEachIndexed { i, c ->
                 if (runStats.contains(c.time)) {
@@ -140,7 +148,7 @@ private fun RunStatsGraph(
                 valueFormatter = rememberBottomAxisValueFormatter(extraStoreKey = extraStoreKey),
                 itemPlacer = remember {
                     AxisItemPlacer.Horizontal.default(
-                        addExtremeLabelPadding = true
+                        addExtremeLabelPadding = true,
                     )
                 },
                 guideline = null,
@@ -165,11 +173,12 @@ private fun CartesianChartModelProducer.ProduceRunStateModel(
         withContext(Dispatchers.Default) {
             tryRunTransaction {
                 val y = dateList.map {
+                    val currentStats = runStats[it.time] ?: return@map 0
                     when (statisticsToShow) {
-                        CALORIES -> runStats[it.time]?.caloriesBurned ?: 0
-                        DURATION -> convertMillisToMinutes(runStats[it.time]?.durationInMillis ?: 0)
+                        CALORIES -> currentStats.caloriesBurned
+                        DURATION -> convertMillisToMinutes(currentStats.durationInMillis)
                         DISTANCE -> convertMeterToKm(
-                            (runStats[it.time]?.distanceInMeters ?: 0).toLong()
+                            currentStats.distanceInMeters.toLong()
                         )
                     }
                 }
@@ -191,22 +200,6 @@ private fun rememberBottomAxisValueFormatter(
         chartValues.model.extraStore[extraStoreKey][x.toInt()].let {
             dateFormatter.format(it)
         }
-    }
-}
-
-private fun createMarker(
-    color: Color,
-    strokeColor: Color = color,
-) = object : MarkerComponent(
-    indicator = ShapeComponent(
-        shape = Shapes.pillShape,
-        color = color.toArgb(),
-        strokeColor = strokeColor.toArgb()
-    ),
-    label = TextComponent.build { this.textSizeSp = 0f }
-) {
-    init {
-        indicatorSizeDp = 8.dp.value
     }
 }
 
@@ -252,10 +245,7 @@ private fun TopStatistics(
                 .width(2.dp)
                 .fillMaxHeight()
         )
-        Column(
-            modifier = Modifier
-                .wrapContentSize()
-        ) {
+        Column {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
