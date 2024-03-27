@@ -21,6 +21,7 @@ import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -177,6 +178,9 @@ private fun DateRangeCard(
     decrementDateRange: () -> Unit,
     incrementDateRange: () -> Unit,
 ) {
+    val canIncrementDate = remember(dateList) {
+        dateList.last() < Calendar.getInstance().time
+    }
     ElevatedCard(
         modifier = Modifier
             .padding(bottom = 16.dp)
@@ -202,11 +206,16 @@ private fun DateRangeCard(
                     isDataAvailable = isDataAvailable,
                 )
             }
-            IconButton(onClick = incrementDateRange) {
+            IconButton(
+                onClick = incrementDateRange,
+                enabled = canIncrementDate
+            ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     contentDescription = "next week",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = if (canIncrementDate)
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else LocalContentColor.current
                 )
             }
         }

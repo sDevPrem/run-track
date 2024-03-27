@@ -50,13 +50,16 @@ class RunStatsViewModel @Inject constructor(
 
     fun incrementWeekRange() {
         _state.update {
-            val date = Calendar.getInstance().apply {
-                time = it.dateRange.start
-            }
-            date.add(Calendar.WEEK_OF_MONTH, 1)
 
+            val todayDate = Calendar.getInstance()
+            if (it.dateRange.endInclusive >= todayDate.time) return
+
+            val nextWeekDate = Calendar.getInstance().apply {
+                time = it.dateRange.start
+                add(Calendar.WEEK_OF_MONTH, 1)
+            }
             it.copy(
-                dateRange = date.setDateToWeekFirstDay().time..date.setDateToWeekLastDay().time,
+                dateRange = nextWeekDate.setDateToWeekFirstDay().time..nextWeekDate.setDateToWeekLastDay().time,
             )
         }
         fetchRunInDate()
