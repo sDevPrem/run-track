@@ -33,9 +33,12 @@ paging = "3.2.0"
 accompanist-permissions = "0.31.5-beta"
 
 #plugin
-android-gradle = "8.0.0"
+android-gradle = "8.3.0"
 kotlin = "1.9.0"
 maps-secret = "2.0.1"
+
+#chart
+vico = "2.0.0-alpha.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -101,6 +104,11 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 
 #accompanist
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
+
+#chart
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }

@@ -30,6 +30,9 @@ class AppRepository @Inject constructor(
         }
     }
 
+    suspend fun getRunStatsInDateRange(fromDate: Date?, toDate: Date?) =
+        runDao.getRunStatsInDateRange(fromDate, toDate)
+
     fun getRunByDescDateWithLimit(limit: Int) = runDao.getRunByDescDateWithLimit(limit)
 
     fun getTotalRunningDuration(fromDate: Date? = null, toDate: Date? = null): Flow<Long> =

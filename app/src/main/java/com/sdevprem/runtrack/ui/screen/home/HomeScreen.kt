@@ -91,6 +91,9 @@ fun HomeScreen(
             navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) },
             navigateToRunningHistoryScreen = {
                 BottomNavDestination.Home.RecentRun.navigateToRunningHistoryScreen(navController)
+            },
+            navigateToRunStats = {
+                BottomNavDestination.Home.navigateToRunStats(navController)
             }
         )
 
@@ -110,7 +113,8 @@ fun HomeScreenContent(
     showRun: (Run) -> Unit,
     dismissDialog: () -> Unit,
     navigateToRunScreen: () -> Unit,
-    navigateToRunningHistoryScreen: () -> Unit
+    navigateToRunningHistoryScreen: () -> Unit,
+    navigateToRunStats: () -> Unit,
 ) {
     Column {
         TopBar(
@@ -118,7 +122,8 @@ fun HomeScreenContent(
                 .zIndex(1f),
             user = state.user,
             weeklyGoalInKm = state.user.weeklyGoalInKM,
-            distanceCoveredInCurrentWeekInKm = state.distanceCoveredInKmInThisWeek
+            distanceCoveredInCurrentWeekInKm = state.distanceCoveredInKmInThisWeek,
+            onWeeklyGoalClick = navigateToRunStats
         )
         if (durationInMillis > 0)
             CurrentRunningCard(
@@ -349,11 +354,11 @@ private fun CurrentRunningCard(
 }
 
 @Composable
-@Preview(showBackground = true)
 private fun TopBar(
     modifier: Modifier = Modifier,
     user: User = User(),
     weeklyGoalInKm: Float = 0f,
+    onWeeklyGoalClick: () -> Unit,
     distanceCoveredInCurrentWeekInKm: Float = 0f
 ) {
     Box(
@@ -378,7 +383,8 @@ private fun TopBar(
             Spacer(modifier = Modifier.size(32.dp))
             WeeklyGoalCard(
                 weeklyGoalInKm = weeklyGoalInKm.roundToInt(),
-                weeklyGoalDoneInKm = distanceCoveredInCurrentWeekInKm
+                weeklyGoalDoneInKm = distanceCoveredInCurrentWeekInKm,
+                onClick = onWeeklyGoalClick
             )
         }
     }
@@ -439,11 +445,13 @@ private fun TopBarProfile(
 private fun WeeklyGoalCard(
     modifier: Modifier = Modifier,
     weeklyGoalInKm: Int,
-    weeklyGoalDoneInKm: Float
+    weeklyGoalDoneInKm: Float,
+    onClick: () -> Unit,
 ) {
     ElevatedCard(
         modifier = modifier,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier
