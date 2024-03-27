@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.conditional
 import com.sdevprem.runtrack.utils.setDateToWeekFirstDay
 import com.sdevprem.runtrack.utils.setDateToWeekLastDay
+import com.sdevprem.runtrack.utils.setMinimumTime
 import com.sdevprem.runtrack.utils.toCalendar
 import com.sdevprem.runtrack.utils.toList
 import java.text.SimpleDateFormat
@@ -178,8 +180,11 @@ private fun DateRangeCard(
     decrementDateRange: () -> Unit,
     incrementDateRange: () -> Unit,
 ) {
-    val canIncrementDate = remember(dateList) {
-        dateList.last() < Calendar.getInstance().time
+    val todayDate = remember(dateList) {
+        Calendar.getInstance().setMinimumTime().time
+    }
+    val canIncrementDate = remember(dateList, todayDate) {
+        dateList.last() < todayDate
     }
     ElevatedCard(
         modifier = Modifier
@@ -203,7 +208,8 @@ private fun DateRangeCard(
             dateList.forEach {
                 DateRangeColumn(
                     date = it,
-                    isDataAvailable = isDataAvailable,
+                    isDataAvailable = isDataAvailable(it),
+                    isTodayDate = it == todayDate
                 )
             }
             IconButton(
@@ -225,11 +231,13 @@ private fun DateRangeCard(
 @Composable
 private fun DateRangeColumn(
     date: Date,
-    isDataAvailable: (date: Date) -> Boolean,
+    isDataAvailable: Boolean,
+    isTodayDate: Boolean,
 ) {
     val dayFormatter: SimpleDateFormat = remember { SimpleDateFormat("EEEE", Locale.getDefault()) }
     val dateFormatter = remember { SimpleDateFormat("d", Locale.getDefault()) }
     val primaryColor = MaterialTheme.colorScheme.primary
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
 
     Column(
         modifier = Modifier
@@ -246,22 +254,40 @@ private fun DateRangeColumn(
         Text(
             text = dateFormatter.format(date).toString(),
             style = MaterialTheme.typography.labelLarge,
-            color = if (isDataAvailable(date)) {
+            color = if (isDataAvailable) {
                 MaterialTheme.colorScheme.onPrimary
             } else {
                 MaterialTheme.colorScheme.onSurface
             },
             modifier = Modifier
                 .conditional(
-                    condition = isDataAvailable(date),
+                    condition = isDataAvailable || isTodayDate,
                 ) {
                     Modifier
-                        .drawBehind {
-                            drawCircle(
-                                color = primaryColor,
-                                radius = size.maxDimension / 2
-                            )
+                        .conditional(
+                            condition = isDataAvailable || isTodayDate
+                        ) {
+                            Modifier
+                                .drawBehind {
+                                    if (isDataAvailable) {
+                                        drawCircle(
+                                            color = primaryColor,
+                                            radius = size.maxDimension / 2
+                                        )
+                                    }
+                                    if (isTodayDate) {
+                                        drawCircle(
+                                            color = onSurfaceColor,
+                                            radius = size.maxDimension / 2,
+                                            style = Stroke(
+                                                width = 2.dp.toPx()
+                                            )
+                                        )
+                                    }
+
+                                }
                         }
+
                 }
                 .padding(4.dp)
 
