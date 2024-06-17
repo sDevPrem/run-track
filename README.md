@@ -101,3 +101,7 @@ These features are left to be implemented:
 
 1. Profile menu implementation.
 2. Unit Tests
+3. Currently, we are storing (maps screenshot) bitmap directly into db in form of bytes
+   which is not good. Save the image to the storage and store only its uri or id.
+4. App Icon
+5. Suitable markers for the start, end, and current position.
