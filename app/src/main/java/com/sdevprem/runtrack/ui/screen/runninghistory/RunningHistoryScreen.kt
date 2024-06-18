@@ -5,10 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +35,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,10 +48,10 @@ import com.sdevprem.runtrack.core.data.utils.RunSortOrder
 import com.sdevprem.runtrack.ui.utils.component.DropDownList
 import com.sdevprem.runtrack.ui.utils.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.utils.component.RunItem
+import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
 
 @Composable
 fun RunningHistoryScreen(
-    paddingValues: PaddingValues = PaddingValues(),
     navController: NavController,
     viewModel: RunningHistoryVM = hiltViewModel()
 ) {
@@ -64,7 +61,6 @@ fun RunningHistoryScreen(
     RunningHistoryScreenContent(
         runItems = runItems,
         onSortOrderSelected = viewModel::setSortOrder,
-        paddingValues = paddingValues,
         onItemClick = viewModel::setDialogRun,
         onNavIconClick = { navController.navigateUp() }
     )
@@ -80,7 +76,6 @@ fun RunningHistoryScreen(
 
 @Composable
 private fun RunningHistoryScreenContent(
-    paddingValues: PaddingValues = PaddingValues(),
     runItems: LazyPagingItems<Run>,
     onSortOrderSelected: (RunSortOrder) -> Unit,
     onItemClick: (Run) -> Unit,
@@ -92,7 +87,6 @@ private fun RunningHistoryScreenContent(
         Box(modifier = Modifier.padding(it)) {
             RunningList(
                 runItems = runItems,
-                bottomPadding = paddingValues.calculateBottomPadding(),
                 onItemClick = onItemClick
             )
         }
@@ -155,10 +149,12 @@ private fun ScreenTopAppBar(
 @Composable
 private fun RunningList(
     runItems: LazyPagingItems<Run>,
-    bottomPadding: Dp = 0.dp,
     onItemClick: (Run) -> Unit
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = LocalScaffoldBottomPadding.current + 8.dp)
+    ) {
 
         if (runItems.loadState.refresh == LoadState.Loading) item {
             CircularProgressIndicator(
@@ -171,10 +167,6 @@ private fun RunningList(
             runItems[it]?.let { run ->
                 RunCardItem(run = run, onItemClick = onItemClick)
             }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(bottomPadding + 8.dp))
         }
     }
 }

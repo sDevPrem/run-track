@@ -20,6 +20,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +46,7 @@ import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.ui.nav.Navigation
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.utils.ComposeUtils
+import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.ui.utils.navigateToBottomNavDestination
 import kotlinx.coroutines.delay
 
@@ -128,7 +130,11 @@ fun MainScreen(
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Navigation(navHostController, it)
+            CompositionLocalProvider(
+                LocalScaffoldBottomPadding provides it.calculateBottomPadding()
+            ) {
+                Navigation(navHostController)
+            }
         }
     }
 
