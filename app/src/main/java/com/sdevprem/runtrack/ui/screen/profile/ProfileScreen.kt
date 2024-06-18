@@ -38,23 +38,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.ui.utils.component.RunningStatsItem
+import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
 
 @Composable
-fun ProfileScreen(
-    bottomPadding: Dp = 0.dp
-) {
+fun ProfileScreen() {
     val context = LocalContext.current
     val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.profileScreenState.collectAsStateWithLifecycle()
 
     ProfileScreenContent(
-        bottomPadding = bottomPadding,
         profileScreenState = state,
         profileEditActions = viewModel
     )
@@ -67,11 +64,13 @@ fun ProfileScreen(
 
 @Composable
 private fun ProfileScreenContent(
-    bottomPadding: Dp = 0.dp,
     profileScreenState: ProfileScreenState,
     profileEditActions: ProfileEditActions
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(bottom = LocalScaffoldBottomPadding.current + 8.dp)
+    ) {
         TopBar(
             state = profileScreenState,
             profileEditActions = profileEditActions
@@ -111,7 +110,6 @@ private fun ProfileScreenContent(
                     )
                 }
             }
-            Spacer(modifier = Modifier.size(bottomPadding + 8.dp))
         }
     }
 }

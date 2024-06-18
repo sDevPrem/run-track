@@ -52,7 +52,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,13 +66,13 @@ import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.ui.utils.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.utils.component.RunItem
 import com.sdevprem.runtrack.ui.utils.component.UserProfilePic
+import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.utils.RunUtils
 import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    bottomPadding: Dp = 0.dp,
     navController: NavController
 ) {
     val doesUserExist by viewModel.doesUserExist.collectAsStateWithLifecycle()
@@ -82,7 +81,6 @@ fun HomeScreen(
 
     if (doesUserExist == true)
         HomeScreenContent(
-            bottomPadding = bottomPadding,
             state = state,
             durationInMillis = durationInMillis,
             deleteRun = viewModel::deleteRun,
@@ -106,7 +104,6 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    bottomPadding: Dp = 0.dp,
     state: HomeScreenState,
     durationInMillis: Long,
     deleteRun: (Run) -> Unit,
@@ -162,7 +159,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = bottomPadding)
+                .padding(bottom = LocalScaffoldBottomPadding.current)
         ) {
             if (state.runList.isEmpty())
                 EmptyRunListView(

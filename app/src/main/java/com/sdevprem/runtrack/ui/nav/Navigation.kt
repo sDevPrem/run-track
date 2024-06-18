@@ -1,6 +1,5 @@
 package com.sdevprem.runtrack.ui.nav
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,29 +13,26 @@ import com.sdevprem.runtrack.ui.screen.runstats.RunStatsScreen
 @Composable
 fun Navigation(
     navController: NavHostController,
-    paddingValues: PaddingValues = PaddingValues()
 ) {
     SetupNavGraph(
         navController = navController,
-        paddingValues = paddingValues
     )
 }
 
 @Composable
 private fun SetupNavGraph(
     navController: NavHostController,
-    paddingValues: PaddingValues = PaddingValues()
 ) {
     NavHost(
         navController = navController,
         startDestination = BottomNavDestination.Home.route
     ) {
-        homeNavigation(navController, paddingValues)
+        homeNavigation(navController)
 
         composable(
             route = BottomNavDestination.Profile.route
         ) {
-            ProfileScreen(paddingValues.calculateBottomPadding())
+            ProfileScreen()
         }
 
         composable(
