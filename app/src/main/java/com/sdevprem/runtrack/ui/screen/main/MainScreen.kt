@@ -95,7 +95,7 @@ fun MainScreen(
 
     Scaffold(
         bottomBar = {
-            ComposeUtils.SlideDownAnimatedVisibility(
+            ComposeUtils.SlideUpAnimatedVisibility(
                 visible = shouldShowBottomNav && doesUserExist == true,
             ) {
                 BottomBar(navController = navHostController)

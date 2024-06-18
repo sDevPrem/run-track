@@ -15,7 +15,7 @@ object ComposeUtils {
     const val slideDownOutDuration = 250
 
     @Composable
-    fun SlideDownAnimatedVisibility(
+    fun SlideUpAnimatedVisibility(
         modifier: Modifier = Modifier,
         inDurationInMillis: Int = slideDownInDuration,
         outDurationInMillis: Int = slideDownOutDuration,
