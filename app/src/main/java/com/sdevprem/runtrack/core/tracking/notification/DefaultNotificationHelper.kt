@@ -10,11 +10,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.core.tracking.notification.NotificationHelper.Companion.TRACKING_NOTIFICATION_ID
 import com.sdevprem.runtrack.core.tracking.service.TrackingService
 import com.sdevprem.runtrack.ui.MainActivity
 import com.sdevprem.runtrack.ui.nav.Destination
-import com.sdevprem.runtrack.utils.RunUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -57,7 +57,7 @@ class DefaultNotificationHelper @Inject constructor(
 
     override fun updateTrackingNotification(durationInMillis: Long, isTracking: Boolean) {
         val notification = baseNotificationBuilder
-            .setContentText(RunUtils.getFormattedStopwatchTime(durationInMillis))
+            .setContentText(DateTimeUtils.getFormattedStopwatchTime(durationInMillis))
             .clearActions()
             .addAction(getTrackingNotificationAction(isTracking))
             .build()

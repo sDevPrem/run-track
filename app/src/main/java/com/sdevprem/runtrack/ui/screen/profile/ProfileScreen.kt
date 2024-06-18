@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.ui.utils.component.RunningStatsItem
-import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
+import com.sdevprem.runtrack.ui.common.compose.component.RunningStatsItem
+import com.sdevprem.runtrack.ui.common.compose.compositonLocal.LocalScaffoldBottomPadding
 
 @Composable
 fun ProfileScreen() {

@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.utils.component
+package com.sdevprem.runtrack.ui.common.compose.component
 
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -35,9 +35,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.common.extension.getDisplayDate
 import com.sdevprem.runtrack.core.data.model.Gender
 import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 import java.util.Date
 
 @Composable

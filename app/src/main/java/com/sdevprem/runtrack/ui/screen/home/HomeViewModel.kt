@@ -2,6 +2,8 @@ package com.sdevprem.runtrack.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
+import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.repository.AppRepository
 import com.sdevprem.runtrack.core.data.repository.UserRepository
@@ -9,8 +11,6 @@ import com.sdevprem.runtrack.core.tracking.TrackingManager
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
-import com.sdevprem.runtrack.utils.setDateToWeekFirstDay
-import com.sdevprem.runtrack.utils.setDateToWeekLastDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

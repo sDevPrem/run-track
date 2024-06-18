@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.utils
+package com.sdevprem.runtrack.ui.common.extension
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind

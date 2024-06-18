@@ -31,10 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
-import com.sdevprem.runtrack.ui.utils.component.RunningStatsItem
-import com.sdevprem.runtrack.utils.RunUtils
+import com.sdevprem.runtrack.ui.common.compose.component.RunningStatsItem
 import java.math.RoundingMode
 
 @Composable
@@ -131,7 +131,7 @@ private fun RunningCardTime(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = RunUtils.getFormattedStopwatchTime(durationInMillis),
+            text = DateTimeUtils.getFormattedStopwatchTime(durationInMillis),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
         )

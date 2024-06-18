@@ -58,16 +58,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.model.User
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
+import com.sdevprem.runtrack.ui.common.compose.component.RunItem
+import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
+import com.sdevprem.runtrack.ui.common.compose.compositonLocal.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination
-import com.sdevprem.runtrack.ui.utils.component.RunInfoDialog
-import com.sdevprem.runtrack.ui.utils.component.RunItem
-import com.sdevprem.runtrack.ui.utils.component.UserProfilePic
-import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.utils.RunUtils
 import kotlin.math.roundToInt
 
 @Composable
@@ -324,7 +324,7 @@ private fun CurrentRunningCard(
             )
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = RunUtils.getFormattedStopwatchTime(durationInMillis),
+                text = DateTimeUtils.getFormattedStopwatchTime(durationInMillis),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = MaterialTheme.colorScheme.onPrimary
                 )

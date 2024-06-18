@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.utils
+package com.sdevprem.runtrack.ui.common.extension
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination

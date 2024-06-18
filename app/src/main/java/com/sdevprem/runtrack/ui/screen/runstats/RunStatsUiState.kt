@@ -1,11 +1,11 @@
 package com.sdevprem.runtrack.ui.screen.runstats
 
 import androidx.compose.runtime.Immutable
+import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
+import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
+import com.sdevprem.runtrack.common.extension.setMinimumTime
+import com.sdevprem.runtrack.common.extension.toCalendar
 import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.utils.setDateToWeekFirstDay
-import com.sdevprem.runtrack.utils.setDateToWeekLastDay
-import com.sdevprem.runtrack.utils.setMinimumTime
-import com.sdevprem.runtrack.utils.toCalendar
 import java.util.Calendar
 import java.util.Date
 

@@ -1,7 +1,6 @@
-package com.sdevprem.runtrack.utils
+package com.sdevprem.runtrack.common.extension
 
 import java.util.Calendar
-import java.util.Date
 
 fun Calendar.setDateToWeekFirstDay() = apply {
     val firstDay = getActualMinimum(Calendar.DAY_OF_WEEK)
@@ -28,8 +27,6 @@ fun Calendar.setMaximumTime() = apply {
     set(Calendar.SECOND, getActualMaximum(Calendar.SECOND))
     set(Calendar.MILLISECOND, getActualMaximum(Calendar.MILLISECOND))
 }
-
-fun Date.toCalendar(): Calendar = Calendar.getInstance().also { it.time = this }
 
 operator fun ClosedRange<Calendar>.iterator() = object : Iterator<Calendar> {
     var current = start

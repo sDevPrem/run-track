@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.utils
+package com.sdevprem.runtrack.ui.common.compose.animation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
