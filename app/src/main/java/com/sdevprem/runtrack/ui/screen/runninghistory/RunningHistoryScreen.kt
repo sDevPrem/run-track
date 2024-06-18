@@ -45,10 +45,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.core.data.utils.RunSortOrder
-import com.sdevprem.runtrack.ui.utils.component.DropDownList
-import com.sdevprem.runtrack.ui.utils.component.RunInfoDialog
-import com.sdevprem.runtrack.ui.utils.component.RunItem
-import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
+import com.sdevprem.runtrack.ui.common.compose.component.DropDownList
+import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
+import com.sdevprem.runtrack.ui.common.compose.component.RunItem
+import com.sdevprem.runtrack.ui.common.compose.compositonLocal.LocalScaffoldBottomPadding
 
 @Composable
 fun RunningHistoryScreen(

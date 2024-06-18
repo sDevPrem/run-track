@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.utils.component
+package com.sdevprem.runtrack.ui.common.compose.component
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -38,10 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.common.extension.getDisplayDate
+import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.core.data.model.Run
 import com.sdevprem.runtrack.ui.theme.md_theme_light_onSurface
-import com.sdevprem.runtrack.utils.RunUtils
-import com.sdevprem.runtrack.utils.RunUtils.getDisplayDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +82,7 @@ fun RunInfoDialog(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = RunUtils.getFormattedStopwatchTime(run.durationInMillis),
+                    text = DateTimeUtils.getFormattedStopwatchTime(run.durationInMillis),
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
                 )

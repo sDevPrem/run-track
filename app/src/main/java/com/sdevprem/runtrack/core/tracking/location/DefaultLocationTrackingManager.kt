@@ -6,7 +6,7 @@ import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import com.sdevprem.runtrack.utils.RunUtils.hasLocationPermission
+import com.sdevprem.runtrack.common.extension.hasLocationPermission
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 

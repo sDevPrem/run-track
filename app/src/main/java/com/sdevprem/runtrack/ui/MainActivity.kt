@@ -20,14 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.sdevprem.runtrack.common.extension.hasAllPermission
+import com.sdevprem.runtrack.common.extension.hasLocationPermission
+import com.sdevprem.runtrack.common.extension.openAppSetting
+import com.sdevprem.runtrack.common.utils.PermissionUtils
 import com.sdevprem.runtrack.core.tracking.location.LocationUtils
+import com.sdevprem.runtrack.ui.common.compose.component.LocationPermissionRequestDialog
 import com.sdevprem.runtrack.ui.screen.main.MainScreen
 import com.sdevprem.runtrack.ui.theme.AppTheme
-import com.sdevprem.runtrack.ui.utils.component.LocationPermissionRequestDialog
-import com.sdevprem.runtrack.utils.RunUtils
-import com.sdevprem.runtrack.utils.RunUtils.hasAllPermission
-import com.sdevprem.runtrack.utils.RunUtils.hasLocationPermission
-import com.sdevprem.runtrack.utils.RunUtils.openAppSetting
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             contract = ActivityResultContracts.RequestMultiplePermissions(),
             onResult = {
                 it.forEach { (permission, isGranted) ->
-                    if (!isGranted && RunUtils.locationPermissions.contains(permission)) {
+                    if (!isGranted && PermissionUtils.locationPermissions.contains(permission)) {
                         showPermissionDeclinedRationale = true
                     }
                 }
@@ -76,16 +76,16 @@ class MainActivity : ComponentActivity() {
                 onDismissClick = ::finish,
                 onOkClick = {
                     showRationale = false
-                    permissionLauncher.launch(RunUtils.allPermissions)
+                    permissionLauncher.launch(PermissionUtils.allPermissions)
                 }
             )
         LaunchedEffect(key1 = Unit) {
             when {
                 hasAllPermission() -> return@LaunchedEffect
-                RunUtils.locationPermissions.any { shouldShowRequestPermissionRationale(it) } -> showRationale =
+                PermissionUtils.locationPermissions.any { shouldShowRequestPermissionRationale(it) } -> showRationale =
                     true
 
-                else -> permissionLauncher.launch(RunUtils.allPermissions)
+                else -> permissionLauncher.launch(PermissionUtils.allPermissions)
             }
         }
     }

@@ -41,13 +41,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.ui.common.compose.animation.ComposeUtils
+import com.sdevprem.runtrack.ui.common.compose.compositonLocal.LocalScaffoldBottomPadding
+import com.sdevprem.runtrack.ui.common.extension.navigateToBottomNavDestination
 import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination
 import com.sdevprem.runtrack.ui.nav.Navigation
 import com.sdevprem.runtrack.ui.theme.AppTheme
-import com.sdevprem.runtrack.ui.utils.ComposeUtils
-import com.sdevprem.runtrack.ui.utils.compositionLocal.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.ui.utils.navigateToBottomNavDestination
 import kotlinx.coroutines.delay
 
 @Composable

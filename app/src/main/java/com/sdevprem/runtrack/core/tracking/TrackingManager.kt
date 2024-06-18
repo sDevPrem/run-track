@@ -4,11 +4,11 @@ import android.location.Location
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
+import com.sdevprem.runtrack.common.utils.LocationUtils
 import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.core.tracking.service.TrackingServiceManager
-import com.sdevprem.runtrack.utils.RunUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -68,7 +68,7 @@ class TrackingManager @Inject constructor(
                 distanceInMeters = state.distanceInMeters.run {
                     var distance = this
                     if (pathPoints.size > 1)
-                        distance += RunUtils.getDistanceBetweenPathPoints(
+                        distance += LocationUtils.getDistanceBetweenPathPoints(
                             pathPoint1 = pathPoints[pathPoints.size - 1],
                             pathPoint2 = pathPoints[pathPoints.size - 2]
                         )

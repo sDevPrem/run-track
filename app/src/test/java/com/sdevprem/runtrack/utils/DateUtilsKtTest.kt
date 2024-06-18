@@ -1,5 +1,9 @@
 package com.sdevprem.runtrack.utils
 
+import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
+import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
+import com.sdevprem.runtrack.common.extension.setMaximumTime
+import com.sdevprem.runtrack.common.extension.setMinimumTime
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

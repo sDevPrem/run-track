@@ -47,8 +47,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.data.model.User
-import com.sdevprem.runtrack.ui.utils.bottomBorder
-import com.sdevprem.runtrack.ui.utils.component.UserProfilePic
+import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
+import com.sdevprem.runtrack.ui.common.extension.bottomBorder
 
 @Composable
 fun TopBarProfile(

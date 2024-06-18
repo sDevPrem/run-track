@@ -39,11 +39,10 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import com.sdevprem.runtrack.core.tracking.model.firstLocationPoint
+import com.sdevprem.runtrack.core.tracking.model.lasLocationPoint
+import com.sdevprem.runtrack.ui.common.utils.GoogleMapUtils
 import com.sdevprem.runtrack.ui.theme.md_theme_light_primary
-import com.sdevprem.runtrack.ui.utils.bitmapDescriptorFromVector
-import com.sdevprem.runtrack.utils.RunUtils
-import com.sdevprem.runtrack.utils.RunUtils.firstLocationPoint
-import com.sdevprem.runtrack.utils.RunUtils.lasLocationPoint
 
 @Composable
 fun Map(
@@ -140,7 +139,7 @@ private fun TakeScreenShot(
 ) {
     MapEffect(key1 = take) { map ->
         if (take)
-            RunUtils.takeSnapshot(
+            GoogleMapUtils.takeSnapshot(
                 map,
                 pathPoints,
                 mapCenter,
@@ -190,7 +189,7 @@ private fun DrawPathPoints(
         )
 
     val currentPosIcon = remember {
-        bitmapDescriptorFromVector(
+        GoogleMapUtils.bitmapDescriptorFromVector(
             context = context,
             vectorResId = R.drawable.ic_circle,
             tint = md_theme_light_primary.toArgb()
@@ -205,7 +204,7 @@ private fun DrawPathPoints(
 
     firstLocationPoint?.let {
         val firstLocationIcon = remember(isRunningFinished) {
-            bitmapDescriptorFromVector(
+            GoogleMapUtils.bitmapDescriptorFromVector(
                 context = context,
                 vectorResId = if (isRunningFinished) R.drawable.ic_circle else R.drawable.ic_circle_hollow,
                 tint = if (isRunningFinished) md_theme_light_primary.toArgb() else null
