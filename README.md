@@ -37,8 +37,8 @@ while storing essential statistics using Room database.
     * `nav`: Contains app navigation and destinations.
     * `screen`: Contains UI.
     * `theme`: Material3 theme.
-    * `utils`: UI utility classes and common components.
-* `utils`: Utility class used across the app.
+    * `common`: UI utility classes and common components.
+* `common`: Utility class used across the app.
 
 ## Build With
 
