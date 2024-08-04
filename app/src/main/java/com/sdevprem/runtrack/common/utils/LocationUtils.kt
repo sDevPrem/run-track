@@ -13,10 +13,10 @@ object LocationUtils {
         return if (pathPoint1 is PathPoint.LocationPoint && pathPoint2 is PathPoint.LocationPoint) {
             val result = FloatArray(1)
             Location.distanceBetween(
-                pathPoint1.latLng.latitude,
-                pathPoint1.latLng.longitude,
-                pathPoint2.latLng.latitude,
-                pathPoint2.latLng.longitude,
+                pathPoint1.locationInfo.latitude,
+                pathPoint1.locationInfo.longitude,
+                pathPoint2.locationInfo.latitude,
+                pathPoint2.locationInfo.longitude,
                 result
             )
             result[0].roundToInt()

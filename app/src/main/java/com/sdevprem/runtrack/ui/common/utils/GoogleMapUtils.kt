@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
+import com.sdevprem.runtrack.common.extension.toLatLng
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 
 
@@ -25,7 +26,7 @@ object GoogleMapUtils {
         val boundsBuilder = LatLngBounds.Builder()
         pathPoints.forEach {
             if (it is PathPoint.LocationPoint)
-                boundsBuilder.include(it.latLng)
+                boundsBuilder.include(it.locationInfo.toLatLng())
         }
         map.moveCamera(
             CameraUpdateFactory
@@ -37,7 +38,7 @@ object GoogleMapUtils {
                 )
         )
 
-        //since move camera bounds the map in the specified LatLng
+        //since move camera bounds the map in the specified LocationInfo
         //from the center withing the bounding box (of side snapshotSideLength)
         //so get the coordinate of the starting point of the box
         val startOffset = mapCenter - Offset(snapshotSideLength / 2, snapshotSideLength / 2)
