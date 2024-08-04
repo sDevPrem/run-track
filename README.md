@@ -21,10 +21,10 @@ while storing essential statistics using Room database.
 
 ## Screenshot
 
-|                                                                                                                         |                                                                                                                           |                                                                                                                          |
-|-------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| ![run_track_home_ss](https://github.com/sDevPrem/run-track/assets/130966261/1e7828dc-555f-49a6-92aa-c7caea944cb2)       | ![runtrack_live_tracking_ss](https://github.com/sDevPrem/run-track/assets/130966261/4cd52d04-7745-484b-b5be-f6b2c0c72f71) | ![runtrack_running_info_ss](https://github.com/sDevPrem/run-track/assets/130966261/b684d4a5-e443-4413-a832-0f63992fe89c) |
-| ![run_track_statistics_ss](https://github.com/sDevPrem/run-track/assets/130966261/b9d92744-7de1-461e-b96f-56950689e0a4) | ![runtrack_profile_ss](https://github.com/sDevPrem/run-track/assets/130966261/bfa0db6b-7ad6-4b22-abcf-d6f6393178f1)       |
+|                                                                                                                         |                                                                                                               |                                                                                                                |
+|-------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| ![run_track_home_ss](https://github.com/user-attachments/assets/6a104b92-06ac-40fd-9b32-0b85d9544446)                   | ![runtrack_live_tracking_ss](https://github.com/user-attachments/assets/fd86f2cb-4114-41c5-ac43-06005cfcfbe9) | ![runtrack_running_info_ss](https://github.com/user-attachments/assets/78e422ba-b6dd-41a6-8ccc-045a99658aae)   |
+| ![run_track_statistics_ss](https://github.com/sDevPrem/run-track/assets/130966261/b9d92744-7de1-461e-b96f-56950689e0a4) | ![runtrack_profile_ss](https://github.com/user-attachments/assets/0574c8e1-87a3-4858-9c09-5a347d4b5c02)       | ![runtrack_all_run_screen_ss](https://github.com/user-attachments/assets/58b6d8c6-bca2-40b4-ade8-e05e0e4ceec9) |
 
 ## Package Structure
 
