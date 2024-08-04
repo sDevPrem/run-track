@@ -13,11 +13,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import com.sdevprem.runtrack.common.extension.toLatLng
 import com.sdevprem.runtrack.domain.tracking.model.PathPoint
+import kotlinx.coroutines.delay
 
 
 object GoogleMapUtils {
 
-    fun takeSnapshot(
+    private const val MAP_SNAPSHOT_DELAY = 500L
+
+    suspend fun takeSnapshot(
         map: GoogleMap,
         pathPoints: List<PathPoint>,
         mapCenter: Offset,
@@ -35,7 +38,7 @@ object GoogleMapUtils {
                     boundsBuilder.build(),
                     snapshotSideLength.toInt(),
                     snapshotSideLength.toInt(),
-                    (snapshotSideLength * 0.05).toInt()
+                    (snapshotSideLength * 0.2).toInt()
                 )
         )
 
@@ -44,6 +47,8 @@ object GoogleMapUtils {
         //so get the coordinate of the starting point of the box
         val startOffset = mapCenter - Offset(snapshotSideLength / 2, snapshotSideLength / 2)
 
+        //A delay to load the icons and map properly before snapshot
+        delay(MAP_SNAPSHOT_DELAY)
         map.snapshot {
             it?.let {
                 //crop to get a square image which fits the user path
