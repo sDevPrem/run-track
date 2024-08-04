@@ -3,8 +3,8 @@ package com.sdevprem.runtrack.core.tracking.service
 import android.content.Intent
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.sdevprem.runtrack.core.tracking.TrackingManager
-import com.sdevprem.runtrack.core.tracking.notification.NotificationHelper
+import com.sdevprem.runtrack.core.tracking.notification.TrackingNotificationHelper
+import com.sdevprem.runtrack.domain.tracking.TrackingManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
@@ -24,7 +24,7 @@ class TrackingService : LifecycleService() {
     lateinit var trackingManager: TrackingManager
 
     @Inject
-    lateinit var notificationHelper: NotificationHelper
+    lateinit var notificationHelper: TrackingNotificationHelper
     var job: Job? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -34,7 +34,7 @@ class TrackingService : LifecycleService() {
             ACTION_RESUME_TRACKING -> trackingManager.startResumeTracking()
             ACTION_START_SERVICE -> {
                 startForeground(
-                    NotificationHelper.TRACKING_NOTIFICATION_ID,
+                    TrackingNotificationHelper.TRACKING_NOTIFICATION_ID,
                     notificationHelper.baseNotificationBuilder.build()
                 )
 

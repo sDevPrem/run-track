@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import com.sdevprem.runtrack.common.extension.toLatLng
-import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import com.sdevprem.runtrack.domain.tracking.model.PathPoint
 
 
 object GoogleMapUtils {

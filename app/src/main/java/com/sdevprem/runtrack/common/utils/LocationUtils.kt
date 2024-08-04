@@ -1,7 +1,7 @@
 package com.sdevprem.runtrack.common.utils
 
 import android.location.Location
-import com.sdevprem.runtrack.core.tracking.model.PathPoint
+import com.sdevprem.runtrack.domain.tracking.model.PathPoint
 import kotlin.math.roundToInt
 
 object LocationUtils {

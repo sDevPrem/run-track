@@ -13,12 +13,14 @@ import com.google.android.gms.location.LocationServices
 import com.sdevprem.runtrack.core.data.db.RunTrackDB
 import com.sdevprem.runtrack.core.data.db.RunTrackDB.Companion.RUN_TRACK_DB_NAME
 import com.sdevprem.runtrack.core.tracking.location.DefaultLocationTrackingManager
-import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.location.LocationUtils
-import com.sdevprem.runtrack.core.tracking.notification.DefaultNotificationHelper
-import com.sdevprem.runtrack.core.tracking.notification.NotificationHelper
-import com.sdevprem.runtrack.core.tracking.service.DefaultTrackingServiceManager
-import com.sdevprem.runtrack.core.tracking.service.TrackingServiceManager
+import com.sdevprem.runtrack.core.tracking.notification.DefaultTrackingNotificationHelper
+import com.sdevprem.runtrack.core.tracking.notification.TrackingNotificationHelper
+import com.sdevprem.runtrack.core.tracking.service.DefaultBackgroundTrackingManager
+import com.sdevprem.runtrack.core.tracking.timer.DefaultTimeTracker
+import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
+import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
+import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -92,15 +94,21 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun provideTrackingServiceManager(
-        trackingServiceManager: DefaultTrackingServiceManager
-    ): TrackingServiceManager
+    abstract fun provideBackgroundTrackingManager(
+        trackingServiceManager: DefaultBackgroundTrackingManager
+    ): BackgroundTrackingManager
 
     @Binds
     @Singleton
     abstract fun provideNotificationHelper(
-        notificationHelper: DefaultNotificationHelper
-    ): NotificationHelper
+        notificationHelper: DefaultTrackingNotificationHelper
+    ): TrackingNotificationHelper
+
+    @Binds
+    @Singleton
+    abstract fun provideTimeTracker(
+        timeTracker: DefaultTimeTracker
+    ): TimeTracker
 
 
 }

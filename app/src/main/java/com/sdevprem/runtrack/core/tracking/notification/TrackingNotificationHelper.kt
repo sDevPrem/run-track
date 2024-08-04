@@ -2,7 +2,7 @@ package com.sdevprem.runtrack.core.tracking.notification
 
 import androidx.core.app.NotificationCompat
 
-interface NotificationHelper {
+interface TrackingNotificationHelper {
     val baseNotificationBuilder: NotificationCompat.Builder
 
     fun createNotificationChannel()
