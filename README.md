@@ -28,17 +28,21 @@ while storing essential statistics using Room database.
 
 ## Package Structure
 
-* `core`
-    * `data`: Contains entity and database related classes.
-    * `tracking`: Classes that handles tracking.
-* `di` : Hilt Modules.
-* `domain`: Common use cases.
-* `ui`
+* [`background`](app/src/main/java/com/sdevprem/runtrack/background): Handles background related
+  process like service.
+* [`data`](app/src/main/java/com/sdevprem/runtrack/data): Responsible for producing data. Contains
+  entity, database and tracking related classes.
+    * [`tracking`](app/src/main/java/com/sdevprem/runtrack/data/tracking): Classes that handles
+      tracking like location tracking.
+* [`di`](app/src/main/java/com/sdevprem/runtrack/di) : Hilt Modules.
+* [`domain`](app/src/main/java/com/sdevprem/runtrack/domain): Contains common use case and
+  interfaces.
+* [`ui`](app/src/main/java/com/sdevprem/runtrack/ui): UI Layer of the app.
     * `nav`: Contains app navigation and destinations.
     * `screen`: Contains UI.
     * `theme`: Material3 theme.
     * `common`: UI utility classes and common components.
-* `common`: Utility class used across the app.
+* [`common`](app/src/main/java/com/sdevprem/runtrack/common): Utility class used across the app.
 
 ## Build With
 
