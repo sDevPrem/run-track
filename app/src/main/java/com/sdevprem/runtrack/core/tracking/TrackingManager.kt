@@ -3,10 +3,10 @@ package com.sdevprem.runtrack.core.tracking
 import android.location.Location
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.model.LatLng
 import com.sdevprem.runtrack.common.utils.LocationUtils
 import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.core.tracking.model.LocationInfo
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.core.tracking.service.TrackingServiceManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,7 +60,7 @@ class TrackingManager @Inject constructor(
     }
 
     private fun addPathPoints(location: Location?) = location?.let {
-        val pos = LatLng(it.latitude, it.longitude)
+        val pos = LocationInfo(it.latitude, it.longitude)
         _currentRunState.update { state ->
             val pathPoints = state.pathPoints + PathPoint.LocationPoint(pos)
             state.copy(

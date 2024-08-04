@@ -1,10 +1,8 @@
 package com.sdevprem.runtrack.core.tracking.model
 
-import com.google.android.gms.maps.model.LatLng
-
 sealed interface PathPoint {
-    class LocationPoint(val latLng: LatLng) : PathPoint
-    object EmptyLocationPoint : PathPoint
+    data class LocationPoint(val locationInfo: LocationInfo) : PathPoint
+    data object EmptyLocationPoint : PathPoint
 }
 
 fun List<PathPoint>.lasLocationPoint(): PathPoint.LocationPoint? {

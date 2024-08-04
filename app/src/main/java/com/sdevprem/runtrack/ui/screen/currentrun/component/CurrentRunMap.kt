@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastForEach
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.GoogleMapComposable
 import com.google.maps.android.compose.MapEffect
@@ -38,6 +37,8 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.common.extension.toLatLng
+import com.sdevprem.runtrack.core.tracking.model.LocationInfo
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.core.tracking.model.firstLocationPoint
 import com.sdevprem.runtrack.core.tracking.model.lasLocationPoint
@@ -102,7 +103,7 @@ private fun Map(
         lastLocationPoint?.let {
             cameraPositionState.animate(
                 CameraUpdateFactory.newCameraPosition(
-                    CameraPosition.fromLatLngZoom(it.latLng, 15f)
+                    CameraPosition.fromLatLngZoom(it.locationInfo.toLatLng(), 15f)
                 )
             )
         }
@@ -165,26 +166,26 @@ private fun DrawPathPoints(
     }
 
     LaunchedEffect(key1 = lastLocationPoint) {
-        pathPoints.lasLocationPoint()?.let { lastMarkerState.position = it.latLng }
+        pathPoints.lasLocationPoint()?.let { lastMarkerState.position = it.locationInfo.toLatLng() }
     }
 
-    val latLngList = mutableListOf<LatLng>()
+    val locationInfoList = mutableListOf<LocationInfo>()
     pathPoints.fastForEach { pathPoint ->
         if (pathPoint is PathPoint.EmptyLocationPoint) {
             Polyline(
-                points = latLngList.toList(),
+                points = locationInfoList.map { it.toLatLng() },
                 color = md_theme_light_primary,
             )
-            latLngList.clear()
+            locationInfoList.clear()
         } else if (pathPoint is PathPoint.LocationPoint) {
-            latLngList += pathPoint.latLng
+            locationInfoList += pathPoint.locationInfo
         }
     }
 
     //add the last path points
-    if (latLngList.isNotEmpty())
+    if (locationInfoList.isNotEmpty())
         Polyline(
-            points = latLngList.toList(),
+            points = locationInfoList.map { it.toLatLng() },
             color = md_theme_light_primary
         )
 
@@ -212,7 +213,7 @@ private fun DrawPathPoints(
         }
         Marker(
             icon = firstLocationIcon,
-            state = rememberMarkerState(position = it.latLng),
+            state = rememberMarkerState(position = it.locationInfo.toLatLng()),
             anchor = Offset(0.5f, 0.5f)
         )
     }
