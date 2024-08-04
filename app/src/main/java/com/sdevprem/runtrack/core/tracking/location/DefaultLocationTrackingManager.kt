@@ -8,8 +8,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.sdevprem.runtrack.common.extension.hasLocationPermission
-import com.sdevprem.runtrack.core.tracking.model.LocationInfo
-import com.sdevprem.runtrack.core.tracking.model.LocationTrackingInfo
+import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
+import com.sdevprem.runtrack.domain.tracking.model.LocationInfo
+import com.sdevprem.runtrack.domain.tracking.model.LocationTrackingInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 

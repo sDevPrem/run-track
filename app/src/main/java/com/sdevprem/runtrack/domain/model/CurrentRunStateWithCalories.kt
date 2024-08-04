@@ -1,6 +1,6 @@
 package com.sdevprem.runtrack.domain.model
 
-import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.domain.tracking.model.CurrentRunState
 
 data class CurrentRunStateWithCalories(
     val currentRunState: CurrentRunState = CurrentRunState(),

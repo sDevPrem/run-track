@@ -1,11 +1,12 @@
-package com.sdevprem.runtrack.core.tracking
+package com.sdevprem.runtrack.domain.tracking
 
 import com.sdevprem.runtrack.common.utils.LocationUtils
-import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
-import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
-import com.sdevprem.runtrack.core.tracking.model.LocationTrackingInfo
-import com.sdevprem.runtrack.core.tracking.model.PathPoint
-import com.sdevprem.runtrack.core.tracking.service.TrackingServiceManager
+import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
+import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
+import com.sdevprem.runtrack.domain.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.domain.tracking.model.LocationTrackingInfo
+import com.sdevprem.runtrack.domain.tracking.model.PathPoint
+import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 class TrackingManager @Inject constructor(
     private val locationTrackingManager: LocationTrackingManager,
     private val timeTracker: TimeTracker,
-    private val trackingServiceManager: TrackingServiceManager
+    private val backgroundTrackingManager: BackgroundTrackingManager
 ) {
     private var isTracking = false
         set(value) {
@@ -86,7 +87,7 @@ class TrackingManager @Inject constructor(
             return
         if (isFirst) {
             postInitialValue()
-            trackingServiceManager.startService()
+            backgroundTrackingManager.startBackgroundTracking()
             isFirst = false
         }
         isTracking = true
@@ -111,7 +112,7 @@ class TrackingManager @Inject constructor(
 
     fun stop() {
         pauseTracking()
-        trackingServiceManager.stopService()
+        backgroundTrackingManager.stopBackgroundTracking()
         timeTracker.stopTimer()
         postInitialValue()
         isFirst = true

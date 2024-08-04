@@ -2,8 +2,8 @@ package com.sdevprem.runtrack.domain.usecase
 
 import com.sdevprem.runtrack.common.utils.RunUtils
 import com.sdevprem.runtrack.core.data.repository.UserRepository
-import com.sdevprem.runtrack.core.tracking.TrackingManager
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.domain.tracking.TrackingManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject

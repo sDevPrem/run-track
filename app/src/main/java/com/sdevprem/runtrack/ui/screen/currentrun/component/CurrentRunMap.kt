@@ -38,10 +38,10 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.extension.toLatLng
-import com.sdevprem.runtrack.core.tracking.model.LocationInfo
-import com.sdevprem.runtrack.core.tracking.model.PathPoint
-import com.sdevprem.runtrack.core.tracking.model.firstLocationPoint
-import com.sdevprem.runtrack.core.tracking.model.lasLocationPoint
+import com.sdevprem.runtrack.domain.tracking.model.LocationInfo
+import com.sdevprem.runtrack.domain.tracking.model.PathPoint
+import com.sdevprem.runtrack.domain.tracking.model.firstLocationPoint
+import com.sdevprem.runtrack.domain.tracking.model.lasLocationPoint
 import com.sdevprem.runtrack.ui.common.utils.GoogleMapUtils
 import com.sdevprem.runtrack.ui.theme.md_theme_light_primary
 

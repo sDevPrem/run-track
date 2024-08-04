@@ -11,16 +11,16 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.utils.DateTimeUtils
-import com.sdevprem.runtrack.core.tracking.notification.NotificationHelper.Companion.TRACKING_NOTIFICATION_ID
+import com.sdevprem.runtrack.core.tracking.notification.TrackingNotificationHelper.Companion.TRACKING_NOTIFICATION_ID
 import com.sdevprem.runtrack.core.tracking.service.TrackingService
 import com.sdevprem.runtrack.ui.MainActivity
 import com.sdevprem.runtrack.ui.nav.Destination
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class DefaultNotificationHelper @Inject constructor(
+class DefaultTrackingNotificationHelper @Inject constructor(
     @ApplicationContext private val context: Context
-) : NotificationHelper {
+) : TrackingNotificationHelper {
 
     companion object {
         private const val TRACKING_NOTIFICATION_CHANNEL_ID = "tracking_notification"
