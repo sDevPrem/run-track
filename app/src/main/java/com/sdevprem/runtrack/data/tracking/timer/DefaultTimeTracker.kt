@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.tracking.timer
+package com.sdevprem.runtrack.data.tracking.timer
 
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.DefaultDispatcher

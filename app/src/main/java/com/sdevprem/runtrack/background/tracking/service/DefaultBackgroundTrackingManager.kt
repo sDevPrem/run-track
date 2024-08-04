@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.tracking.service
+package com.sdevprem.runtrack.background.tracking.service
 
 import android.content.Context
 import android.content.Intent

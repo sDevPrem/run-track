@@ -1,6 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.onboard
 
-import com.sdevprem.runtrack.core.data.model.Gender
+import com.sdevprem.runtrack.data.model.Gender
 
 interface OnBoardingScreenEvent {
     fun updateName(name: String)

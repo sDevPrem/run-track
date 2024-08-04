@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.data.db.mapper
+package com.sdevprem.runtrack.data.db.mapper
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

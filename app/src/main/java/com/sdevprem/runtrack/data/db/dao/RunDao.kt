@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.data.db.dao
+package com.sdevprem.runtrack.data.db.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.model.Run
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 

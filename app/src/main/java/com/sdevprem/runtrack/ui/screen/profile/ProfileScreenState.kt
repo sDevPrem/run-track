@@ -1,6 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.profile
 
-import com.sdevprem.runtrack.core.data.model.User
+import com.sdevprem.runtrack.data.model.User
 
 data class ProfileScreenState(
     val totalDistanceInKm: Float = 0f,

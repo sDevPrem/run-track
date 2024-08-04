@@ -49,8 +49,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.core.data.model.Gender
-import com.sdevprem.runtrack.core.data.model.User
+import com.sdevprem.runtrack.data.model.Gender
+import com.sdevprem.runtrack.data.model.User
 import com.sdevprem.runtrack.ui.nav.Destination
 import kotlinx.coroutines.launch
 

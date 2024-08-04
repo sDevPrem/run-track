@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.data.model
+package com.sdevprem.runtrack.data.model
 
 import android.net.Uri
 

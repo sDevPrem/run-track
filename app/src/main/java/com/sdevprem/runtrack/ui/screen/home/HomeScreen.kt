@@ -59,8 +59,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.utils.DateTimeUtils
-import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.core.data.model.User
+import com.sdevprem.runtrack.data.model.Run
+import com.sdevprem.runtrack.data.model.User
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.common.compose.component.RunItem

@@ -29,7 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.core.tracking.location.LocationUtils
+import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.ui.common.compose.animation.ComposeUtils
 import com.sdevprem.runtrack.ui.screen.currentrun.component.CurrentRunStatsCard
 import com.sdevprem.runtrack.ui.screen.currentrun.component.Map

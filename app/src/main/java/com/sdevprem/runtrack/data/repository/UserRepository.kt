@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.data.repository
+package com.sdevprem.runtrack.data.repository
 
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.sdevprem.runtrack.core.data.model.Gender
-import com.sdevprem.runtrack.core.data.model.User
+import com.sdevprem.runtrack.data.model.Gender
+import com.sdevprem.runtrack.data.model.User
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
