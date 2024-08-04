@@ -5,12 +5,8 @@ sealed interface PathPoint {
     data object EmptyLocationPoint : PathPoint
 }
 
-fun List<PathPoint>.lasLocationPoint(): PathPoint.LocationPoint? {
-    for (i in lastIndex downTo 0)
-        if (get(i) is PathPoint.LocationPoint)
-            return get(i) as PathPoint.LocationPoint
-    return null
-}
+fun List<PathPoint>.lasLocationPoint() =
+    findLast { it is PathPoint.LocationPoint } as? PathPoint.LocationPoint
 
 fun List<PathPoint>.firstLocationPoint() =
     find { it is PathPoint.LocationPoint } as? PathPoint.LocationPoint
