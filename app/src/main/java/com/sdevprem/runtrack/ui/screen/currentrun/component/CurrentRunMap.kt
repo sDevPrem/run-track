@@ -20,10 +20,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -43,6 +46,7 @@ import com.sdevprem.runtrack.domain.tracking.model.PathPoint
 import com.sdevprem.runtrack.domain.tracking.model.firstLocationPoint
 import com.sdevprem.runtrack.domain.tracking.model.lasLocationPoint
 import com.sdevprem.runtrack.ui.common.utils.GoogleMapUtils
+import com.sdevprem.runtrack.ui.theme.RTColor
 import com.sdevprem.runtrack.ui.theme.md_theme_light_primary
 
 @Composable
@@ -116,7 +120,6 @@ private fun Map(
         cameraPositionState = cameraPositionState,
         onMapLoaded = onMapLoaded,
     ) {
-
         DrawPathPoints(pathPoints = pathPoints, isRunningFinished = isRunningFinished)
 
         TakeScreenShot(
@@ -158,15 +161,25 @@ private fun DrawPathPoints(
 ) {
     val context = LocalContext.current
     val lastMarkerState = rememberMarkerState()
+    val largeLastMarkerState = rememberMarkerState()
     val lastLocationPoint by remember(pathPoints) {
         derivedStateOf { pathPoints.lasLocationPoint() }
     }
     val firstLocationPoint by remember(pathPoints) {
         derivedStateOf { pathPoints.firstLocationPoint() }
     }
+    val density = LocalDensity.current
+    val largeLocationIconSize = remember { with(density) { 32.dp.toPx().toInt() } }
+    val smallLocationIconSize = remember { with(density) { 16.dp.toPx().toInt() } }
+    val flagSize = remember { with(density) { 32.dp.toPx().toInt() } }
+    val flagOffset = remember { Offset(0.5f, 0.8f) }
 
     LaunchedEffect(key1 = lastLocationPoint) {
-        pathPoints.lasLocationPoint()?.let { lastMarkerState.position = it.locationInfo.toLatLng() }
+        pathPoints.lasLocationPoint()?.let {
+            val latLng = it.locationInfo.toLatLng()
+            lastMarkerState.position = latLng
+            largeLastMarkerState.position = latLng
+        }
     }
 
     val locationInfoList = mutableListOf<LocationInfo>()
@@ -189,17 +202,47 @@ private fun DrawPathPoints(
             color = md_theme_light_primary
         )
 
-    val currentPosIcon = remember {
+    val currentPosIcon = remember(isRunningFinished) {
+        if (isRunningFinished.not()) {
+            GoogleMapUtils.bitmapDescriptorFromVector(
+                context = context,
+                vectorResId = R.drawable.ic_circle,
+                tint = md_theme_light_primary.toArgb(),
+                sizeInPx = smallLocationIconSize
+            )
+        } else {
+            GoogleMapUtils.bitmapDescriptorFromVector(
+                context = context,
+                vectorResId = R.drawable.ic_location_marker,
+                tint = Color.Red.toArgb(),
+                sizeInPx = flagSize
+            )
+        }
+    }
+    val currentPosLargeIcon = remember(isRunningFinished) {
+        if (isRunningFinished) return@remember null
+
         GoogleMapUtils.bitmapDescriptorFromVector(
             context = context,
             vectorResId = R.drawable.ic_circle,
-            tint = md_theme_light_primary.toArgb()
+            tint = md_theme_light_primary.copy(alpha = 0.4f).toArgb(),
+            sizeInPx = largeLocationIconSize
         )
     }
+
+    currentPosLargeIcon?.let {
+        Marker(
+            icon = currentPosLargeIcon,
+            state = largeLastMarkerState,
+            anchor = Offset(0.5f, 0.5f),
+            visible = lastLocationPoint != null
+        )
+    }
+
     Marker(
         icon = currentPosIcon,
         state = lastMarkerState,
-        anchor = Offset(0.5f, 0.5f),
+        anchor = if (isRunningFinished) flagOffset else Offset(0.5f, 0.5f),
         visible = lastLocationPoint != null
     )
 
@@ -207,14 +250,16 @@ private fun DrawPathPoints(
         val firstLocationIcon = remember(isRunningFinished) {
             GoogleMapUtils.bitmapDescriptorFromVector(
                 context = context,
-                vectorResId = if (isRunningFinished) R.drawable.ic_circle else R.drawable.ic_circle_hollow,
-                tint = if (isRunningFinished) md_theme_light_primary.toArgb() else null
+                vectorResId = R.drawable.ic_location_marker,
+                tint = RTColor.CHATEAU_GREEN.toArgb(),
+                sizeInPx = flagSize
             )
         }
         Marker(
             icon = firstLocationIcon,
             state = rememberMarkerState(position = it.locationInfo.toLatLng()),
-            anchor = Offset(0.5f, 0.5f)
+            anchor = flagOffset,
+
         )
     }
 }

@@ -3,6 +3,7 @@ package com.sdevprem.runtrack.ui.common.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.geometry.Offset
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -60,8 +61,9 @@ object GoogleMapUtils {
 
     fun bitmapDescriptorFromVector(
         context: Context,
-        vectorResId: Int,
-        tint: Int? = null
+        @DrawableRes vectorResId: Int,
+        tint: Int? = null,
+        sizeInPx: Int? = null,
     ): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)!!
         tint?.let { vectorDrawable.setTint(it) }
@@ -69,13 +71,13 @@ object GoogleMapUtils {
         vectorDrawable.setBounds(
             0,
             0,
-            vectorDrawable.intrinsicWidth,
-            vectorDrawable.intrinsicHeight
+            sizeInPx ?: vectorDrawable.intrinsicWidth,
+            sizeInPx ?: vectorDrawable.intrinsicHeight
         )
 
         val bitmap = Bitmap.createBitmap(
-            vectorDrawable.intrinsicWidth,
-            vectorDrawable.intrinsicHeight,
+            sizeInPx ?: vectorDrawable.intrinsicWidth,
+            sizeInPx ?: vectorDrawable.intrinsicHeight,
             Bitmap.Config.ARGB_8888
         )
 
