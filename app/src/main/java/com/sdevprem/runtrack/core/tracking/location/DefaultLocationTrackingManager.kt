@@ -6,7 +6,10 @@ import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.sdevprem.runtrack.common.extension.hasLocationPermission
+import com.sdevprem.runtrack.core.tracking.model.LocationInfo
+import com.sdevprem.runtrack.core.tracking.model.LocationTrackingInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 
@@ -17,18 +20,36 @@ class DefaultLocationTrackingManager constructor(
     private val locationRequest: LocationRequest
 ) : LocationTrackingManager {
 
-    override fun registerCallback(locationCallback: LocationCallback) {
+    private var locationCallback: LocationTrackingManager.LocationCallback? = null
+    private val gLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            locationCallback?.onLocationUpdate(
+                p0.locations.mapNotNull {
+                    it?.let {
+                        LocationTrackingInfo(
+                            locationInfo = LocationInfo(it.latitude, it.longitude),
+                            speedInMS = it.speed
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    override fun setCallback(locationCallback: LocationTrackingManager.LocationCallback) {
         if (context.hasLocationPermission()) {
+            this.locationCallback = locationCallback
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
-                locationCallback,
+                gLocationCallback,
                 Looper.getMainLooper()
             )
         }
     }
 
-    override fun unRegisterCallback(locationCallback: LocationCallback) {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    override fun removeCallback() {
+        this.locationCallback = null
+        fusedLocationProviderClient.removeLocationUpdates(gLocationCallback)
     }
 
 }
