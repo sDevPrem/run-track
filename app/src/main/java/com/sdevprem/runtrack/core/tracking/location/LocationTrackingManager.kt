@@ -1,9 +1,13 @@
 package com.sdevprem.runtrack.core.tracking.location
 
-import com.google.android.gms.location.LocationCallback
+import com.sdevprem.runtrack.core.tracking.model.LocationTrackingInfo
 
 interface LocationTrackingManager {
-    fun registerCallback(locationCallback: LocationCallback)
+    fun setCallback(locationCallback: LocationCallback)
 
-    fun unRegisterCallback(locationCallback: LocationCallback)
+    fun removeCallback()
+
+    interface LocationCallback {
+        fun onLocationUpdate(results: List<LocationTrackingInfo>)
+    }
 }

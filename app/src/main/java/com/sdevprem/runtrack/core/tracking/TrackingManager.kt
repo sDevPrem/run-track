@@ -1,12 +1,9 @@
 package com.sdevprem.runtrack.core.tracking
 
-import android.location.Location
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
 import com.sdevprem.runtrack.common.utils.LocationUtils
 import com.sdevprem.runtrack.core.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.core.tracking.model.CurrentRunState
-import com.sdevprem.runtrack.core.tracking.model.LocationInfo
+import com.sdevprem.runtrack.core.tracking.model.LocationTrackingInfo
 import com.sdevprem.runtrack.core.tracking.model.PathPoint
 import com.sdevprem.runtrack.core.tracking.service.TrackingServiceManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,12 +38,17 @@ class TrackingManager @Inject constructor(
 
     private var isFirst = true
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult) {
+    private val locationCallback = object : LocationTrackingManager.LocationCallback {
+
+        override fun onLocationUpdate(results: List<LocationTrackingInfo>) {
             if (isTracking) {
-                result.locations.forEach { location ->
-                    addPathPoints(location)
-                    Timber.d("New LocationPoint : ${location.latitude}, ${location.longitude}")
+                results.forEach { info ->
+                    addPathPoints(info)
+                    Timber.d(
+                        "New LocationPoint : " +
+                                "latitude: ${info.locationInfo.latitude}, " +
+                                "longitude: ${info.locationInfo.longitude}"
+                    )
                 }
             }
         }
@@ -59,10 +61,9 @@ class TrackingManager @Inject constructor(
         _trackingDurationInMs.update { 0 }
     }
 
-    private fun addPathPoints(location: Location?) = location?.let {
-        val pos = LocationInfo(it.latitude, it.longitude)
+    private fun addPathPoints(info: LocationTrackingInfo) {
         _currentRunState.update { state ->
-            val pathPoints = state.pathPoints + PathPoint.LocationPoint(pos)
+            val pathPoints = state.pathPoints + PathPoint.LocationPoint(info.locationInfo)
             state.copy(
                 pathPoints = pathPoints,
                 distanceInMeters = state.distanceInMeters.run {
@@ -74,7 +75,7 @@ class TrackingManager @Inject constructor(
                         )
                     distance
                 },
-                speedInKMH = (it.speed * 3.6f).toBigDecimal()
+                speedInKMH = (info.speedInMS * 3.6f).toBigDecimal()
                     .setScale(2, RoundingMode.HALF_UP).toFloat()
             )
         }
@@ -90,7 +91,7 @@ class TrackingManager @Inject constructor(
         }
         isTracking = true
         timeTracker.startResumeTimer(timeTrackerCallback)
-        locationTrackingManager.registerCallback(locationCallback)
+        locationTrackingManager.setCallback(locationCallback)
     }
 
     private fun addEmptyPolyLine() {
@@ -103,7 +104,7 @@ class TrackingManager @Inject constructor(
 
     fun pauseTracking() {
         isTracking = false
-        locationTrackingManager.unRegisterCallback(locationCallback)
+        locationTrackingManager.removeCallback()
         timeTracker.pauseTimer()
         addEmptyPolyLine()
     }
