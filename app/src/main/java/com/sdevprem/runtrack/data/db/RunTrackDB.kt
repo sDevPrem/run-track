@@ -1,11 +1,11 @@
-package com.sdevprem.runtrack.core.data.db
+package com.sdevprem.runtrack.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.sdevprem.runtrack.core.data.db.dao.RunDao
-import com.sdevprem.runtrack.core.data.db.mapper.DBConverters
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.db.dao.RunDao
+import com.sdevprem.runtrack.data.db.mapper.DBConverters
+import com.sdevprem.runtrack.data.model.Run
 
 @Database(
     entities = [Run::class],

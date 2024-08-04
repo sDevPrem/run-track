@@ -2,7 +2,7 @@ package com.sdevprem.runtrack.ui.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.core.data.repository.UserRepository
+import com.sdevprem.runtrack.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

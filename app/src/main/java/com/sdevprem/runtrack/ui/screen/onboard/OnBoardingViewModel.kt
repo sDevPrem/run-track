@@ -4,9 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.core.data.model.Gender
-import com.sdevprem.runtrack.core.data.model.User
-import com.sdevprem.runtrack.core.data.repository.UserRepository
+import com.sdevprem.runtrack.data.model.Gender
+import com.sdevprem.runtrack.data.model.User
+import com.sdevprem.runtrack.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

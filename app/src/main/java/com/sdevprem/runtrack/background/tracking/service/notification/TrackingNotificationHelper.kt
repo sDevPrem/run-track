@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.core.tracking.notification
+package com.sdevprem.runtrack.background.tracking.service.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,21 +10,21 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.background.tracking.service.TrackingService
 import com.sdevprem.runtrack.common.utils.DateTimeUtils
-import com.sdevprem.runtrack.core.tracking.notification.TrackingNotificationHelper.Companion.TRACKING_NOTIFICATION_ID
-import com.sdevprem.runtrack.core.tracking.service.TrackingService
 import com.sdevprem.runtrack.ui.MainActivity
 import com.sdevprem.runtrack.ui.nav.Destination
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class DefaultTrackingNotificationHelper @Inject constructor(
+class TrackingNotificationHelper @Inject constructor(
     @ApplicationContext private val context: Context
-) : TrackingNotificationHelper {
+) {
 
     companion object {
         private const val TRACKING_NOTIFICATION_CHANNEL_ID = "tracking_notification"
         private const val TRACKING_NOTIFICATION_CHANNEL_NAME = "Run Tracking Status"
+        const val TRACKING_NOTIFICATION_ID = 3
     }
 
     private val intentToRunScreen = TaskStackBuilder.create(context).run {
@@ -39,7 +39,7 @@ class DefaultTrackingNotificationHelper @Inject constructor(
         getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)!!
     }
 
-    override val baseNotificationBuilder
+    private val baseNotificationBuilder
         get() = NotificationCompat.Builder(
             context,
             TRACKING_NOTIFICATION_CHANNEL_ID
@@ -55,7 +55,7 @@ class DefaultTrackingNotificationHelper @Inject constructor(
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    override fun updateTrackingNotification(durationInMillis: Long, isTracking: Boolean) {
+    fun updateTrackingNotification(durationInMillis: Long, isTracking: Boolean) {
         val notification = baseNotificationBuilder
             .setContentText(DateTimeUtils.getFormattedStopwatchTime(durationInMillis))
             .clearActions()
@@ -84,11 +84,11 @@ class DefaultTrackingNotificationHelper @Inject constructor(
         )
     }
 
-    override fun removeTrackingNotification() {
+    fun removeTrackingNotification() {
         notificationManager.cancel(TRACKING_NOTIFICATION_ID)
     }
 
-    override fun createNotificationChannel() {
+    fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return
 
@@ -99,4 +99,6 @@ class DefaultTrackingNotificationHelper @Inject constructor(
         )
         notificationManager.createNotificationChannel(notificationChannel)
     }
+
+    fun getDefaultNotification() = baseNotificationBuilder.build()
 }

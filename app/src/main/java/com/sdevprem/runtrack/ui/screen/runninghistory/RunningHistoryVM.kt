@@ -3,9 +3,9 @@ package com.sdevprem.runtrack.ui.screen.runninghistory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.core.data.repository.AppRepository
-import com.sdevprem.runtrack.core.data.utils.RunSortOrder
+import com.sdevprem.runtrack.data.model.Run
+import com.sdevprem.runtrack.data.repository.AppRepository
+import com.sdevprem.runtrack.data.utils.RunSortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

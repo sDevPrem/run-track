@@ -24,7 +24,7 @@ import com.sdevprem.runtrack.common.extension.hasAllPermission
 import com.sdevprem.runtrack.common.extension.hasLocationPermission
 import com.sdevprem.runtrack.common.extension.openAppSetting
 import com.sdevprem.runtrack.common.utils.PermissionUtils
-import com.sdevprem.runtrack.core.tracking.location.LocationUtils
+import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.ui.common.compose.component.LocationPermissionRequestDialog
 import com.sdevprem.runtrack.ui.screen.main.MainScreen
 import com.sdevprem.runtrack.ui.theme.AppTheme

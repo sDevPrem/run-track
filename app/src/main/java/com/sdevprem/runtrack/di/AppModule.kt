@@ -10,14 +10,12 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.sdevprem.runtrack.core.data.db.RunTrackDB
-import com.sdevprem.runtrack.core.data.db.RunTrackDB.Companion.RUN_TRACK_DB_NAME
-import com.sdevprem.runtrack.core.tracking.location.DefaultLocationTrackingManager
-import com.sdevprem.runtrack.core.tracking.location.LocationUtils
-import com.sdevprem.runtrack.core.tracking.notification.DefaultTrackingNotificationHelper
-import com.sdevprem.runtrack.core.tracking.notification.TrackingNotificationHelper
-import com.sdevprem.runtrack.core.tracking.service.DefaultBackgroundTrackingManager
-import com.sdevprem.runtrack.core.tracking.timer.DefaultTimeTracker
+import com.sdevprem.runtrack.background.tracking.service.DefaultBackgroundTrackingManager
+import com.sdevprem.runtrack.data.db.RunTrackDB
+import com.sdevprem.runtrack.data.db.RunTrackDB.Companion.RUN_TRACK_DB_NAME
+import com.sdevprem.runtrack.data.tracking.location.DefaultLocationTrackingManager
+import com.sdevprem.runtrack.data.tracking.location.LocationUtils
+import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
 import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
@@ -97,12 +95,6 @@ abstract class AppModule {
     abstract fun provideBackgroundTrackingManager(
         trackingServiceManager: DefaultBackgroundTrackingManager
     ): BackgroundTrackingManager
-
-    @Binds
-    @Singleton
-    abstract fun provideNotificationHelper(
-        notificationHelper: DefaultTrackingNotificationHelper
-    ): TrackingNotificationHelper
 
     @Binds
     @Singleton

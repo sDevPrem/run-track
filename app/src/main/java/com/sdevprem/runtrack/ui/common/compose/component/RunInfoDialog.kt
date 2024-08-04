@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.extension.getDisplayDate
 import com.sdevprem.runtrack.common.utils.DateTimeUtils
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.ui.theme.md_theme_light_onSurface
 
 @OptIn(ExperimentalMaterial3Api::class)

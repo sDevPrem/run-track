@@ -5,7 +5,7 @@ import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
 import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
 import com.sdevprem.runtrack.common.extension.setMinimumTime
 import com.sdevprem.runtrack.common.extension.toCalendar
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.model.Run
 import java.util.Calendar
 import java.util.Date
 

@@ -45,7 +45,7 @@
             android:value="@integer/google_play_services_version" />
 
         <service
-            android:name=".core.tracking.service.TrackingService"
+            android:name=".background.tracking.service.TrackingService"
             android:foregroundServiceType="location" />
     </application>
 

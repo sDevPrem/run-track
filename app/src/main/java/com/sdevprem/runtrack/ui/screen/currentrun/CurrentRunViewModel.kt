@@ -3,8 +3,8 @@ package com.sdevprem.runtrack.ui.screen.currentrun
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.core.data.repository.AppRepository
+import com.sdevprem.runtrack.data.model.Run
+import com.sdevprem.runtrack.data.repository.AppRepository
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories

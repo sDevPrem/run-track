@@ -45,7 +45,7 @@ import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
 import com.sdevprem.runtrack.common.extension.setMinimumTime
 import com.sdevprem.runtrack.common.extension.toCalendar
 import com.sdevprem.runtrack.common.extension.toList
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.ui.common.extension.conditional
 import com.sdevprem.runtrack.ui.screen.runstats.utils.RunStatsAccumulator
 import com.sdevprem.runtrack.ui.theme.AppTheme

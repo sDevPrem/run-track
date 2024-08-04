@@ -1,6 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.runstats.utils
 
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.ui.screen.runstats.RunStatsUiState.AccumulatedRunStatisticsOnDate
 import java.util.Date
 

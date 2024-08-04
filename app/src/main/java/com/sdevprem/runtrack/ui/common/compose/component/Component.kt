@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.extension.getDisplayDate
-import com.sdevprem.runtrack.core.data.model.Gender
-import com.sdevprem.runtrack.core.data.model.Run
+import com.sdevprem.runtrack.data.model.Gender
+import com.sdevprem.runtrack.data.model.Run
 import java.util.Date
 
 @Composable

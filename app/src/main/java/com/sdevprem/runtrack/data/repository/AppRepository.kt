@@ -1,10 +1,10 @@
-package com.sdevprem.runtrack.core.data.repository
+package com.sdevprem.runtrack.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.sdevprem.runtrack.core.data.db.dao.RunDao
-import com.sdevprem.runtrack.core.data.model.Run
-import com.sdevprem.runtrack.core.data.utils.RunSortOrder
+import com.sdevprem.runtrack.data.db.dao.RunDao
+import com.sdevprem.runtrack.data.model.Run
+import com.sdevprem.runtrack.data.utils.RunSortOrder
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 import javax.inject.Inject
