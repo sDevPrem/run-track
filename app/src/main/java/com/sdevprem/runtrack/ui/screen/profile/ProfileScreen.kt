@@ -77,12 +77,12 @@ private fun ProfileScreenContent(
         )
         Column(
             modifier = Modifier
-                .padding(8.dp)
                 .verticalScroll(rememberScrollState())
                 .padding(top = 16.dp)
         ) {
             ElevatedCard(
                 modifier = Modifier
+                    .padding(8.dp)
                     .padding(horizontal = 24.dp),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
             ) {
