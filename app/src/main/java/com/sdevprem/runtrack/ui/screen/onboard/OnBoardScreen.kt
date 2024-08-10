@@ -1,8 +1,14 @@
 package com.sdevprem.runtrack.ui.screen.onboard
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -20,6 +26,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -29,7 +36,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -43,6 +49,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -56,6 +63,7 @@ import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.data.model.Gender
 import com.sdevprem.runtrack.data.model.User
+import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
 import com.sdevprem.runtrack.ui.nav.Destination
 import kotlinx.coroutines.launch
 
@@ -126,7 +134,9 @@ private fun OnBoardScreenContent(
                     name = user.name,
                     gender = user.gender,
                     onNameChange = onBoardingScreenEvent::updateName,
-                    onGenderChange = onBoardingScreenEvent::updateGender
+                    onGenderChange = onBoardingScreenEvent::updateGender,
+                    onUserImageUriChange = onBoardingScreenEvent::updateUserImgUri,
+                    userImgUri = user.imgUri
                 )
 
                 1 -> SecondPage(
@@ -228,20 +238,33 @@ private fun FirstPage(
     modifier: Modifier = Modifier,
     name: String,
     gender: Gender,
+    userImgUri: Uri?,
     onNameChange: (String) -> Unit,
-    onGenderChange: (Gender) -> Unit
+    onGenderChange: (Gender) -> Unit,
+    onUserImageUriChange: (Uri?) -> Unit,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(
-            value = name,
-            onValueChange = onNameChange,
-            label = {
-                Text(text = "Name")
-            },
-            modifier = Modifier.fillMaxWidth()
+        UserImage(
+            selectedGender = gender,
+            userImgUri = userImgUri,
+            setUserImageUri = onUserImageUriChange
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChange,
+                label = {
+                    Text(text = "Name")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Spacer(modifier = Modifier.size(16.dp))
         Row(
             modifier = Modifier
@@ -255,7 +278,6 @@ private fun FirstPage(
                 cardGender = Gender.MALE,
                 onGenderChange = onGenderChange
             )
-
             GenderCard(
                 modifier = Modifier
                     .padding(start = 8.dp)
@@ -268,7 +290,63 @@ private fun FirstPage(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun UserImage(
+    selectedGender: Gender,
+    setUserImageUri: (ur: Uri?) -> Unit,
+    userImgUri: Uri?,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            it?.let {
+                context.contentResolver
+                    .takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            setUserImageUri(it)
+        }
+    )
+    Box(
+        modifier = modifier
+    ) {
+        AnimatedContent(
+            targetState = userImgUri ?: selectedGender,
+            label = "UserImageAnimation",
+        ) {
+            UserProfilePic(
+                imgUri = it as? Uri,
+                gender = selectedGender,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(80.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        IconButton(
+            onClick = {
+                photoPickerLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+            },
+            modifier = Modifier
+                .size(32.dp)
+                .align(Alignment.BottomEnd),
+            colors = IconButtonDefaults.iconButtonColors().copy(
+                containerColor = MaterialTheme.colorScheme.primary
+            ),
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                contentDescription = "Settings",
+                tint = MaterialTheme.colorScheme.onPrimary,
+            )
+        }
+    }
+}
+
 @Composable
 private fun GenderCard(
     modifier: Modifier,

@@ -1,5 +1,6 @@
 package com.sdevprem.runtrack.ui.screen.onboard
 
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -41,6 +42,8 @@ class OnBoardingViewModel @Inject constructor(
     override fun updateWeight(weightInKg: Float) = _user.update { it.copy(weightInKg = weightInKg) }
     override fun updateWeeklyGoal(weeklyGoalInKm: Float) =
         _user.update { it.copy(weeklyGoalInKM = weeklyGoalInKm) }
+
+    override fun updateUserImgUri(uri: Uri?) = _user.update { it.copy(imgUri = uri) }
 
     fun saveUser(navigate: () -> Unit) {
         if (!user.value.isUserValid()) {
