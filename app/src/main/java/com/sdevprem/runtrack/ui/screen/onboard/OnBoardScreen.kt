@@ -4,6 +4,8 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
@@ -23,7 +25,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -275,12 +280,18 @@ private fun GenderCard(
     OutlinedCard(
         onClick = { onGenderChange(cardGender) },
         modifier = modifier,
-        border = BorderStroke(1.dp, getGenderCardColor(isSelected))
+        border = BorderStroke(2.dp, getGenderCardColor(isSelected))
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
+            GenderCardCheckBox(
+                isSelected = isSelected,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 8.dp, top = 8.dp)
+            )
             Icon(
                 imageVector = ImageVector.vectorResource(
                     id = when (cardGender) {
@@ -290,8 +301,38 @@ private fun GenderCard(
                 ),
                 contentDescription = "Female",
                 modifier = Modifier
+                    .align(Alignment.Center)
                     .padding(24.dp),
                 tint = getGenderCardColor(isSelected = isSelected)
+            )
+        }
+    }
+}
+
+@Composable
+private fun GenderCardCheckBox(
+    isSelected: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .size(24.dp)
+            .border(
+                width = 2.dp,
+                color = getGenderCardColor(isSelected = isSelected),
+                shape = CircleShape
+            )
+            .padding(4.dp)
+    ) {
+        AnimatedVisibility(
+            visible = isSelected,
+            enter = fadeIn() + scaleIn(),
+            exit = fadeOut() + scaleOut()
+        ) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.primary,
             )
         }
     }
