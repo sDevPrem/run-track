@@ -54,6 +54,9 @@ android {
 }
 
 dependencies {
+    //kmm
+    implementation(projects.shared)
+
     implementation(libs.androidx.core.ktx)
 
     //compose
