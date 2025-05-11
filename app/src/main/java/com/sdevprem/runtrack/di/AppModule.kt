@@ -13,12 +13,12 @@ import com.google.android.gms.location.LocationServices
 import com.sdevprem.runtrack.background.tracking.service.DefaultBackgroundTrackingManager
 import com.sdevprem.runtrack.data.db.RunTrackDB
 import com.sdevprem.runtrack.data.db.RunTrackDB.Companion.RUN_TRACK_DB_NAME
-import com.sdevprem.runtrack.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
 import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
-import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
+import com.sdevprem.runtrack.shared.data.tracking.location.DefaultLocationTrackingManager
+import com.sdevprem.runtrack.shared.domain.location.LocationTrackingManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

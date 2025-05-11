@@ -2,8 +2,8 @@ package com.sdevprem.runtrack.domain.tracking
 
 import com.sdevprem.runtrack.common.utils.LocationUtils
 import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
-import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
+import com.sdevprem.runtrack.shared.domain.location.LocationTrackingManager
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunState
 import com.sdevprem.runtrack.shared.domain.model.LocationTrackingInfo
 import com.sdevprem.runtrack.shared.domain.model.PathPoint

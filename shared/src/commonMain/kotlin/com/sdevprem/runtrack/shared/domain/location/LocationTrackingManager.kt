@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.domain.tracking.location
+package com.sdevprem.runtrack.shared.domain.location
 
 import com.sdevprem.runtrack.shared.domain.model.LocationTrackingInfo
 

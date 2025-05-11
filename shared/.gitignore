@@ -1,0 +1,15 @@
+# Kotlin
+*.kotlin_module
+
+# Gradle files
+.gradle/
+build/
+*/build/
+bin/
+**/bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws

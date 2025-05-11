@@ -6,7 +6,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@protocol SharedPlatform;
+@class SharedLocationTrackingInfo, SharedCurrentRunState, SharedLocationInfo, SharedPathPointEmptyLocationPoint, SharedPathPointLocationPoint;
+
+@protocol SharedPlatform, SharedLocationTrackingManagerLocationCallback, SharedLocationTrackingManager, SharedPathPoint;
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
@@ -162,6 +164,101 @@ __attribute__((swift_name("IOSPlatform")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
 @property (readonly) NSString *name __attribute__((swift_name("name")));
+@end
+
+__attribute__((swift_name("LocationTrackingManager")))
+@protocol SharedLocationTrackingManager
+@required
+- (void)removeCallback __attribute__((swift_name("removeCallback()")));
+- (void)setCallbackLocationCallback:(id<SharedLocationTrackingManagerLocationCallback>)locationCallback __attribute__((swift_name("setCallback(locationCallback:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("DefaultLocationTrackingManager")))
+@interface SharedDefaultLocationTrackingManager : SharedBase <SharedLocationTrackingManager>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (void)removeCallback __attribute__((swift_name("removeCallback()")));
+- (void)setCallbackLocationCallback:(id<SharedLocationTrackingManagerLocationCallback>)locationCallback __attribute__((swift_name("setCallback(locationCallback:)")));
+@end
+
+__attribute__((swift_name("LocationTrackingManagerLocationCallback")))
+@protocol SharedLocationTrackingManagerLocationCallback
+@required
+- (void)onLocationUpdateResults:(NSArray<SharedLocationTrackingInfo *> *)results __attribute__((swift_name("onLocationUpdate(results:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("CurrentRunState")))
+@interface SharedCurrentRunState : SharedBase
+- (instancetype)initWithDistanceInMeters:(int32_t)distanceInMeters speedInKMH:(float)speedInKMH isTracking:(BOOL)isTracking pathPoints:(NSArray<id<SharedPathPoint>> *)pathPoints __attribute__((swift_name("init(distanceInMeters:speedInKMH:isTracking:pathPoints:)"))) __attribute__((objc_designated_initializer));
+- (SharedCurrentRunState *)doCopyDistanceInMeters:(int32_t)distanceInMeters speedInKMH:(float)speedInKMH isTracking:(BOOL)isTracking pathPoints:(NSArray<id<SharedPathPoint>> *)pathPoints __attribute__((swift_name("doCopy(distanceInMeters:speedInKMH:isTracking:pathPoints:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) int32_t distanceInMeters __attribute__((swift_name("distanceInMeters")));
+@property (readonly) BOOL isTracking __attribute__((swift_name("isTracking")));
+@property (readonly) NSArray<id<SharedPathPoint>> *pathPoints __attribute__((swift_name("pathPoints")));
+@property (readonly) float speedInKMH __attribute__((swift_name("speedInKMH")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("LocationInfo")))
+@interface SharedLocationInfo : SharedBase
+- (instancetype)initWithLatitude:(double)latitude longitude:(double)longitude __attribute__((swift_name("init(latitude:longitude:)"))) __attribute__((objc_designated_initializer));
+- (SharedLocationInfo *)doCopyLatitude:(double)latitude longitude:(double)longitude __attribute__((swift_name("doCopy(latitude:longitude:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) double latitude __attribute__((swift_name("latitude")));
+@property (readonly) double longitude __attribute__((swift_name("longitude")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("LocationTrackingInfo")))
+@interface SharedLocationTrackingInfo : SharedBase
+- (instancetype)initWithLocationInfo:(SharedLocationInfo *)locationInfo speedInMS:(float)speedInMS __attribute__((swift_name("init(locationInfo:speedInMS:)"))) __attribute__((objc_designated_initializer));
+- (SharedLocationTrackingInfo *)doCopyLocationInfo:(SharedLocationInfo *)locationInfo speedInMS:(float)speedInMS __attribute__((swift_name("doCopy(locationInfo:speedInMS:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) SharedLocationInfo *locationInfo __attribute__((swift_name("locationInfo")));
+@property (readonly) float speedInMS __attribute__((swift_name("speedInMS")));
+@end
+
+__attribute__((swift_name("PathPoint")))
+@protocol SharedPathPoint
+@required
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("PathPointEmptyLocationPoint")))
+@interface SharedPathPointEmptyLocationPoint : SharedBase <SharedPathPoint>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)emptyLocationPoint __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) SharedPathPointEmptyLocationPoint *shared __attribute__((swift_name("shared")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("PathPointLocationPoint")))
+@interface SharedPathPointLocationPoint : SharedBase <SharedPathPoint>
+- (instancetype)initWithLocationInfo:(SharedLocationInfo *)locationInfo __attribute__((swift_name("init(locationInfo:)"))) __attribute__((objc_designated_initializer));
+- (SharedPathPointLocationPoint *)doCopyLocationInfo:(SharedLocationInfo *)locationInfo __attribute__((swift_name("doCopy(locationInfo:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) SharedLocationInfo *locationInfo __attribute__((swift_name("locationInfo")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("PathPointKt")))
+@interface SharedPathPointKt : SharedBase
++ (SharedPathPointLocationPoint * _Nullable)firstLocationPoint:(NSArray<id<SharedPathPoint>> *)receiver __attribute__((swift_name("firstLocationPoint(_:)")));
++ (SharedPathPointLocationPoint * _Nullable)lasLocationPoint:(NSArray<id<SharedPathPoint>> *)receiver __attribute__((swift_name("lasLocationPoint(_:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))

@@ -7,6 +7,7 @@ espresso-core = "3.5.1"
 androidx-junit = "1.1.5"
 junit = "4.13.2"
 
+kotlinx-coroutines-core = "1.7.3"
 lifecycle = "2.6.1"
 
 coil-compose = "2.4.0"
@@ -69,6 +70,7 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
 
 #Timber
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 #navigation

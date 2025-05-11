@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml:2:13-83
-INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml:2:13-83
+ADDED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml:2:13-83
+INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml:2:13-83
 	package
-		INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml
+		INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml
 	xmlns:android
-		ADDED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml:2:23-81
+		ADDED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml:2:23-81
 uses-sdk
-INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml reason: use-sdk injection requested
-INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml
-INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml
+INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml reason: use-sdk injection requested
+INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml
+INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml
 	android:targetSdkVersion
-		INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml
+		INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml
 	android:minSdkVersion
-		INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest16363286260664182624.xml
+		INJECTED from /Users/prem.thakurzomato.com/dev/personal/Android/run-track/shared/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14507609793620768805.xml
