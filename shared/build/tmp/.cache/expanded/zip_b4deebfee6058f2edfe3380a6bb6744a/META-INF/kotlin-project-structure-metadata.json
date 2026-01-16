@@ -1,0 +1,379 @@
+{
+  "projectStructure": {
+    "formatVersion": "0.3.3",
+    "isPublishedAsRoot": "true",
+    "variants": [
+      {
+        "name": "debugApiElements",
+        "sourceSet": [
+          "jvmMain",
+          "commonMain"
+        ]
+      },
+      {
+        "name": "debugRuntimeElements",
+        "sourceSet": [
+          "jvmMain",
+          "commonMain"
+        ]
+      },
+      {
+        "name": "releaseApiElements",
+        "sourceSet": [
+          "jvmMain",
+          "commonMain"
+        ]
+      },
+      {
+        "name": "releaseRuntimeElements",
+        "sourceSet": [
+          "jvmMain",
+          "commonMain"
+        ]
+      },
+      {
+        "name": "desktopApiElements",
+        "sourceSet": [
+          "jvmMain",
+          "commonMain",
+          "notMobileMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "desktopRuntimeElements",
+        "sourceSet": [
+          "jvmMain",
+          "commonMain",
+          "notMobileMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "jsApiElements",
+        "sourceSet": [
+          "commonMain",
+          "jsWasmMain",
+          "jsNativeMain",
+          "skikoMain",
+          "notMobileMain"
+        ]
+      },
+      {
+        "name": "jsRuntimeElements",
+        "sourceSet": [
+          "commonMain",
+          "jsWasmMain",
+          "jsNativeMain",
+          "skikoMain",
+          "notMobileMain"
+        ]
+      },
+      {
+        "name": "macosArm64ApiElements",
+        "sourceSet": [
+          "macosMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain",
+          "notMobileMain"
+        ]
+      },
+      {
+        "name": "macosX64ApiElements",
+        "sourceSet": [
+          "macosMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain",
+          "notMobileMain"
+        ]
+      },
+      {
+        "name": "uikitArm64ApiElements",
+        "sourceSet": [
+          "uikitMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "uikitInstrumentedSimArm64ApiElements",
+        "sourceSet": [
+          "uikitInstrumentedMain",
+          "uikitMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "uikitInstrumentedX64ApiElements",
+        "sourceSet": [
+          "uikitInstrumentedMain",
+          "uikitMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "uikitSimArm64ApiElements",
+        "sourceSet": [
+          "uikitMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "uikitX64ApiElements",
+        "sourceSet": [
+          "uikitMain",
+          "darwinMain",
+          "nativeMain",
+          "commonMain",
+          "jsNativeMain",
+          "skikoMain"
+        ]
+      },
+      {
+        "name": "wasmJsApiElements",
+        "sourceSet": [
+          "commonMain",
+          "jsWasmMain",
+          "jsNativeMain",
+          "skikoMain",
+          "notMobileMain"
+        ]
+      },
+      {
+        "name": "wasmJsRuntimeElements",
+        "sourceSet": [
+          "commonMain",
+          "jsWasmMain",
+          "jsNativeMain",
+          "skikoMain",
+          "notMobileMain"
+        ]
+      }
+    ],
+    "sourceSets": [
+      {
+        "name": "commonMain",
+        "dependsOn": [],
+        "moduleDependency": [
+          "org.jetbrains.compose.runtime:runtime-saveable",
+          "org.jetbrains.compose.ui:ui-geometry",
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.compose.ui:ui-unit",
+          "org.jetbrains.compose.ui:ui-util"
+        ],
+        "binaryLayout": "klib"
+      },
+      {
+        "name": "darwinMain",
+        "dependsOn": [
+          "nativeMain"
+        ],
+        "moduleDependency": [
+          "org.jetbrains.compose.runtime:runtime-saveable",
+          "org.jetbrains.compose.ui:ui-geometry",
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.compose.ui:ui-unit",
+          "org.jetbrains.compose.ui:ui-util",
+          "org.jetbrains.skiko:skiko",
+          "org.jetbrains.compose.collection-internal:collection",
+          "org.jetbrains.kotlin:kotlin-stdlib-common",
+          "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+          "org.jetbrains.kotlinx:atomicfu",
+          "org.jetbrains.compose.runtime:runtime",
+          "org.jetbrains.compose.annotation-internal:annotation",
+          "org.jetbrains.androidx.lifecycle:lifecycle-common",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose",
+          "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel"
+        ],
+        "sourceSetCInteropMetadataDirectory": "darwinMain-cinterop",
+        "binaryLayout": "klib",
+        "hostSpecific": "true"
+      },
+      {
+        "name": "jsNativeMain",
+        "dependsOn": [
+          "skikoMain"
+        ],
+        "moduleDependency": [],
+        "binaryLayout": "klib"
+      },
+      {
+        "name": "jsWasmMain",
+        "dependsOn": [
+          "jsNativeMain",
+          "notMobileMain"
+        ],
+        "moduleDependency": [],
+        "binaryLayout": "klib"
+      },
+      {
+        "name": "jvmMain",
+        "dependsOn": [
+          "commonMain"
+        ],
+        "moduleDependency": [],
+        "binaryLayout": "klib"
+      },
+      {
+        "name": "macosMain",
+        "dependsOn": [
+          "darwinMain",
+          "notMobileMain"
+        ],
+        "moduleDependency": [
+          "org.jetbrains.compose.runtime:runtime-saveable",
+          "org.jetbrains.compose.ui:ui-geometry",
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.compose.ui:ui-unit",
+          "org.jetbrains.compose.ui:ui-util",
+          "org.jetbrains.skiko:skiko",
+          "org.jetbrains.compose.collection-internal:collection",
+          "org.jetbrains.kotlin:kotlin-stdlib-common",
+          "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+          "org.jetbrains.kotlinx:atomicfu",
+          "org.jetbrains.compose.runtime:runtime",
+          "org.jetbrains.compose.annotation-internal:annotation",
+          "org.jetbrains.androidx.lifecycle:lifecycle-common",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose",
+          "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel"
+        ],
+        "sourceSetCInteropMetadataDirectory": "macosMain-cinterop",
+        "binaryLayout": "klib",
+        "hostSpecific": "true"
+      },
+      {
+        "name": "nativeMain",
+        "dependsOn": [
+          "commonMain",
+          "jsNativeMain"
+        ],
+        "moduleDependency": [
+          "org.jetbrains.compose.runtime:runtime-saveable",
+          "org.jetbrains.compose.ui:ui-geometry",
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.compose.ui:ui-unit",
+          "org.jetbrains.compose.ui:ui-util",
+          "org.jetbrains.skiko:skiko",
+          "org.jetbrains.compose.collection-internal:collection",
+          "org.jetbrains.kotlin:kotlin-stdlib-common",
+          "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+          "org.jetbrains.kotlinx:atomicfu",
+          "org.jetbrains.compose.runtime:runtime",
+          "org.jetbrains.compose.annotation-internal:annotation",
+          "org.jetbrains.androidx.lifecycle:lifecycle-common",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose",
+          "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel"
+        ],
+        "sourceSetCInteropMetadataDirectory": "nativeMain-cinterop",
+        "binaryLayout": "klib",
+        "hostSpecific": "true"
+      },
+      {
+        "name": "notMobileMain",
+        "dependsOn": [
+          "skikoMain"
+        ],
+        "moduleDependency": [],
+        "binaryLayout": "klib"
+      },
+      {
+        "name": "skikoMain",
+        "dependsOn": [
+          "commonMain"
+        ],
+        "moduleDependency": [
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.skiko:skiko"
+        ],
+        "binaryLayout": "klib"
+      },
+      {
+        "name": "uikitInstrumentedMain",
+        "dependsOn": [
+          "uikitMain"
+        ],
+        "moduleDependency": [
+          "org.jetbrains.compose.ui:ui-uikit",
+          "org.jetbrains.compose.runtime:runtime-saveable",
+          "org.jetbrains.compose.ui:ui-geometry",
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.compose.ui:ui-unit",
+          "org.jetbrains.compose.ui:ui-util",
+          "org.jetbrains.skiko:skiko",
+          "org.jetbrains.compose.collection-internal:collection",
+          "org.jetbrains.kotlin:kotlin-stdlib-common",
+          "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+          "org.jetbrains.kotlinx:atomicfu",
+          "org.jetbrains.compose.runtime:runtime",
+          "org.jetbrains.compose.annotation-internal:annotation",
+          "org.jetbrains.androidx.lifecycle:lifecycle-common",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose",
+          "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel"
+        ],
+        "sourceSetCInteropMetadataDirectory": "uikitInstrumentedMain-cinterop",
+        "binaryLayout": "klib",
+        "hostSpecific": "true"
+      },
+      {
+        "name": "uikitMain",
+        "dependsOn": [
+          "darwinMain"
+        ],
+        "moduleDependency": [
+          "org.jetbrains.compose.runtime:runtime-saveable",
+          "org.jetbrains.compose.ui:ui-geometry",
+          "org.jetbrains.compose.ui:ui-graphics",
+          "org.jetbrains.compose.ui:ui-text",
+          "org.jetbrains.compose.ui:ui-unit",
+          "org.jetbrains.compose.ui:ui-util",
+          "org.jetbrains.skiko:skiko",
+          "org.jetbrains.compose.ui:ui-uikit",
+          "org.jetbrains.compose.collection-internal:collection",
+          "org.jetbrains.kotlin:kotlin-stdlib-common",
+          "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+          "org.jetbrains.kotlinx:atomicfu",
+          "org.jetbrains.compose.runtime:runtime",
+          "org.jetbrains.compose.annotation-internal:annotation",
+          "org.jetbrains.androidx.lifecycle:lifecycle-common",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime",
+          "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose",
+          "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel"
+        ],
+        "sourceSetCInteropMetadataDirectory": "uikitMain-cinterop",
+        "binaryLayout": "klib",
+        "hostSpecific": "true"
+      }
+    ]
+  }
+}

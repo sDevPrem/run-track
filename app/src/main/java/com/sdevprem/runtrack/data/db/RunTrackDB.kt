@@ -10,6 +10,7 @@ import com.sdevprem.runtrack.data.model.Run
 @Database(
     entities = [Run::class],
     version = 1,
+    exportSchema = false
 )
 
 @TypeConverters(DBConverters::class)

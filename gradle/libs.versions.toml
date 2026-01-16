@@ -7,11 +7,12 @@ espresso-core = "3.5.1"
 androidx-junit = "1.1.5"
 junit = "4.13.2"
 
+kotlinx-datetime = "0.7.1"
 lifecycle = "2.6.1"
 
 coil-compose = "2.4.0"
 
-hilt = "2.49"
+hilt = "2.54"
 hilt-navigation-compose = "1.0.0"
 
 kotlin-bom = "1.8.0"
@@ -24,7 +25,8 @@ play-services-maps = "18.2.0"
 
 timber = "5.0.1"
 
-room = "2.6.1"
+room = "2.8.4"
+sqlite = "2.6.2"
 
 datstore = "1.0.0"
 
@@ -33,12 +35,15 @@ paging = "3.2.0"
 accompanist-permissions = "0.31.5-beta"
 
 #plugin
-android-gradle = "8.3.0"
-kotlin = "2.0.10"
+android-gradle = "8.4.0"
+kotlin = "2.1.0"
 maps-secret = "2.0.1"
+ksp = "2.1.0-1.0.29"
 
 #chart
 vico = "2.0.0-alpha.12"
+
+compose-multiplatform = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -69,6 +74,7 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
 
 #Timber
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 #navigation
@@ -80,6 +86,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 
 #room
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -112,6 +119,9 @@ vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = 
 
 #multiplatforms
 
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+compose-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version.ref = "compose-multiplatform" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
@@ -120,7 +130,8 @@ jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotli
 maps-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "maps-secret" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
 
 #multiplatform
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

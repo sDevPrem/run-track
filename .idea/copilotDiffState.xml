@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/.gitignore">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/.gitignore" />
+              <option name="originalContent" value="*.iml&#10;.gradle&#10;/local.properties&#10;/.idea/caches&#10;/.idea/libraries&#10;/.idea/modules.xml&#10;/.idea/workspace.xml&#10;/.idea/navEditor.xml&#10;/.idea/assetWizardSettings.xml&#10;.DS_Store&#10;/build&#10;/captures&#10;.externalNativeBuild&#10;.cxx&#10;local.properties&#10;.kotlin/" />
+              <option name="updatedContent" value="*.iml&#10;.gradle&#10;/local.properties&#10;/.idea/caches&#10;/.idea/libraries&#10;/.idea/modules.xml&#10;/.idea/workspace.xml&#10;/.idea/navEditor.xml&#10;/.idea/assetWizardSettings.xml&#10;.DS_Store&#10;/build&#10;/captures&#10;.externalNativeBuild&#10;.cxx&#10;local.properties&#10;.kotlin/" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

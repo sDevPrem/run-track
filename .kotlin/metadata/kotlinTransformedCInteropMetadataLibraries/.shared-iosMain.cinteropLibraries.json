@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "moduleId": "androidx.sqlite:sqlite-bundled:2.6.2",
+    "file": "/Users/prem.thakurzomato.com/dev/personal/Android/run-track/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-bundled-2.6.2-nativeMain-cinterop/androidx.sqlite_sqlite-bundled-cinterop-androidXBundledSqlite-dCYVRw.klib",
+    "sourceSetName": "nativeMain"
+  },
+  {
+    "moduleId": "androidx.sqlite:sqlite-framework:2.6.2",
+    "file": "/Users/prem.thakurzomato.com/dev/personal/Android/run-track/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-framework-2.6.2-nativeMain-cinterop/androidx.sqlite_sqlite-framework-cinterop-sqlite3-5Ubkcg.klib",
+    "sourceSetName": "nativeMain"
+  },
+  {
+    "moduleId": "org.jetbrains.kotlinx:atomicfu:0.27.0",
+    "file": "/Users/prem.thakurzomato.com/dev/personal/Android/run-track/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.kotlinx-atomicfu-0.27.0-iosMain-cinterop/org.jetbrains.kotlinx_atomicfu-cinterop-interop-WOkCig.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "org.jetbrains.compose.ui:ui-uikit:1.7.0",
+    "file": "/Users/prem.thakurzomato.com/dev/personal/Android/run-track/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.compose.ui-ui-uikit-1.7.0-uikitMain-cinterop/org.jetbrains.compose.ui_ui-uikit-cinterop-utils-aNVDjg.klib",
+    "sourceSetName": "uikitMain"
+  }
+]
