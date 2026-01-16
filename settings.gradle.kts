@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "RunTrack"
 include(":app")
 include(":shared")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

@@ -3,6 +3,7 @@ package com.sdevprem.runtrack.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.sdevprem.runtrack.data.db.dao.RunDao
+import com.sdevprem.runtrack.data.db.mapper.toEntity
 import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.data.utils.RunSortOrder
 import kotlinx.coroutines.flow.Flow
@@ -12,11 +13,12 @@ import javax.inject.Singleton
 
 @Singleton
 class AppRepository @Inject constructor(
-    private val runDao: RunDao
+    private val runDao: RunDao,
+    private val sRunDao: com.sdevprem.runtrack.shared.data.db.dao.RunDao
 ) {
-    suspend fun insertRun(run: Run) = runDao.insertRun(run)
+    suspend fun insertRun(run: Run) = sRunDao.insertRun(run.toEntity())
 
-    suspend fun deleteRun(run: Run) = runDao.deleteRun(run)
+    suspend fun deleteRun(run: Run) = sRunDao.deleteRun(run.toEntity())
 
     fun getSortedAllRun(sortingOrder: RunSortOrder) = Pager(
         config = PagingConfig(pageSize = 20),

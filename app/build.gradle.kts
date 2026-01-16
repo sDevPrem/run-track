@@ -12,7 +12,7 @@ plugins {
 
 android {
     namespace = "com.sdevprem.runtrack"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sdevprem.runtrack"
@@ -129,4 +129,6 @@ dependencies {
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
     implementation(libs.vico.core)
+
+    implementation(projects.shared)
 }

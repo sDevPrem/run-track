@@ -25,6 +25,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import getDatabaseBuilder
+import getRoomDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -55,6 +57,19 @@ abstract class AppModule {
             RunTrackDB::class.java,
             RUN_TRACK_DB_NAME
         ).build()
+
+        @Provides
+        @Singleton
+        fun provideSharedRunningDB(
+            @ApplicationContext context: Context
+        ): com.sdevprem.runtrack.shared.data.db.RunTrackDB = getRoomDatabase(
+            getDatabaseBuilder(context)
+        )
+
+        @Singleton
+        @Provides
+        fun provideSharedRunDao(db: com.sdevprem.runtrack.shared.data.db.RunTrackDB) =
+            db.getRunDao()
 
         @Singleton
         @Provides

@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.androidx.room) apply false
+//    kotlin("plugin.serialization") version "2.3.0" apply false
 }

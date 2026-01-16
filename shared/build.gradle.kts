@@ -4,15 +4,15 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
+//    kotlin("plugin.serialization") version "2.3.0"
 }
 
 kotlin {
 
     androidTarget {
-        compilations.all {
-//            kotlin {
-//                jvmToolchain(1_8)
-//            }
+        @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
     iosX64()
@@ -31,12 +31,17 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.sqlite.bundled)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.graphics)
+        commonMain {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+            dependencies {
+                implementation(libs.androidx.room.runtime)
+                implementation(libs.androidx.sqlite.bundled)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.coroutines.core)
+//            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
+//            implementation(libs.compose.ui)
+//            implementation(libs.compose.graphics)
+            }
         }
         commonTest.dependencies {
 
@@ -45,6 +50,7 @@ kotlin {
 }
 
 dependencies {
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     add("kspIosX64", libs.androidx.room.compiler)
@@ -53,16 +59,24 @@ dependencies {
 
 android {
     namespace = "com.sdevprem.runtrack.shared"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         minSdk = 24
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 room {
     schemaDirectory("$projectDir/schemas")
 }
+
+//// Make common source sets depend on KSP generated code
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+//    if (name != "kspCommonMainKotlinMetadata") {
+//        dependsOn("kspCommonMainKotlinMetadata")
+//    }
+//}
+
