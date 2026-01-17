@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.background.tracking.service.notification
+package com.sdevprem.runtrack.shared.background.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,17 +8,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
-import androidx.core.net.toUri
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.background.tracking.service.TrackingService
-import com.sdevprem.runtrack.common.utils.DateTimeUtils
-import com.sdevprem.runtrack.ui.MainActivity
-import com.sdevprem.runtrack.ui.nav.Destination
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
+import com.sdevprem.runtrack.shared.R
+import com.sdevprem.runtrack.shared.background.tracking.service.TrackingService
 
-class TrackingNotificationHelper @Inject constructor(
-    @ApplicationContext private val context: Context
+class TrackingNotificationHelper(
+    private val context: Context,
+    currentRunIntent: Intent
 ) {
 
     companion object {
@@ -28,14 +23,7 @@ class TrackingNotificationHelper @Inject constructor(
     }
 
     private val intentToRunScreen = TaskStackBuilder.create(context).run {
-        addNextIntentWithParentStack(
-            Intent(
-                Intent.ACTION_VIEW,
-                Destination.CurrentRun.currentRunUriPattern.toUri(),
-                context,
-                MainActivity::class.java
-            )
-        )
+        addNextIntentWithParentStack(currentRunIntent)
         getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)!!
     }
 
@@ -57,7 +45,7 @@ class TrackingNotificationHelper @Inject constructor(
 
     fun updateTrackingNotification(durationInMillis: Long, isTracking: Boolean) {
         val notification = baseNotificationBuilder
-            .setContentText(DateTimeUtils.getFormattedStopwatchTime(durationInMillis))
+            .setContentText(getFormattedStopwatchTime(durationInMillis))
             .clearActions()
             .addAction(getTrackingNotificationAction(isTracking))
             .build()
@@ -77,7 +65,8 @@ class TrackingNotificationHelper @Inject constructor(
                     TrackingService::class.java
                 ).apply {
                     action =
-                        if (isTracking) TrackingService.ACTION_PAUSE_TRACKING else TrackingService.ACTION_RESUME_TRACKING
+                        if (isTracking) TrackingService.ACTION_PAUSE_TRACKING
+                        else TrackingService.ACTION_RESUME_TRACKING
                 },
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -101,4 +90,22 @@ class TrackingNotificationHelper @Inject constructor(
     }
 
     fun getDefaultNotification() = baseNotificationBuilder.build()
+
+    fun getFormattedStopwatchTime(ms: Long): String {
+        val totalSeconds = ms / 1000
+        val seconds = totalSeconds % 60
+        val minutes = (totalSeconds / 60) % 60
+        val hours = totalSeconds / 3600
+
+        return buildString {
+            if (hours < 10) append('0')
+            append(hours)
+            append(':')
+            if (minutes < 10) append('0')
+            append(minutes)
+            append(':')
+            if (seconds < 10) append('0')
+            append(seconds)
+        }
+    }
 }

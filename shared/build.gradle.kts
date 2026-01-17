@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.dagger.hilt.android)
 //    kotlin("plugin.serialization") version "2.3.0"
 }
 
@@ -34,6 +35,9 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(libs.play.services.location)
+                implementation(libs.androidx.hilt.navigation.compose)
+                implementation(libs.hilt.android)
+                implementation(libs.androidx.lifecycle.service)
             }
         }
         commonMain {
@@ -64,6 +68,7 @@ dependencies {
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspAndroid", libs.hilt.compiler)
 }
 
 android {

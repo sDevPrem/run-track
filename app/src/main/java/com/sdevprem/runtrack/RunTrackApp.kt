@@ -1,7 +1,7 @@
 package com.sdevprem.runtrack
 
 import android.app.Application
-import com.sdevprem.runtrack.background.tracking.service.notification.TrackingNotificationHelper
+import com.sdevprem.runtrack.shared.background.notification.TrackingNotificationHelper
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject

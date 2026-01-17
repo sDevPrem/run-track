@@ -1,6 +1,8 @@
 package com.sdevprem.runtrack.di
 
 import android.content.Context
+import android.content.Intent
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -9,11 +11,11 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.sdevprem.runtrack.background.tracking.service.DefaultBackgroundTrackingManager
 import com.sdevprem.runtrack.data.migration.DataStoreMigration
 import com.sdevprem.runtrack.data.migration.OldPrefs
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
-import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
+import com.sdevprem.runtrack.shared.background.DefaultBackgroundTrackingManager
+import com.sdevprem.runtrack.shared.background.notification.TrackingNotificationHelper
 import com.sdevprem.runtrack.shared.createDataStore
 import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.db.dao.RunDao
@@ -21,9 +23,11 @@ import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.shared.data.tracking.timer.DefaultTimeTracker
+import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
-import dagger.Binds
+import com.sdevprem.runtrack.ui.MainActivity
+import com.sdevprem.runtrack.ui.nav.Destination
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -125,13 +129,27 @@ abstract class AppModule {
             @ApplicationScope scope: CoroutineScope,
             @IoDispatcher dispatcher: CoroutineDispatcher
         ): TimeTracker = DefaultTimeTracker(scope, dispatcher)
-    }
 
-    @Binds
-    @Singleton
-    abstract fun provideBackgroundTrackingManager(
-        trackingServiceManager: DefaultBackgroundTrackingManager
-    ): BackgroundTrackingManager
+        @Singleton
+        @Provides
+        fun provideBackgroundTrackingManager(
+            @ApplicationContext context: Context,
+        ): BackgroundTrackingManager = DefaultBackgroundTrackingManager(context)
+
+        @Singleton
+        @Provides
+        fun providesNotificationHelper(
+            @ApplicationContext context: Context,
+        ) = TrackingNotificationHelper(
+            context,
+            Intent(
+                Intent.ACTION_VIEW,
+                Destination.CurrentRun.currentRunUriPattern.toUri(),
+                context,
+                MainActivity::class.java
+            )
+        )
+    }
 
 }
 

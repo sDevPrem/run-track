@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.domain.tracking.background
+package com.sdevprem.runtrack.shared.domain.tracking.background
 
 interface BackgroundTrackingManager {
     fun startBackgroundTracking()
