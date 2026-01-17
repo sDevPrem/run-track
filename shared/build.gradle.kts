@@ -39,6 +39,9 @@ kotlin {
                 implementation(libs.androidx.sqlite.bundled)
                 api(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.androidx.datastore)
+                implementation(libs.androidx.datastore.preferences)
+
 //            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
 //            implementation(libs.compose.ui)
 //            implementation(libs.compose.graphics)

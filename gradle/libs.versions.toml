@@ -29,7 +29,7 @@ timber = "5.0.1"
 room = "2.8.4"
 sqlite = "2.6.2"
 
-datstore = "1.0.0"
+datstore = "1.2.0"
 
 paging = "3.2.0"
 
@@ -97,6 +97,7 @@ androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "ro
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin-bom" }
 
 #datastore
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datstore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datstore" }
 
 #coil
