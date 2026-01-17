@@ -23,6 +23,7 @@ import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.shared.data.tracking.timer.DefaultTimeTracker
+import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
@@ -148,6 +149,18 @@ abstract class AppModule {
                 context,
                 MainActivity::class.java
             )
+        )
+
+        @Singleton
+        @Provides
+        fun providesTrackingManager(
+            locationTrackingManager: LocationTrackingManager,
+            timeTracker: TimeTracker,
+            backgroundTrackingManager: BackgroundTrackingManager
+        ) = TrackingManager(
+            locationTrackingManager = locationTrackingManager,
+            timeTracker = timeTracker,
+            backgroundTrackingManager = backgroundTrackingManager
         )
     }
 

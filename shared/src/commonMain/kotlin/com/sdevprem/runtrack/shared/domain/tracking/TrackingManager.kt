@@ -1,22 +1,18 @@
-package com.sdevprem.runtrack.domain.tracking
+package com.sdevprem.runtrack.shared.domain.tracking
 
-import com.sdevprem.runtrack.common.utils.LocationUtils
-import com.sdevprem.runtrack.domain.tracking.model.CurrentRunState
-import com.sdevprem.runtrack.domain.tracking.model.PathPoint
+import com.sdevprem.runtrack.shared.common.utils.LocationUtils
 import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
+import com.sdevprem.runtrack.shared.domain.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.shared.domain.tracking.model.LocationTrackingInfo
+import com.sdevprem.runtrack.shared.domain.tracking.model.PathPoint
 import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
-import java.math.RoundingMode
-import javax.inject.Inject
-import javax.inject.Singleton
+import kotlin.math.round
 
-@Singleton
-class TrackingManager @Inject constructor(
+class TrackingManager(
     private val locationTrackingManager: LocationTrackingManager,
     private val timeTracker: TimeTracker,
     private val backgroundTrackingManager: BackgroundTrackingManager
@@ -45,11 +41,6 @@ class TrackingManager @Inject constructor(
             if (isTracking) {
                 results.forEach { info ->
                     addPathPoints(info)
-                    Timber.d(
-                        "New LocationPoint : " +
-                                "latitude: ${info.locationInfo.latitude}, " +
-                                "longitude: ${info.locationInfo.longitude}"
-                    )
                 }
             }
         }
@@ -76,8 +67,7 @@ class TrackingManager @Inject constructor(
                         )
                     distance
                 },
-                speedInKMH = (info.speedInMS * 3.6f).toBigDecimal()
-                    .setScale(2, RoundingMode.HALF_UP).toFloat()
+                speedInKMH = round(info.speedInMS * 3.6f * 100f) / 100f
             )
         }
     }

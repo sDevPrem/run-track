@@ -1,6 +1,4 @@
-package com.sdevprem.runtrack.domain.tracking.model
-
-import com.sdevprem.runtrack.shared.domain.tracking.model.LocationInfo
+package com.sdevprem.runtrack.shared.domain.tracking.model
 
 sealed interface PathPoint {
     data class LocationPoint(val locationInfo: LocationInfo) : PathPoint

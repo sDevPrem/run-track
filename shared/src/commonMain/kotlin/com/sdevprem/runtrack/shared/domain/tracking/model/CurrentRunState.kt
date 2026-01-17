@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.domain.tracking.model
+package com.sdevprem.runtrack.shared.domain.tracking.model
 
 data class CurrentRunState(
     val distanceInMeters: Int = 0,

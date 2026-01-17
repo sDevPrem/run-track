@@ -1,12 +1,12 @@
-package com.sdevprem.runtrack.common.utils
+package com.sdevprem.runtrack.shared.common.utils
 
 import android.location.Location
-import com.sdevprem.runtrack.domain.tracking.model.PathPoint
+import com.sdevprem.runtrack.shared.domain.tracking.model.PathPoint
 import kotlin.math.roundToInt
 
-object LocationUtils {
+actual object LocationUtils {
 
-    fun getDistanceBetweenPathPoints(
+    actual fun getDistanceBetweenPathPoints(
         pathPoint1: PathPoint,
         pathPoint2: PathPoint
     ): Int {

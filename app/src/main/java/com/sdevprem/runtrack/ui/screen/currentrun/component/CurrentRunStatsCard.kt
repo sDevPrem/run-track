@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
-import com.sdevprem.runtrack.domain.tracking.model.CurrentRunState
+import com.sdevprem.runtrack.shared.domain.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.ui.common.compose.component.RunningStatsItem
 import java.math.RoundingMode
 
