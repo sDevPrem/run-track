@@ -1,20 +1,16 @@
 package com.sdevprem.runtrack.di
 
 import android.content.Context
-import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.floatPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.sdevprem.runtrack.background.tracking.service.DefaultBackgroundTrackingManager
+import com.sdevprem.runtrack.data.migration.DataStoreMigration
 import com.sdevprem.runtrack.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
@@ -36,7 +32,6 @@ import getRoomDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.plus
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -101,24 +96,7 @@ abstract class AppModule {
         ): DataStore<Preferences> = createDataStore(
             context,
             scope.plus(ioDispatcher + SupervisorJob()),
-            listOf(
-                object : DataMigration<Preferences> {
-                    override suspend fun shouldMigrate(currentData: Preferences) =
-                        oldPrefs.data.first().asMap().isEmpty().not()
-
-                    override suspend fun migrate(currentData: Preferences): Preferences {
-                        val oldData = oldPrefs.data.first().asMap()
-                        val currentMutablePrefs = currentData.toMutablePreferences()
-
-                        mapOldToNewPrefs(oldData, currentMutablePrefs)
-                        return currentMutablePrefs.toPreferences()
-                    }
-
-                    override suspend fun cleanUp() {
-                        oldPrefs.edit { it.clear() }
-                    }
-                }
-            )
+            listOf(DataStoreMigration(oldPrefs))
         )
 
         @Singleton
@@ -133,22 +111,6 @@ abstract class AppModule {
                 locationRequest = LocationUtils.locationRequestBuilder.build()
             )
         }
-
-        private fun mapOldToNewPrefs(
-            oldData: Map<Preferences.Key<*>, Any>,
-            currentMutablePrefs: MutablePreferences
-        ) {
-            oldData.forEach { (key, value) ->
-                when (value) {
-                    is String ->
-                        currentMutablePrefs[stringPreferencesKey(key.name)] = value
-
-                    is Float ->
-                        currentMutablePrefs[floatPreferencesKey(key.name)] = value
-                }
-            }
-        }
-
     }
 
     @Binds
