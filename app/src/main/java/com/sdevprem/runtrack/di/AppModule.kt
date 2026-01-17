@@ -7,10 +7,10 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -140,8 +140,8 @@ abstract class AppModule {
         ) {
             oldData.forEach { (key, value) ->
                 when (value) {
-                    is Boolean ->
-                        currentMutablePrefs[booleanPreferencesKey(key.name)] = value
+                    is String ->
+                        currentMutablePrefs[stringPreferencesKey(key.name)] = value
 
                     is Float ->
                         currentMutablePrefs[floatPreferencesKey(key.name)] = value
