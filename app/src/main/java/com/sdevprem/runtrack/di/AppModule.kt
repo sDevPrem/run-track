@@ -1,11 +1,16 @@
 package com.sdevprem.runtrack.di
 
 import android.content.Context
+import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -16,6 +21,7 @@ import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
 import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
+import com.sdevprem.runtrack.shared.createDataStore
 import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.db.dao.RunDao
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
@@ -30,7 +36,9 @@ import getRoomDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.plus
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -69,7 +77,8 @@ abstract class AppModule {
 
         @Provides
         @Singleton
-        fun providesPreferenceDataStore(
+        @OldPrefs
+        fun providesOldPreferenceDataStore(
             @ApplicationContext context: Context,
             @ApplicationScope scope: CoroutineScope,
             @IoDispatcher ioDispatcher: CoroutineDispatcher
@@ -82,6 +91,35 @@ abstract class AppModule {
                 scope = scope.plus(ioDispatcher + SupervisorJob())
             )
 
+        @Provides
+        @Singleton
+        fun providesPreferenceDataStore(
+            @ApplicationContext context: Context,
+            @ApplicationScope scope: CoroutineScope,
+            @IoDispatcher ioDispatcher: CoroutineDispatcher,
+            @OldPrefs oldPrefs: DataStore<Preferences>,
+        ): DataStore<Preferences> = createDataStore(
+            context,
+            scope.plus(ioDispatcher + SupervisorJob()),
+            listOf(
+                object : DataMigration<Preferences> {
+                    override suspend fun shouldMigrate(currentData: Preferences) = true
+
+                    override suspend fun migrate(currentData: Preferences): Preferences {
+                        val oldData = oldPrefs.data.first().asMap()
+                        val currentMutablePrefs = currentData.toMutablePreferences()
+
+                        mapOldToNewPrefs(oldData, currentMutablePrefs)
+                        return currentMutablePrefs.toPreferences()
+                    }
+
+                    override suspend fun cleanUp() {
+                        oldPrefs.edit { it.clear() }
+                    }
+                }
+            )
+        )
+
         @Singleton
         @Provides
         fun provideLocationTrackingManager(
@@ -93,6 +131,21 @@ abstract class AppModule {
                 context = context,
                 locationRequest = LocationUtils.locationRequestBuilder.build()
             )
+        }
+
+        private fun mapOldToNewPrefs(
+            oldData: Map<Preferences.Key<*>, Any>,
+            currentMutablePrefs: MutablePreferences
+        ) {
+            oldData.forEach { (key, value) ->
+                when (value) {
+                    is Boolean ->
+                        currentMutablePrefs[booleanPreferencesKey(key.name)] = value
+
+                    is Float ->
+                        currentMutablePrefs[floatPreferencesKey(key.name)] = value
+                }
+            }
         }
 
     }
@@ -111,3 +164,11 @@ abstract class AppModule {
 
 
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class OldPrefs
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class Prefs
