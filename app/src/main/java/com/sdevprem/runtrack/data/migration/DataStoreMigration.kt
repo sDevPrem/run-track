@@ -7,6 +7,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
+import javax.inject.Qualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class OldPrefs
 
 class DataStoreMigration(
     private val oldPrefs: androidx.datastore.core.DataStore<Preferences>

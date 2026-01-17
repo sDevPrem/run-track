@@ -11,6 +11,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.sdevprem.runtrack.background.tracking.service.DefaultBackgroundTrackingManager
 import com.sdevprem.runtrack.data.migration.DataStoreMigration
+import com.sdevprem.runtrack.data.migration.OldPrefs
 import com.sdevprem.runtrack.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
@@ -33,7 +34,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.plus
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -128,10 +128,3 @@ abstract class AppModule {
 
 }
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class OldPrefs
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class Prefs
