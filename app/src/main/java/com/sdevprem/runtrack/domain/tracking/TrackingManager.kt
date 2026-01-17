@@ -6,7 +6,7 @@ import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.model.CurrentRunState
 import com.sdevprem.runtrack.domain.tracking.model.LocationTrackingInfo
 import com.sdevprem.runtrack.domain.tracking.model.PathPoint
-import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
+import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -14,15 +14,15 @@ import com.sdevprem.runtrack.data.migration.DataStoreMigration
 import com.sdevprem.runtrack.data.migration.OldPrefs
 import com.sdevprem.runtrack.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
-import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
 import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
-import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
 import com.sdevprem.runtrack.shared.createDataStore
 import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.db.dao.RunDao
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
+import com.sdevprem.runtrack.shared.data.tracking.timer.DefaultTimeTracker
+import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -118,6 +118,13 @@ abstract class AppModule {
         fun provideUserRepository(
             datastore: DataStore<Preferences>
         ) = UserRepository(datastore)
+
+        @Singleton
+        @Provides
+        fun providesTimeTracker(
+            @ApplicationScope scope: CoroutineScope,
+            @IoDispatcher dispatcher: CoroutineDispatcher
+        ): TimeTracker = DefaultTimeTracker(scope, dispatcher)
     }
 
     @Binds
@@ -125,13 +132,6 @@ abstract class AppModule {
     abstract fun provideBackgroundTrackingManager(
         trackingServiceManager: DefaultBackgroundTrackingManager
     ): BackgroundTrackingManager
-
-    @Binds
-    @Singleton
-    abstract fun provideTimeTracker(
-        timeTracker: DefaultTimeTracker
-    ): TimeTracker
-
 
 }
 
