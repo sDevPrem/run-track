@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.screen.onboard
+package com.sdevprem.runtrack.shared.ui.screen.onboard
 
 import com.sdevprem.runtrack.shared.data.model.Gender
 

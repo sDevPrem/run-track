@@ -5,7 +5,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
+import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.ui.common.VMProvider
+import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardingViewModel
 import com.sdevprem.runtrack.shared.ui.screen.runninghistory.RunningHistoryVM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,6 +22,10 @@ object ViewModelProvider : VMProvider {
                 hiltViewModel<AndroidRunningHistoryVM>()
                     .runningHistoryVM as T
             }
+            OnBoardingViewModel::class -> {
+                hiltViewModel<AndroidOnboardingVM>()
+                    .onboardingVM as T
+            }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${kClass.qualifiedName}")
         }
@@ -31,6 +37,16 @@ class AndroidRunningHistoryVM @Inject constructor(
     repository: AppRepository,
 ) : ViewModel() {
     val runningHistoryVM = RunningHistoryVM(
+        repository,
+        viewModelScope
+    )
+}
+
+@HiltViewModel
+class AndroidOnboardingVM @Inject constructor(
+    repository: UserRepository,
+) : ViewModel() {
+    val onboardingVM = OnBoardingViewModel(
         repository,
         viewModelScope
     )

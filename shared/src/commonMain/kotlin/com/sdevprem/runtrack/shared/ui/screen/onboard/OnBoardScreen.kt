@@ -1,8 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.onboard
+package com.sdevprem.runtrack.shared.ui.screen.onboard
 
-import android.app.Activity
-import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -37,43 +34,49 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.shared.data.model.Gender
 import com.sdevprem.runtrack.shared.data.model.User
-import com.sdevprem.runtrack.ui.nav.Destination
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_arrow_backward
+import runtrack.shared.generated.resources.ic_arrow_forward
+import runtrack.shared.generated.resources.ic_female
+import runtrack.shared.generated.resources.ic_male
+import runtrack.shared.generated.resources.ic_run
 
 private const val TOTAL_PAGE = 2
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun OnBoardScreen(
-    navController: NavController,
-    viewModel: OnBoardingViewModel = hiltViewModel()
+    navigateToHome: () -> Unit,
+    exitApp: () -> Unit,
+    viewModel: OnBoardingViewModel = LocalVMProvider.current.provideViewModel(OnBoardingViewModel::class)
 ) {
-    val context = LocalContext.current
+//    val context = LocalContext.current
     val user by viewModel.user.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = { TOTAL_PAGE })
     val coroutineScope = rememberCoroutineScope()
 
+    //todo: migrate to navigation event handler
+    // https://kotlinlang.org/docs/multiplatform/whats-new-compose-110.html#deprecated-predictivebackhandler
     BackHandler(true) {
         if (pagerState.currentPage > 0) coroutineScope.launch {
             pagerState.animateScrollToPage(pagerState.currentPage - 1)
-        } else
-        //if user wants to exit this screen
-        //exit the app :)
-            (context as? Activity)?.finish()
+        } else {
+            //if user wants to exit this screen
+            //exit the app :)
+            exitApp()
+        }
     }
 
     OnBoardScreenContent(
@@ -81,14 +84,12 @@ fun OnBoardScreen(
         viewModel,
         pagerState = pagerState
     ) {
-        viewModel.saveUser {
-            Destination.OnBoardingDestination.navigateToHome(navController)
-        }
+        viewModel.saveUser(navigateToHome)
     }
 
     LaunchedEffect(key1 = viewModel.errorMsg.value) {
         if (viewModel.errorMsg.value.isNotBlank()) {
-            Toast.makeText(context, viewModel.errorMsg.value, Toast.LENGTH_SHORT).show()
+//todo            Toast.makeText(context, viewModel.errorMsg.value, Toast.LENGTH_SHORT).show()
             viewModel.resetErrorMsg()
         }
     }
@@ -163,7 +164,7 @@ private fun OnBoardingScreenHeader(
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_run),
+            imageVector = vectorResource(Res.drawable.ic_run),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
@@ -282,10 +283,10 @@ private fun GenderCard(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    id = when (cardGender) {
-                        Gender.MALE -> R.drawable.ic_male
-                        Gender.FEMALE -> R.drawable.ic_female
+                imageVector = vectorResource(
+                    when (cardGender) {
+                        Gender.MALE -> Res.drawable.ic_male
+                        Gender.FEMALE -> Res.drawable.ic_female
                     }
                 ),
                 contentDescription = "Female",
@@ -304,7 +305,7 @@ private fun getGenderCardColor(isSelected: Boolean) =
     else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
 
 @Composable
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 private fun BottomItem(
     onNextButtonClicked: () -> Unit = {},
     onBackButtonClicked: () -> Unit = {},
@@ -336,7 +337,7 @@ private fun BottomItem(
                 )
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_backward),
+                    imageVector = vectorResource(Res.drawable.ic_arrow_backward),
                     contentDescription = "back",
                     modifier = Modifier
                         .size(16.dp)
@@ -367,7 +368,7 @@ private fun BottomItem(
 
             }
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
+                imageVector = vectorResource(Res.drawable.ic_arrow_forward),
                 contentDescription = "next",
                 tint = contentColor,
                 modifier = Modifier

@@ -63,6 +63,7 @@ kotlin {
                 implementation(libs.jetBrains.lifecycle)
                 implementation(libs.coil3.compose)
                 implementation(libs.coil.network.ktor)
+                implementation(libs.compose.backhandler)
 
 //            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
 //            implementation(libs.compose.ui)

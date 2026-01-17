@@ -51,6 +51,7 @@ ksp = "2.2.21-2.0.4"
 vico = "2.0.0-alpha.12"
 
 compose-multiplatform = "1.7.0"
+jetbrains-backhandler = "1.10.0"
 compose-plugin = "1.8.2"
 
 [libraries]
@@ -144,6 +145,7 @@ compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", v
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 compose-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version.ref = "compose-multiplatform" }
+compose-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "jetbrains-backhandler" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
