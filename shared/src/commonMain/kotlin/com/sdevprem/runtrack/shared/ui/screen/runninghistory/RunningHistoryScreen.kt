@@ -37,6 +37,7 @@ import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.utils.RunSortOrder
+import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.compose.components.DropDownList
 import com.sdevprem.runtrack.shared.ui.common.compose.components.RunInfoDialog
@@ -148,7 +149,7 @@ private fun RunningList(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = /*todo LocalScaffoldBottomPadding.current + */8.dp)
+        contentPadding = PaddingValues(bottom = LocalScaffoldBottomPadding.current + 8.dp)
     ) {
 
         if (runItems.loadState.refresh == LoadState.Loading) item {

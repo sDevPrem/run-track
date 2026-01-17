@@ -63,10 +63,10 @@ import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.common.compose.component.RunItem
 import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
-import com.sdevprem.runtrack.ui.common.compose.compositonLocal.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination
 import kotlin.math.roundToInt

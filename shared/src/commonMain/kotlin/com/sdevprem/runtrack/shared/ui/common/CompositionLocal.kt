@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.common.compose.compositonLocal
+package com.sdevprem.runtrack.shared.ui.common
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.dp
