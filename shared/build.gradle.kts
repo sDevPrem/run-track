@@ -35,8 +35,9 @@ kotlin {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
                 implementation(libs.androidx.room.runtime)
+                implementation(libs.androidx.room.paging)
                 implementation(libs.androidx.sqlite.bundled)
-                implementation(libs.kotlinx.datetime)
+                api(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.coroutines.core)
 //            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
 //            implementation(libs.compose.ui)
