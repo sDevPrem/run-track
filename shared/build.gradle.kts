@@ -40,6 +40,7 @@ kotlin {
                 implementation(libs.androidx.hilt.navigation.compose)
                 implementation(libs.hilt.android)
                 implementation(libs.androidx.lifecycle.service)
+                implementation(libs.ktor.client.android)
             }
         }
         commonMain {
@@ -57,10 +58,19 @@ kotlin {
                 implementation(libs.compose.material3)
                 implementation(libs.compose.ui)
                 implementation(libs.compose.components.resources)
+                implementation(libs.paging.compose.common)
+                implementation(compose.components.resources)
+                implementation(libs.jetBrains.lifecycle)
+                implementation(libs.coil3.compose)
+                implementation(libs.coil.network.ktor)
+
 //            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
 //            implementation(libs.compose.ui)
 //            implementation(libs.compose.graphics)
             }
+        }
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
 

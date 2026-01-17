@@ -1,9 +1,12 @@
 package com.sdevprem.runtrack.ui.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.ui.di.ViewModelProvider
 import com.sdevprem.runtrack.ui.nav.Destination.CurrentRun
 import com.sdevprem.runtrack.ui.screen.currentrun.CurrentRunScreen
 import com.sdevprem.runtrack.ui.screen.onboard.OnBoardScreen
@@ -14,9 +17,13 @@ import com.sdevprem.runtrack.ui.screen.runstats.RunStatsScreen
 fun Navigation(
     navController: NavHostController,
 ) {
-    SetupNavGraph(
-        navController = navController,
-    )
+    CompositionLocalProvider(
+        LocalVMProvider provides ViewModelProvider
+    ) {
+        SetupNavGraph(
+            navController = navController,
+        )
+    }
 }
 
 @Composable

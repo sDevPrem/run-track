@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.extension.getDisplayDate
+import com.sdevprem.runtrack.data.db.mapper.toDataModel
 import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.shared.data.model.Gender
 import java.util.Date
@@ -98,6 +100,20 @@ fun RunningStatsItem(
             )
         }
     }
+}
+
+@Composable
+fun RunItem(
+    modifier: Modifier = Modifier,
+    run: com.sdevprem.runtrack.shared.data.model.Run,
+    showTrailingIcon: Boolean = true
+) {
+    val modalRun = remember(run) { run.toDataModel() }
+    RunItem(
+        modifier = modifier,
+        run = modalRun,
+        showTrailingIcon = showTrailingIcon
+    )
 }
 
 @Composable

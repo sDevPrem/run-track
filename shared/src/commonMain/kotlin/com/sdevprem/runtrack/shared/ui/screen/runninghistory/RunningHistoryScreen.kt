@@ -1,6 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.runninghistory
+package com.sdevprem.runtrack.shared.ui.screen.runninghistory
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,29 +30,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.data.model.Run
+import app.cash.paging.compose.LazyPagingItems
+import app.cash.paging.compose.collectAsLazyPagingItems
+import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.utils.RunSortOrder
-import com.sdevprem.runtrack.ui.common.compose.component.DropDownList
-import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
-import com.sdevprem.runtrack.ui.common.compose.component.RunItem
-import com.sdevprem.runtrack.ui.common.compose.compositonLocal.LocalScaffoldBottomPadding
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.common.compose.components.DropDownList
+import com.sdevprem.runtrack.shared.ui.common.compose.components.RunInfoDialog
+import com.sdevprem.runtrack.shared.ui.common.compose.components.RunItem
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_arrow_backward
 
 @Composable
 fun RunningHistoryScreen(
-    navController: NavController,
-    viewModel: RunningHistoryVM = hiltViewModel()
+    navigateUp: () -> Unit,
+    viewModel: RunningHistoryVM = LocalVMProvider.current.provideViewModel(RunningHistoryVM::class)
 ) {
     val runItems = viewModel.runList.collectAsLazyPagingItems()
 
@@ -62,7 +57,7 @@ fun RunningHistoryScreen(
         runItems = runItems,
         onSortOrderSelected = viewModel::setSortOrder,
         onItemClick = viewModel::setDialogRun,
-        onNavIconClick = { navController.navigateUp() }
+        onNavIconClick = navigateUp
     )
 
     viewModel.dialogRun.collectAsStateWithLifecycle().value?.let {
@@ -96,7 +91,7 @@ private fun RunningHistoryScreenContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 private fun ScreenTopAppBar(
     onSortOrderSelected: (RunSortOrder) -> Unit = {},
     onNavIconClick: () -> Unit = {}
@@ -108,7 +103,7 @@ private fun ScreenTopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavIconClick) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_backward),
+                    imageVector = vectorResource(Res.drawable.ic_arrow_backward),
                     contentDescription = "Navigate back"
                 )
             }
@@ -153,7 +148,7 @@ private fun RunningList(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = LocalScaffoldBottomPadding.current + 8.dp)
+        contentPadding = PaddingValues(bottom = /*todo LocalScaffoldBottomPadding.current + */8.dp)
     ) {
 
         if (runItems.loadState.refresh == LoadState.Loading) item {
@@ -191,17 +186,17 @@ private fun RunCardItem(
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-private fun RunCardItemPreview() {
-    val runList = List(4) {
-        Run(
-            img = BitmapFactory.decodeResource(
-                LocalContext.current.resources,
-                R.drawable.running_boy
-            )
-        )
-    }
-
-    RunCardItem(run = runList[0])
-}
+//@Composable
+//@Preview(showBackground = true)
+//private fun RunCardItemPreview() {
+//    val runList = List(4) {
+//        Run(
+//            img = BitmapFactory.decodeResource(
+//                LocalContext.current.resources,
+//                R.drawable.running_boy
+//            ).rowBytes
+//        )
+//    }
+//
+//    RunCardItem(run = runList[0])
+//}

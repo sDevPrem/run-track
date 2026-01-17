@@ -10,8 +10,13 @@ junit = "4.13.2"
 kotlinx-datetime = "0.7.1"
 kotlinx-coroutines = "1.9.0"
 lifecycle = "2.6.1"
+jetBrains-lifecycle = "2.9.6"
 
 coil-compose = "2.4.0"
+coil = "3.0.4"
+
+ktor = "3.0.1"
+
 
 hilt = "2.57"
 hilt-navigation-compose = "1.3.0"
@@ -32,6 +37,7 @@ sqlite = "2.6.2"
 datstore = "1.2.0"
 
 paging = "3.2.0"
+pagingCommonVersion = "3.3.0-alpha02-0.4.0"
 
 accompanist-permissions = "0.31.5-beta"
 
@@ -76,6 +82,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
+jetBrains-lifecycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jetBrains-lifecycle" }
 
 #Timber
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -105,6 +112,11 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 
 #coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
 
 #maps
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "maps-compose" }
@@ -114,6 +126,7 @@ play-services-maps = { module = "com.google.android.gms:play-services-maps", ver
 #paging
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingCommonVersion" }
 
 #accompanist
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }

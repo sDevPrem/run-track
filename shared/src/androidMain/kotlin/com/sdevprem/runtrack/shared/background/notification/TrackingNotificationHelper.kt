@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import com.sdevprem.runtrack.shared.R
 import com.sdevprem.runtrack.shared.background.tracking.service.TrackingService
+import com.sdevprem.runtrack.shared.common.utils.DateUtils.getFormattedStopwatchTime
 
 class TrackingNotificationHelper(
     private val context: Context,
@@ -90,22 +91,4 @@ class TrackingNotificationHelper(
     }
 
     fun getDefaultNotification() = baseNotificationBuilder.build()
-
-    fun getFormattedStopwatchTime(ms: Long): String {
-        val totalSeconds = ms / 1000
-        val seconds = totalSeconds % 60
-        val minutes = (totalSeconds / 60) % 60
-        val hours = totalSeconds / 3600
-
-        return buildString {
-            if (hours < 10) append('0')
-            append(hours)
-            append(':')
-            if (minutes < 10) append('0')
-            append(minutes)
-            append(':')
-            if (seconds < 10) append('0')
-            append(seconds)
-        }
-    }
 }
