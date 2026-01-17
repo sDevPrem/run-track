@@ -1,19 +1,15 @@
-package com.sdevprem.runtrack.data.repository
+package com.sdevprem.runtrack.shared.data.repository
 
-import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.sdevprem.runtrack.data.model.Gender
-import com.sdevprem.runtrack.data.model.User
+import com.sdevprem.runtrack.shared.data.model.Gender
+import com.sdevprem.runtrack.shared.data.model.User
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class UserRepository @Inject constructor(
+class UserRepository(
     private val dataStore: DataStore<Preferences>
 ) {
 
@@ -32,7 +28,7 @@ class UserRepository @Inject constructor(
             gender = Gender.valueOf(it[USER_GENDER] ?: Gender.MALE.name),
             weightInKg = it[USER_WEIGHT_IN_KG] ?: 0.0f,
             weeklyGoalInKM = it[USER_WEEKLY_GOAL_IN_KM] ?: 0.0f,
-            imgUri = if (dbImgUri.isNullOrBlank()) null else dbImgUri.toUri()
+            imgUri = if (dbImgUri.isNullOrBlank()) null else dbImgUri
         )
     }
 

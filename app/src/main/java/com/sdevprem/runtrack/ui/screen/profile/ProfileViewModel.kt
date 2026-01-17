@@ -3,8 +3,8 @@ package com.sdevprem.runtrack.ui.screen.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
+import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -70,7 +70,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     override fun updateImgUri(newUri: Uri?) {
-        _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri)) }
+        _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri?.toString())) }
     }
 
     override fun cancelEditing() {

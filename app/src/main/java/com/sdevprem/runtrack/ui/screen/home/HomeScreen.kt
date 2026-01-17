@@ -54,14 +54,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.common.utils.DateTimeUtils
 import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.data.model.User
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
+import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.common.compose.component.RunItem
 import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
@@ -399,7 +400,7 @@ private fun TopBarProfile(
         verticalAlignment = Alignment.CenterVertically
     ) {
         UserProfilePic(
-            imgUri = user.imgUri,
+            imgUri = user.imgUri?.toUri(),
             gender = user.gender,
             modifier = Modifier
                 .size(40.dp)

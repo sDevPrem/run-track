@@ -22,6 +22,7 @@ import com.sdevprem.runtrack.shared.createDataStore
 import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.db.dao.RunDao
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
+import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -111,6 +112,12 @@ abstract class AppModule {
                 locationRequest = LocationUtils.locationRequestBuilder.build()
             )
         }
+
+        @Singleton
+        @Provides
+        fun provideUserRepository(
+            datastore: DataStore<Preferences>
+        ) = UserRepository(datastore)
     }
 
     @Binds

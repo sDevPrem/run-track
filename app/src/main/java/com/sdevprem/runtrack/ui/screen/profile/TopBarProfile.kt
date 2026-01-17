@@ -45,8 +45,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.data.model.User
+import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
 import com.sdevprem.runtrack.ui.common.extension.bottomBorder
 
@@ -149,7 +150,7 @@ private fun TopBarProfileContent(
         Box {
 
             UserProfilePic(
-                imgUri = user.imgUri,
+                imgUri = user.imgUri?.toUri(),
                 gender = user.gender,
                 modifier = Modifier
                     .size(84.dp)
