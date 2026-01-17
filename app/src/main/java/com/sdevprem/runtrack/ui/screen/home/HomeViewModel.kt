@@ -10,10 +10,10 @@ import com.sdevprem.runtrack.data.db.mapper.toEntity
 import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
-import com.sdevprem.runtrack.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
+import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

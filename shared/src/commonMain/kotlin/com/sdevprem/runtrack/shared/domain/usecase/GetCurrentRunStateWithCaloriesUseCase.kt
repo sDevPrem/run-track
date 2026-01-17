@@ -1,17 +1,13 @@
-package com.sdevprem.runtrack.domain.usecase
+package com.sdevprem.runtrack.shared.domain.usecase
 
-import com.sdevprem.runtrack.common.utils.RunUtils
-import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
+import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.math.roundToInt
 
-@Singleton
-class GetCurrentRunStateWithCaloriesUseCase @Inject constructor(
+class GetCurrentRunStateWithCaloriesUseCase(
     private val userRepository: UserRepository,
     private val trackingManager: TrackingManager
 ) {
@@ -19,11 +15,15 @@ class GetCurrentRunStateWithCaloriesUseCase @Inject constructor(
         return combine(userRepository.user, trackingManager.currentRunState) { user, runState ->
             CurrentRunStateWithCalories(
                 currentRunState = runState,
-                caloriesBurnt = RunUtils.calculateCaloriesBurnt(
+                caloriesBurnt = calculateCaloriesBurnt(
                     distanceInMeters = runState.distanceInMeters,
                     weightInKg = user.weightInKg
                 ).roundToInt()
             )
         }
     }
+
+    //from chat gpt
+    private fun calculateCaloriesBurnt(distanceInMeters: Int, weightInKg: Float) =
+        (0.75f * weightInKg) * (distanceInMeters / 1000f)
 }

@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.domain.model
+package com.sdevprem.runtrack.shared.domain.model
 
 import com.sdevprem.runtrack.shared.domain.tracking.model.CurrentRunState
 

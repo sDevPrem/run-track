@@ -27,6 +27,7 @@ import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
+import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import com.sdevprem.runtrack.ui.MainActivity
 import com.sdevprem.runtrack.ui.nav.Destination
 import dagger.Module
@@ -162,6 +163,13 @@ abstract class AppModule {
             timeTracker = timeTracker,
             backgroundTrackingManager = backgroundTrackingManager
         )
+
+        @Singleton
+        @Provides
+        fun providesGetCurrentRunStateWithCaloriesUseCase(
+            trackingManager: TrackingManager,
+            userRepository: UserRepository
+        ) = GetCurrentRunStateWithCaloriesUseCase(userRepository, trackingManager)
     }
 
 }
