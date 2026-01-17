@@ -8,8 +8,9 @@ plugins {
 //    alias(libs.plugins.jetbrains.kotlin.kapt) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.kotlinCocoapods) apply false
-    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.androidx.room) apply false
+    alias(libs.plugins.jetbrainsCompose) apply false
+    alias(libs.plugins.compose.compiler) apply false
 //    kotlin("plugin.serialization") version "2.3.0" apply false
 }

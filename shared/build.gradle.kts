@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 //    kotlin("plugin.serialization") version "2.3.0"
 }
 
@@ -50,7 +52,11 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.androidx.datastore)
                 implementation(libs.androidx.datastore.preferences)
-
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
 //            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
 //            implementation(libs.compose.ui)
 //            implementation(libs.compose.graphics)
