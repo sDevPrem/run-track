@@ -103,7 +103,8 @@ abstract class AppModule {
             scope.plus(ioDispatcher + SupervisorJob()),
             listOf(
                 object : DataMigration<Preferences> {
-                    override suspend fun shouldMigrate(currentData: Preferences) = true
+                    override suspend fun shouldMigrate(currentData: Preferences) =
+                        oldPrefs.data.first().asMap().isEmpty().not()
 
                     override suspend fun migrate(currentData: Preferences): Preferences {
                         val oldData = oldPrefs.data.first().asMap()
