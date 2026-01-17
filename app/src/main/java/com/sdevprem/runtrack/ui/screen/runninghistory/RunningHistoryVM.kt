@@ -3,6 +3,8 @@ package com.sdevprem.runtrack.ui.screen.runninghistory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.map
+import com.sdevprem.runtrack.data.db.mapper.toDataModel
 import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.data.repository.AppRepository
 import com.sdevprem.runtrack.data.utils.RunSortOrder
@@ -11,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +28,7 @@ class RunningHistoryVM @Inject constructor(
     val runList = _runSortOrder.flatMapLatest {
         repository.getSortedAllRun(it)
             .flow
+            .map { pagingData -> pagingData.map { it.toDataModel() } }
             .cachedIn(viewModelScope)
     }
 

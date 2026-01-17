@@ -7,18 +7,16 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.sdevprem.runtrack.background.tracking.service.DefaultBackgroundTrackingManager
-import com.sdevprem.runtrack.data.db.RunTrackDB
-import com.sdevprem.runtrack.data.db.RunTrackDB.Companion.RUN_TRACK_DB_NAME
 import com.sdevprem.runtrack.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.data.tracking.timer.DefaultTimeTracker
 import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
+import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -50,30 +48,16 @@ abstract class AppModule {
 
         @Provides
         @Singleton
-        fun provideRunningDB(
-            @ApplicationContext context: Context
-        ): RunTrackDB = Room.databaseBuilder(
-            context,
-            RunTrackDB::class.java,
-            RUN_TRACK_DB_NAME
-        ).build()
-
-        @Provides
-        @Singleton
         fun provideSharedRunningDB(
             @ApplicationContext context: Context
-        ): com.sdevprem.runtrack.shared.data.db.RunTrackDB = getRoomDatabase(
+        ): RunTrackDB = getRoomDatabase(
             getDatabaseBuilder(context)
         )
 
         @Singleton
         @Provides
-        fun provideSharedRunDao(db: com.sdevprem.runtrack.shared.data.db.RunTrackDB) =
+        fun provideSharedRunDao(db: RunTrackDB) =
             db.getRunDao()
-
-        @Singleton
-        @Provides
-        fun provideRunDao(db: RunTrackDB) = db.getRunDao()
 
         @Provides
         @Singleton
