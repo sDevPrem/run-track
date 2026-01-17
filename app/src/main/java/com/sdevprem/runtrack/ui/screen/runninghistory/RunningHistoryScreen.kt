@@ -44,7 +44,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.data.utils.RunSortOrder
+import com.sdevprem.runtrack.shared.data.utils.RunSortOrder
 import com.sdevprem.runtrack.ui.common.compose.component.DropDownList
 import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
 import com.sdevprem.runtrack.ui.common.compose.component.RunItem

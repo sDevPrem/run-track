@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.data.utils
+package com.sdevprem.runtrack.shared.data.utils
 
 enum class RunSortOrder {
     DATE,

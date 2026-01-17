@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.sdevprem.runtrack.data.db.mapper.toDataModel
+import com.sdevprem.runtrack.data.db.mapper.toEntity
 import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.data.repository.AppRepository
-import com.sdevprem.runtrack.data.utils.RunSortOrder
+import com.sdevprem.runtrack.shared.data.repository.AppRepository
+import com.sdevprem.runtrack.shared.data.utils.RunSortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +47,7 @@ class RunningHistoryVM @Inject constructor(
     fun deleteRun() = dialogRun.value?.let {
         viewModelScope.launch {
             _dialogRun.value = null
-            repository.deleteRun(it)
+            repository.deleteRun(it.toEntity())
         }
     }
 }

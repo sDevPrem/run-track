@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
 import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
-import com.sdevprem.runtrack.data.repository.AppRepository
+import com.sdevprem.runtrack.data.db.mapper.toDataModel
+import com.sdevprem.runtrack.data.db.mapper.toDateTime
 import com.sdevprem.runtrack.di.DefaultDispatcher
+import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.ui.screen.runstats.utils.RunStatsAccumulator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -34,10 +36,10 @@ class RunStatsViewModel @Inject constructor(
     private fun fetchRunInDate() = viewModelScope.launch {
         val runList = state.value.let {
             repository.getRunStatsInDateRange(
-                fromDate = it.dateRange.start,
-                toDate = it.dateRange.endInclusive
+                fromDate = it.dateRange.start.toDateTime(),
+                toDate = it.dateRange.endInclusive.toDateTime()
             )
-        }
+        }.map { it.toDataModel() }
         withContext(defaultDispatcher) {
             _state.update {
                 it.copy(

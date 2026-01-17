@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
 import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
+import com.sdevprem.runtrack.data.db.mapper.toDataModel
+import com.sdevprem.runtrack.data.db.mapper.toDateTime
+import com.sdevprem.runtrack.data.db.mapper.toEntity
 import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.data.repository.AppRepository
 import com.sdevprem.runtrack.data.repository.UserRepository
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
+import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -47,8 +50,8 @@ class HomeViewModel @Inject constructor(
     private val calendar = Calendar.getInstance()
 
     private val distanceCoveredInThisWeekInMeter = repository.getTotalDistance(
-        calendar.setDateToWeekFirstDay().time,
-        calendar.setDateToWeekLastDay().time
+        calendar.setDateToWeekFirstDay().time.toDateTime(),
+        calendar.setDateToWeekLastDay().time.toDateTime()
     )
 
     private val _homeScreenState = MutableStateFlow(HomeScreenState())
@@ -60,7 +63,7 @@ class HomeViewModel @Inject constructor(
         _homeScreenState,
     ) { runList, runState, user, distanceInMeter, state ->
         state.copy(
-            runList = runList,
+            runList = runList.map { it.toDataModel() },
             currentRunStateWithCalories = runState,
             user = user,
             distanceCoveredInKmInThisWeek = distanceInMeter / 1000f
@@ -73,7 +76,7 @@ class HomeViewModel @Inject constructor(
 
     fun deleteRun(run: Run) = externalScope.launch(ioDispatcher) {
         dismissRunDialog()
-        repository.deleteRun(run)
+        repository.deleteRun(run.toEntity())
     }
 
     fun showRun(run: Run) {

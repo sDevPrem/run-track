@@ -3,13 +3,14 @@ package com.sdevprem.runtrack.ui.screen.currentrun
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sdevprem.runtrack.data.db.mapper.toEntity
 import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.data.repository.AppRepository
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
+import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +65,7 @@ class CurrentRunViewModel @Inject constructor(
     }
 
     private fun saveRun(run: Run) = appCoroutineScope.launch(ioDispatcher) {
-        repository.insertRun(run)
+        repository.insertRun(run.toEntity())
     }
 
 }

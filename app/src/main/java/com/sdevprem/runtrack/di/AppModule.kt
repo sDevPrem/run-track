@@ -17,6 +17,8 @@ import com.sdevprem.runtrack.domain.tracking.background.BackgroundTrackingManage
 import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.domain.tracking.timer.TimeTracker
 import com.sdevprem.runtrack.shared.data.db.RunTrackDB
+import com.sdevprem.runtrack.shared.data.db.dao.RunDao
+import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -58,6 +60,12 @@ abstract class AppModule {
         @Provides
         fun provideSharedRunDao(db: RunTrackDB) =
             db.getRunDao()
+
+        @Singleton
+        @Provides
+        fun provideAppRepository(
+            runDao: RunDao
+        ): AppRepository = AppRepository(runDao = runDao)
 
         @Provides
         @Singleton
