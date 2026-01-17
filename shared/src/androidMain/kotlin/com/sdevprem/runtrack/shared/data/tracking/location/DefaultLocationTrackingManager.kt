@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.data.tracking.location
+package com.sdevprem.runtrack.shared.data.tracking.location
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,17 +7,14 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.sdevprem.runtrack.common.extension.hasLocationPermission
-import com.sdevprem.runtrack.domain.tracking.location.LocationTrackingManager
-import com.sdevprem.runtrack.domain.tracking.model.LocationInfo
-import com.sdevprem.runtrack.domain.tracking.model.LocationTrackingInfo
-import dagger.hilt.android.qualifiers.ApplicationContext
-
+import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
+import com.sdevprem.runtrack.shared.domain.tracking.model.LocationInfo
+import com.sdevprem.runtrack.shared.domain.tracking.model.LocationTrackingInfo
 
 @SuppressLint("MissingPermission")
-class DefaultLocationTrackingManager constructor(
+class DefaultLocationTrackingManager(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    @ApplicationContext private val context: Context,
+    private val context: Context,
     private val locationRequest: LocationRequest
 ) : LocationTrackingManager {
 
@@ -38,7 +35,7 @@ class DefaultLocationTrackingManager constructor(
     }
 
     override fun setCallback(locationCallback: LocationTrackingManager.LocationCallback) {
-        if (context.hasLocationPermission()) {
+        if (/*context.hasLocationPermission()*/ true) { //todo: add permission check
             this.locationCallback = locationCallback
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,

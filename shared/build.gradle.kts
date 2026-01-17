@@ -31,6 +31,11 @@ kotlin {
     }
 
     sourceSets {
+        androidMain {
+            dependencies {
+                implementation(libs.play.services.location)
+            }
+        }
         commonMain {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {

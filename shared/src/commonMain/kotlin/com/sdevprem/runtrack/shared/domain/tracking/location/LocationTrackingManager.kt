@@ -1,6 +1,6 @@
-package com.sdevprem.runtrack.domain.tracking.location
+package com.sdevprem.runtrack.shared.domain.tracking.location
 
-import com.sdevprem.runtrack.domain.tracking.model.LocationTrackingInfo
+import com.sdevprem.runtrack.shared.domain.tracking.model.LocationTrackingInfo
 
 interface LocationTrackingManager {
     fun setCallback(locationCallback: LocationCallback)
