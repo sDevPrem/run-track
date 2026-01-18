@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.screen.home
+package com.sdevprem.runtrack.shared.ui.screen.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,9 +40,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -51,30 +48,36 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.common.utils.DateTimeUtils
-import com.sdevprem.runtrack.data.model.Run
+import coil3.toUri
+import com.sdevprem.runtrack.shared.common.utils.DateUtils.getFormattedStopwatchTime
+import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.ui.common.compose.component.RunInfoDialog
-import com.sdevprem.runtrack.ui.common.compose.component.RunItem
-import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
-import com.sdevprem.runtrack.ui.nav.BottomNavDestination
-import com.sdevprem.runtrack.ui.nav.Destination
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.common.compose.components.RunInfoDialog
+import com.sdevprem.runtrack.shared.ui.common.compose.components.RunItem
+import com.sdevprem.runtrack.shared.ui.common.compose.components.UserProfilePic
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_arrow_forward
+import runtrack.shared.generated.resources.ic_calendar
+import runtrack.shared.generated.resources.ic_run
+import runtrack.shared.generated.resources.ic_settings
+import runtrack.shared.generated.resources.running_boy
 import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    navController: NavController
+    navigateToRunningHistoryScreen: () -> Unit,
+    navigateToRunScreen: () -> Unit,
+    navigateToRunStats: () -> Unit,
+    navigateToOnBoardingScreen: () -> Unit,
+    viewModel: HomeViewModel = LocalVMProvider.current.provideViewModel(HomeViewModel::class),
 ) {
     val doesUserExist by viewModel.doesUserExist.collectAsStateWithLifecycle()
     val state by viewModel.homeScreenState.collectAsStateWithLifecycle()
@@ -87,19 +90,13 @@ fun HomeScreen(
             deleteRun = viewModel::deleteRun,
             showRun = viewModel::showRun,
             dismissDialog = viewModel::dismissRunDialog,
-            navigateToRunScreen = { Destination.navigateToCurrentRunScreen(navController) },
-            navigateToRunningHistoryScreen = {
-                BottomNavDestination.Home.RecentRun.navigateToRunningHistoryScreen(navController)
-            },
-            navigateToRunStats = {
-                BottomNavDestination.Home.navigateToRunStats(navController)
-            }
+            navigateToRunScreen = navigateToRunScreen,
+            navigateToRunningHistoryScreen = navigateToRunningHistoryScreen,
+            navigateToRunStats = navigateToRunStats
         )
 
     LaunchedEffect(key1 = doesUserExist) {
-        if (doesUserExist == false)
-            BottomNavDestination.Home
-                .navigateToOnBoardingScreen(navController)
+        if (doesUserExist == false) navigateToOnBoardingScreen()
     }
 }
 
@@ -226,7 +223,7 @@ private fun RecentRunList(
 }
 
 @Composable
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 private fun EmptyRunListView(
     modifier: Modifier = Modifier
 ) {
@@ -238,7 +235,7 @@ private fun EmptyRunListView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_calendar),
+            imageVector = vectorResource(Res.drawable.ic_calendar),
             contentDescription = null,
             modifier = Modifier
                 .size(80.dp),
@@ -254,7 +251,7 @@ private fun EmptyRunListView(
                 )
             ) {
                 Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_run),
+                    imageVector = vectorResource(Res.drawable.ic_run),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
@@ -305,7 +302,7 @@ private fun CurrentRunningCard(
                 ),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.running_boy),
+                painter = painterResource(Res.drawable.running_boy),
                 contentDescription = null,
                 modifier = Modifier
                     .size(40.dp)
@@ -325,7 +322,7 @@ private fun CurrentRunningCard(
             )
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = DateTimeUtils.getFormattedStopwatchTime(durationInMillis),
+                text = getFormattedStopwatchTime(durationInMillis),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -430,7 +427,7 @@ private fun TopBarProfile(
                 .size(24.dp)
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_settings),
+                imageVector = vectorResource(Res.drawable.ic_settings),
                 contentDescription = "Settings",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -474,7 +471,7 @@ private fun WeeklyGoalCard(
                     .weight(1f)
             )
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
+                imageVector = vectorResource(Res.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
@@ -516,13 +513,13 @@ private fun WeeklyGoalCard(
                 modifier = Modifier.size(8.dp)
             )
             LinearProgressIndicator(
-                progress = if (weeklyGoalInKm > 0) weeklyGoalDoneInKm / weeklyGoalInKm else 0f,
+                progress = { if (weeklyGoalInKm > 0) weeklyGoalDoneInKm / weeklyGoalInKm else 0f },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp),
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 strokeCap = StrokeCap.Round,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
             )
         }
     }

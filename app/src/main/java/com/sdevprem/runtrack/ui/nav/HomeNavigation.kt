@@ -5,9 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.screen.home.HomeScreen
 import com.sdevprem.runtrack.shared.ui.screen.runninghistory.RunningHistoryScreen
 import com.sdevprem.runtrack.shared.ui.screen.runninghistory.RunningHistoryVM
-import com.sdevprem.runtrack.ui.screen.home.HomeScreen
 
 fun NavGraphBuilder.homeNavigation(
     navController: NavController,
@@ -20,7 +20,19 @@ fun NavGraphBuilder.homeNavigation(
             route = BottomNavDestination.Home.RecentRun.route
         ) {
             HomeScreen(
-                navController = navController,
+                navigateToRunScreen = {
+                    Destination.navigateToCurrentRunScreen(navController)
+                },
+                navigateToRunningHistoryScreen = {
+                    BottomNavDestination.Home.RecentRun.navigateToRunningHistoryScreen(navController)
+                },
+                navigateToRunStats = {
+                    BottomNavDestination.Home.navigateToRunStats(navController)
+                },
+                navigateToOnBoardingScreen = {
+                    BottomNavDestination.Home
+                        .navigateToOnBoardingScreen(navController)
+                }
             )
         }
 
@@ -32,6 +44,6 @@ fun NavGraphBuilder.homeNavigation(
                 viewModel = LocalVMProvider.current.provideViewModel(RunningHistoryVM::class)
             )
         }
-
     }
 }
+    

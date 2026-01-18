@@ -4,13 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sdevprem.runtrack.di.ApplicationScope
+import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
+import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
+import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import com.sdevprem.runtrack.shared.ui.common.VMProvider
+import com.sdevprem.runtrack.shared.ui.screen.home.HomeViewModel
 import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardingViewModel
 import com.sdevprem.runtrack.shared.ui.screen.profile.ProfileViewModel
 import com.sdevprem.runtrack.shared.ui.screen.runninghistory.RunningHistoryVM
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -29,6 +36,10 @@ object ViewModelProvider : VMProvider {
             }
             ProfileViewModel::class -> {
                 hiltViewModel<AndroidProfileVM>()
+                    .vm as T
+            }
+            HomeViewModel::class -> {
+                hiltViewModel<AndroidHomeVM>()
                     .vm as T
             }
 
@@ -63,4 +74,23 @@ class AndroidProfileVM @Inject constructor(
     userRepository: UserRepository,
 ) : ViewModel() {
     val vm = ProfileViewModel(appRepository, userRepository, viewModelScope)
+}
+
+@HiltViewModel
+class AndroidHomeVM @Inject constructor(
+    repository: AppRepository,
+    trackingManager: TrackingManager,
+    userRepository: UserRepository,
+    getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope private val externalScope: CoroutineScope
+) : ViewModel() {
+    val vm = HomeViewModel(
+        repository,
+        trackingManager,
+        externalScope,
+        ioDispatcher,
+        userRepository,
+        getCurrentRunStateWithCaloriesUseCase
+    )
 }

@@ -4,8 +4,8 @@ package com.sdevprem.runtrack.shared.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.sdevprem.runtrack.shared.common.extension.now
 import com.sdevprem.runtrack.shared.data.db.mapper.DBConverters
-import com.sdevprem.runtrack.shared.utils.now
 import kotlinx.datetime.LocalDateTime
 
 @Entity(tableName = "running_table")

@@ -1,20 +1,15 @@
-package com.sdevprem.runtrack.ui.screen.home
+package com.sdevprem.runtrack.shared.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
-import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
-import com.sdevprem.runtrack.data.db.mapper.toDataModel
-import com.sdevprem.runtrack.data.db.mapper.toDateTime
-import com.sdevprem.runtrack.data.db.mapper.toEntity
-import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.di.ApplicationScope
-import com.sdevprem.runtrack.di.IoDispatcher
+import com.sdevprem.runtrack.shared.common.extension.now
+import com.sdevprem.runtrack.shared.common.extension.toWeekFirstDay
+import com.sdevprem.runtrack.shared.common.extension.toWeekLastDay
+import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,16 +18,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Calendar
-import javax.inject.Inject
+import kotlinx.datetime.LocalDateTime
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val repository: AppRepository,
     trackingManager: TrackingManager,
-    @ApplicationScope
     private val externalScope: CoroutineScope,
-    @IoDispatcher
     private val ioDispatcher: CoroutineDispatcher,
     userRepository: UserRepository,
     getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
@@ -47,11 +38,11 @@ class HomeViewModel @Inject constructor(
             null
         )
 
-    private val calendar = Calendar.getInstance()
+    private val calendar = LocalDateTime.now()
 
     private val distanceCoveredInThisWeekInMeter = repository.getTotalDistance(
-        calendar.setDateToWeekFirstDay().time.toDateTime(),
-        calendar.setDateToWeekLastDay().time.toDateTime()
+        calendar.toWeekFirstDay(),
+        calendar.toWeekLastDay()
     )
 
     private val _homeScreenState = MutableStateFlow(HomeScreenState())
@@ -63,7 +54,7 @@ class HomeViewModel @Inject constructor(
         _homeScreenState,
     ) { runList, runState, user, distanceInMeter, state ->
         state.copy(
-            runList = runList.map { it.toDataModel() },
+            runList = runList.map { it },
             currentRunStateWithCalories = runState,
             user = user,
             distanceCoveredInKmInThisWeek = distanceInMeter / 1000f
@@ -76,7 +67,7 @@ class HomeViewModel @Inject constructor(
 
     fun deleteRun(run: Run) = externalScope.launch(ioDispatcher) {
         dismissRunDialog()
-        repository.deleteRun(run.toEntity())
+        repository.deleteRun(run)
     }
 
     fun showRun(run: Run) {

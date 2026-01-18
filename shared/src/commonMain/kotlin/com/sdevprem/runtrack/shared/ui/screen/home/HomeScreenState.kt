@@ -1,6 +1,6 @@
-package com.sdevprem.runtrack.ui.screen.home
+package com.sdevprem.runtrack.shared.ui.screen.home
 
-import com.sdevprem.runtrack.data.model.Run
+import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 
