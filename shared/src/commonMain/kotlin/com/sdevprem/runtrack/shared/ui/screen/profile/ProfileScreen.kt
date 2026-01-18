@@ -1,6 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.profile
+package com.sdevprem.runtrack.shared.ui.screen.profile
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,22 +32,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.ui.common.compose.component.RunningStatsItem
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.common.compose.components.RunningStatsItem
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.fire
+import runtrack.shared.generated.resources.ic_arrow_forward
+import runtrack.shared.generated.resources.ic_gear
+import runtrack.shared.generated.resources.ic_raising_hand
+import runtrack.shared.generated.resources.ic_telephone_receiver
+import runtrack.shared.generated.resources.ic_trophy
+import runtrack.shared.generated.resources.running_boy
+import runtrack.shared.generated.resources.stopwatch
 
 @Composable
 fun ProfileScreen() {
-    val context = LocalContext.current
-    val viewModel: ProfileViewModel = hiltViewModel()
+//    val context = LocalContext.current
+    val viewModel: ProfileViewModel =
+        LocalVMProvider.current.provideViewModel(ProfileViewModel::class)
     val state by viewModel.profileScreenState.collectAsStateWithLifecycle()
 
     ProfileScreenContent(
@@ -57,8 +63,8 @@ fun ProfileScreen() {
     )
 
     LaunchedEffect(key1 = state.errorMsg) {
-        if (state.errorMsg.isNullOrBlank().not())
-            Toast.makeText(context, state.errorMsg.toString(), Toast.LENGTH_SHORT).show()
+//        if (state.errorMsg.isNullOrBlank().not())
+//            Toast.makeText(context, state.errorMsg.toString(), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -92,19 +98,19 @@ private fun ProfileScreenContent(
                         .padding(horizontal = 24.dp)
                 ) {
                     SettingsItem(
-                        img = painterResource(id = R.drawable.ic_raising_hand),
+                        img = painterResource(Res.drawable.ic_raising_hand),
                         title = "Personal Parameter"
                     )
                     SettingsItem(
-                        img = painterResource(id = R.drawable.ic_trophy),
+                        img = painterResource(Res.drawable.ic_trophy),
                         title = "Achievements"
                     )
                     SettingsItem(
-                        img = painterResource(id = R.drawable.ic_gear),
+                        img = painterResource(Res.drawable.ic_gear),
                         title = "Settings"
                     )
                     SettingsItem(
-                        img = painterResource(id = R.drawable.ic_telephone_receiver),
+                        img = painterResource(Res.drawable.ic_telephone_receiver),
                         title = "Our Contact",
                         showDivider = false
                     )
@@ -172,7 +178,7 @@ private fun TotalProgressCard(
                     .weight(1f)
             )
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
+                imageVector = vectorResource(Res.drawable.ic_arrow_forward),
                 contentDescription = "More info",
                 modifier = Modifier
                     .size(16.dp)
@@ -196,7 +202,7 @@ private fun TotalProgressCard(
         ) {
             RunningStatsItem(
                 modifier = Modifier,
-                painter = painterResource(id = R.drawable.running_boy),
+                painter = painterResource(Res.drawable.running_boy),
                 unit = "km",
                 value = state.totalDistanceInKm.toString()
             )
@@ -212,7 +218,7 @@ private fun TotalProgressCard(
             )
             RunningStatsItem(
                 modifier = Modifier,
-                painter = painterResource(id = R.drawable.stopwatch),
+                painter = painterResource(Res.drawable.stopwatch),
                 unit = "hr",
                 value = state.totalDurationInHr.toString()
             )
@@ -228,7 +234,7 @@ private fun TotalProgressCard(
             )
             RunningStatsItem(
                 modifier = Modifier,
-                painter = painterResource(id = R.drawable.fire),
+                painter = painterResource(Res.drawable.fire),
                 unit = "kcal",
                 value = state.totalCaloriesBurnt.toString()
             )
@@ -268,7 +274,7 @@ private fun SettingsItem(
                     .weight(1f)
             )
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
+                imageVector = vectorResource(Res.drawable.ic_arrow_forward),
                 contentDescription = null,
                 modifier = Modifier
                     .size(16.dp),

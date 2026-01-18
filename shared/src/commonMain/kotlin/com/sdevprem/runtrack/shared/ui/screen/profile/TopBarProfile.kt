@@ -1,9 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.profile
+package com.sdevprem.runtrack.shared.ui.screen.profile
 
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,17 +35,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
-import com.sdevprem.runtrack.R
+import coil3.toUri
 import com.sdevprem.runtrack.shared.data.model.User
-import com.sdevprem.runtrack.ui.common.compose.component.UserProfilePic
-import com.sdevprem.runtrack.ui.common.extension.bottomBorder
+import com.sdevprem.runtrack.shared.ui.common.compose.components.UserProfilePic
+import com.sdevprem.runtrack.shared.ui.common.extension.bottomBorder
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_edit
 
 @Composable
 fun TopBarProfile(
@@ -97,7 +92,7 @@ fun TopBarProfile(
         ) {
             Icon(
                 imageVector = if (!isEditMode)
-                    ImageVector.vectorResource(id = R.drawable.ic_edit)
+                    vectorResource(Res.drawable.ic_edit)
                 else
                     Icons.Default.Done,
                 contentDescription = "Settings",
@@ -115,18 +110,19 @@ private fun TopBarProfileContent(
     isEditMode: Boolean,
     profileEditActions: ProfileEditActions
 ) {
-    val context = LocalContext.current
-    val photoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = {
-            it?.let {
-                context.contentResolver
-                    .takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                profileEditActions.updateImgUri(it)
-            }
-        }
-    )
     val userNameFocusRequester = remember { FocusRequester() }
+//    val pickerState = rememberMediaPickerState()
+//
+//    MediaPicker(
+//        state = pickerState,
+//        onResult = { result ->
+//            when (result) {
+//                is MediaResult.Image -> { result }
+//                else -> {}
+//            }
+//        },
+//        onPermissionDenied = { deniedPermission -> }
+//    )
 
     LaunchedEffect(key1 = isEditMode) {
         if (isEditMode)
@@ -167,9 +163,7 @@ private fun TopBarProfileContent(
             ) {
                 IconButton(
                     onClick = {
-                        photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
+//                        pickerState.pickImage(maxCount = 1)
                     },
                     modifier = Modifier
                         .background(
@@ -178,7 +172,7 @@ private fun TopBarProfileContent(
                         )
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                        imageVector = vectorResource(Res.drawable.ic_edit),
                         contentDescription = "Change Photo",
                         tint = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier

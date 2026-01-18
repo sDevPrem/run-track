@@ -1,6 +1,6 @@
-package com.sdevprem.runtrack.ui.screen.profile
+package com.sdevprem.runtrack.shared.ui.screen.profile
 
-import android.net.Uri
+import coil3.Uri
 
 interface ProfileEditActions {
     fun startEditing()

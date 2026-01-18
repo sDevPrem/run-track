@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.screen.profile
+package com.sdevprem.runtrack.shared.ui.screen.profile
 
 import com.sdevprem.runtrack.shared.data.model.User
 

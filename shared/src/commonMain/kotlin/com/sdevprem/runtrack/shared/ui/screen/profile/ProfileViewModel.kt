@@ -1,11 +1,9 @@
-package com.sdevprem.runtrack.ui.screen.profile
+package com.sdevprem.runtrack.shared.ui.screen.profile
 
-import android.net.Uri
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import coil3.Uri
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -15,14 +13,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
-import javax.inject.Inject
+import kotlin.math.round
 
-@HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ProfileViewModel(
     appRepository: AppRepository,
-    private val userRepository: UserRepository
-) : ViewModel(), ProfileEditActions {
+    private val userRepository: UserRepository,
+    private val viewModelScope: CoroutineScope
+) : ProfileEditActions {
 
     private val _profileScreenState = MutableStateFlow(ProfileScreenState())
     val profileScreenState = combine(
@@ -33,9 +30,7 @@ class ProfileViewModel @Inject constructor(
     ) { distance, calories, duration, state ->
         state.copy(
             totalCaloriesBurnt = calories,
-            totalDurationInHr = duration.toBigDecimal()
-                .divide((3_600_000).toBigDecimal(), 2, RoundingMode.HALF_UP)
-                .toFloat(),
+            totalDurationInHr = (round(duration / 36_000.0) / 100.0).toFloat(),
             totalDistanceInKm = distance / 1000f,
         )
     }.stateIn(

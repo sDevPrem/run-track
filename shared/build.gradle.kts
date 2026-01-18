@@ -64,6 +64,10 @@ kotlin {
                 implementation(libs.coil3.compose)
                 implementation(libs.coil.network.ktor)
                 implementation(libs.compose.backhandler)
+                implementation(libs.filekit.core)
+//                implementation(libs.filekit.dialogs)
+//                implementation(libs.filekit.dialogs.compose)
+//                implementation("network.chaintech:cmpfilepicker:1.0.0")
 
 //            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0-RC")
 //            implementation(libs.compose.ui)

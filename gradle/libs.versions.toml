@@ -53,6 +53,8 @@ vico = "2.0.0-alpha.12"
 compose-multiplatform = "1.7.0"
 jetbrains-backhandler = "1.10.0"
 compose-plugin = "1.8.2"
+filekit = "0.12.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -146,6 +148,10 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 compose-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version.ref = "compose-multiplatform" }
 compose-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "jetbrains-backhandler" }
+
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }

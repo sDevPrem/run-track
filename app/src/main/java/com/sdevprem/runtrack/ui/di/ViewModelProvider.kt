@@ -8,6 +8,7 @@ import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.ui.common.VMProvider
 import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardingViewModel
+import com.sdevprem.runtrack.shared.ui.screen.profile.ProfileViewModel
 import com.sdevprem.runtrack.shared.ui.screen.runninghistory.RunningHistoryVM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,6 +26,10 @@ object ViewModelProvider : VMProvider {
             OnBoardingViewModel::class -> {
                 hiltViewModel<AndroidOnboardingVM>()
                     .onboardingVM as T
+            }
+            ProfileViewModel::class -> {
+                hiltViewModel<AndroidProfileVM>()
+                    .vm as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${kClass.qualifiedName}")
@@ -50,4 +55,12 @@ class AndroidOnboardingVM @Inject constructor(
         repository,
         viewModelScope
     )
+}
+
+@HiltViewModel
+class AndroidProfileVM @Inject constructor(
+    appRepository: AppRepository,
+    userRepository: UserRepository,
+) : ViewModel() {
+    val vm = ProfileViewModel(appRepository, userRepository, viewModelScope)
 }

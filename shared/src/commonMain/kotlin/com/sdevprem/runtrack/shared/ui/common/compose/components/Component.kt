@@ -16,16 +16,47 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.Uri
 import coil3.compose.AsyncImage
 import com.sdevprem.runtrack.shared.common.utils.DateUtils
+import com.sdevprem.runtrack.shared.data.model.Gender
 import com.sdevprem.runtrack.shared.data.model.Run
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_arrow_forward
+import runtrack.shared.generated.resources.ic_female
+import runtrack.shared.generated.resources.ic_male
+
+@Composable
+fun UserProfilePic(
+    modifier: Modifier = Modifier,
+    imgUri: Uri?,
+    gender: Gender,
+    tint: Color = MaterialTheme.colorScheme.onPrimary
+) {
+    AsyncImage(
+        model = imgUri,
+        contentDescription = null,
+        modifier = modifier,
+        fallback = painterResource(
+            if (gender == Gender.MALE)
+                Res.drawable.ic_male
+            else
+                Res.drawable.ic_female
+        ),
+        contentScale = ContentScale.Crop,
+        colorFilter = if (imgUri == null)
+            ColorFilter.tint(color = tint)
+        else null
+    )
+}
 
 @Composable
 fun RunItem(
