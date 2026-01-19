@@ -43,6 +43,7 @@ import com.patrykandpatrick.vico.core.component.text.TextComponent
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.ExtraStore
 import com.patrykandpatrick.vico.core.model.lineSeries
+import com.sdevprem.runtrack.shared.common.extension.roundTo
 import com.sdevprem.runtrack.shared.common.extension.toList
 import com.sdevprem.runtrack.shared.common.utils.DateUtils
 import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsUiState.Statistic.CALORIES
@@ -51,8 +52,6 @@ import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsUiState.Statistic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
 @Composable
 actual fun RunStatsGraphCard(
@@ -270,9 +269,4 @@ private fun convertMeterToKm(value: Long): Float {
 
 private fun convertMillisToMinutes(value: Long): Float {
     return (value / 60000f).roundTo(1)
-}
-
-private fun Float.roundTo(decimals: Int): Float {
-    val multiplier = 10f.pow(decimals)
-    return (this * multiplier).roundToInt() / multiplier
 }
