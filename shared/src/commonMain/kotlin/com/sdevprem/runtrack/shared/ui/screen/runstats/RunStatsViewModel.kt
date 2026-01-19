@@ -2,6 +2,7 @@ package com.sdevprem.runtrack.shared.ui.screen.runstats
 
 import com.sdevprem.runtrack.shared.common.extension.now
 import com.sdevprem.runtrack.shared.common.extension.toWeekFirstDay
+import com.sdevprem.runtrack.shared.common.extension.toWeekLastDay
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.ui.screen.runstats.utils.RunStatsAccumulator
 import kotlinx.coroutines.CoroutineDispatcher
@@ -56,7 +57,7 @@ class RunStatsViewModel(
                 .atTime(0, 0, 0)
             it.copy(
                 dateRange = nextWeekDate.toWeekFirstDay()..
-                        nextWeekDate.toWeekFirstDay(),
+                        nextWeekDate.toWeekLastDay(),
             )
         }
         fetchRunInDate()
@@ -69,7 +70,7 @@ class RunStatsViewModel(
 
             it.copy(
                 dateRange = previousWeekDate.toWeekFirstDay()..
-                        previousWeekDate.toWeekFirstDay(),
+                        previousWeekDate.toWeekLastDay(),
             )
         }
         fetchRunInDate()
