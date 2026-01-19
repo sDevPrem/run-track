@@ -1,6 +1,8 @@
 package com.sdevprem.runtrack.shared.common.utils
 
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
@@ -15,6 +17,26 @@ object DateUtils {
             char(',')
             char(' ')
             year() // "yyyy"
+        }
+    }
+
+    private val formatDD by lazy {
+        LocalDate.Format {
+            day(padding = Padding.ZERO)
+        }
+    }
+
+    private val formatDay by lazy {
+        LocalDate.Format {
+            dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+        }
+    }
+
+    private val formatMMMDD by lazy {
+        LocalDate.Format {
+            monthName(MonthNames.ENGLISH_ABBREVIATED) // "MMM"
+            char(' ')
+            day(padding = Padding.ZERO) // "dd"
         }
     }
 
@@ -38,6 +60,18 @@ object DateUtils {
 
     fun formatDateMMMDDYYYY(date: LocalDateTime): String {
         return formatMMMDDYYYY.format(date)
+    }
+
+    fun formatDD(date: LocalDate): String {
+        return formatDD.format(date)
+    }
+
+    fun formatDay(date: LocalDate): String {
+        return formatDay.format(date)
+    }
+
+    fun formatMMMDD(date: LocalDate): String {
+        return formatMMMDD.format(date)
     }
 
 }

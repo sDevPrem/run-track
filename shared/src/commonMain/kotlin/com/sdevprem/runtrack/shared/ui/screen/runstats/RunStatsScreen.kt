@@ -1,8 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.runstats
+package com.sdevprem.runtrack.shared.ui.screen.runstats
 
-import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -27,39 +24,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
-import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
-import com.sdevprem.runtrack.common.extension.setMinimumTime
-import com.sdevprem.runtrack.common.extension.toCalendar
-import com.sdevprem.runtrack.common.extension.toList
-import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.ui.common.extension.conditional
-import com.sdevprem.runtrack.ui.screen.runstats.utils.RunStatsAccumulator
-import com.sdevprem.runtrack.ui.theme.AppTheme
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import kotlin.random.Random
+import com.sdevprem.runtrack.shared.common.extension.now
+import com.sdevprem.runtrack.shared.common.extension.toList
+import com.sdevprem.runtrack.shared.common.utils.DateUtils
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.common.extension.conditional
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun RunStatsScreen(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RunStatsViewModel = hiltViewModel(),
+    viewModel: RunStatsViewModel = LocalVMProvider.current.provideViewModel(RunStatsViewModel::class),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     RunStatsContent(
@@ -82,7 +66,7 @@ private fun RunStatsContent(
     modifier: Modifier = Modifier,
 ) {
     val dateList = remember(state.dateRange) {
-        (state.dateRange.start.toCalendar()..state.dateRange.endInclusive.toCalendar()).toList()
+        (state.dateRange.start..state.dateRange.endInclusive).toList()
     }
     Scaffold(
         topBar = { TopBar(navigateUp = navigateUp) },
@@ -99,7 +83,7 @@ private fun RunStatsContent(
                     .padding(bottom = 8.dp)
             )
             DateRangeCard(
-                dateList = dateList.map { it.time },
+                dateList = dateList,
                 isDataAvailable = { state.runStatisticsOnDate.containsKey(it) },
                 incrementDateRange = incrementDateRange,
                 decrementDateRange = decrementDateRange
@@ -173,13 +157,13 @@ private fun StatisticFilter(
 
 @Composable
 private fun DateRangeCard(
-    dateList: List<Date>,
-    isDataAvailable: (date: Date) -> Boolean,
+    dateList: List<LocalDateTime>,
+    isDataAvailable: (date: LocalDateTime) -> Boolean,
     decrementDateRange: () -> Unit,
     incrementDateRange: () -> Unit,
 ) {
     val todayDate = remember(dateList) {
-        Calendar.getInstance().setMinimumTime().time
+        LocalDateTime.now()
     }
     val canIncrementDate = remember(dateList, todayDate) {
         dateList.last() < todayDate
@@ -205,7 +189,7 @@ private fun DateRangeCard(
             }
             dateList.forEach {
                 DateRangeColumn(
-                    date = it,
+                    date = it.date,
                     isDataAvailable = isDataAvailable(it),
                     isTodayDate = it == todayDate
                 )
@@ -228,12 +212,10 @@ private fun DateRangeCard(
 
 @Composable
 private fun DateRangeColumn(
-    date: Date,
+    date: LocalDate,
     isDataAvailable: Boolean,
     isTodayDate: Boolean,
 ) {
-    val dayFormatter = remember { SimpleDateFormat("EEEE", Locale.getDefault()) }
-    val dateFormatter = remember { SimpleDateFormat("d", Locale.getDefault()) }
     val primaryColor = MaterialTheme.colorScheme.primary
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
 
@@ -244,13 +226,13 @@ private fun DateRangeColumn(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = dayFormatter.format(date).first().toString(),
+            text = DateUtils.formatDay(date),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Text(
-            text = dateFormatter.format(date).toString(),
+            text = DateUtils.formatDD(date),
             style = MaterialTheme.typography.labelLarge,
             color = if (isDataAvailable) {
                 MaterialTheme.colorScheme.onPrimary
@@ -286,53 +268,53 @@ private fun DateRangeColumn(
     }
 }
 
-@Composable
-@Preview(
-    showBackground = true
-)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-private fun RunStatsScreenPreview() = AppTheme {
-    val img = BitmapFactory.decodeResource(
-        LocalContext.current.resources,
-        R.drawable.running_boy
-    )
-    var previewState by remember {
-        val runList = getDemoRunList(img)
-        mutableStateOf(
-            RunStatsUiState.EMPTY_STATE.copy(
-                runStats = runList,
-                runStatisticsOnDate = RunStatsAccumulator.accumulateRunByDate(runList)
-            )
-        )
-    }
-    RunStatsContent(
-        previewState,
-        onStatisticSelected = {
-            previewState = previewState.copy(statisticToShow = it)
-        },
-        decrementDateRange = {},
-        incrementDateRange = {},
-        navigateUp = {}
-    )
-}
-
-private fun getDemoRun(img: Bitmap) = Run(
-    img = img,
-    distanceInMeters = 1000,
-)
-
-private fun getDemoRunList(img: Bitmap) = buildList {
-    val dateList = (Calendar.getInstance().setDateToWeekFirstDay()..Calendar.getInstance()
-        .setDateToWeekLastDay()).toList()
-    dateList.forEach {
-        add(
-            getDemoRun(img).copy(
-                timestamp = it.time,
-                distanceInMeters = Random.nextInt(200, 1000)
-            )
-        )
-    }
-}
+//@Composable
+//@Preview(
+//    showBackground = true
+//)
+//@Preview(
+//    showBackground = true,
+//    uiMode = Configuration.UI_MODE_NIGHT_YES
+//)
+//private fun RunStatsScreenPreview() = AppTheme {
+//    val img = BitmapFactory.decodeResource(
+//        LocalContext.current.resources,
+//        R.drawable.running_boy
+//    )
+//    var previewState by remember {
+//        val runList = getDemoRunList(img)
+//        mutableStateOf(
+//            RunStatsUiState.EMPTY_STATE.copy(
+//                runStats = runList,
+//                runStatisticsOnDate = RunStatsAccumulator.accumulateRunByDate(runList)
+//            )
+//        )
+//    }
+//    RunStatsContent(
+//        previewState,
+//        onStatisticSelected = {
+//            previewState = previewState.copy(statisticToShow = it)
+//        },
+//        decrementDateRange = {},
+//        incrementDateRange = {},
+//        navigateUp = {}
+//    )
+//}
+//
+//private fun getDemoRun(img: Bitmap) = Run(
+//    img = img,
+//    distanceInMeters = 1000,
+//)
+//
+//private fun getDemoRunList(img: Bitmap) = buildList {
+//    val dateList = (Calendar.getInstance().setDateToWeekFirstDay()..Calendar.getInstance()
+//        .setDateToWeekLastDay()).toList()
+//    dateList.forEach {
+//        add(
+//            getDemoRun(img).copy(
+//                timestamp = it.time,
+//                distanceInMeters = Random.nextInt(200, 1000)
+//            )
+//        )
+//    }
+//}

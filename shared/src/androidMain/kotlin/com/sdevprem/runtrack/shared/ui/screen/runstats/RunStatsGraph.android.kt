@@ -1,6 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.runstats
+package com.sdevprem.runtrack.shared.ui.screen.runstats
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
@@ -45,29 +43,23 @@ import com.patrykandpatrick.vico.core.component.text.TextComponent
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.ExtraStore
 import com.patrykandpatrick.vico.core.model.lineSeries
-import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
-import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
-import com.sdevprem.runtrack.common.extension.toCalendar
-import com.sdevprem.runtrack.common.extension.toList
-import com.sdevprem.runtrack.ui.screen.runstats.RunStatsUiState.Statistic.CALORIES
-import com.sdevprem.runtrack.ui.screen.runstats.RunStatsUiState.Statistic.DISTANCE
-import com.sdevprem.runtrack.ui.screen.runstats.RunStatsUiState.Statistic.DURATION
-import com.sdevprem.runtrack.ui.theme.AppTheme
+import com.sdevprem.runtrack.shared.common.extension.toList
+import com.sdevprem.runtrack.shared.common.utils.DateUtils
+import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsUiState.Statistic.CALORIES
+import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsUiState.Statistic.DISTANCE
+import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsUiState.Statistic.DURATION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-
+import kotlinx.datetime.LocalDateTime
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 @Composable
-fun RunStatsGraphCard(
-    runStats: Map<Date, RunStatsUiState.AccumulatedRunStatisticsOnDate>,
-    dateRange: ClosedRange<Date>,
+actual fun RunStatsGraphCard(
+    runStats: Map<LocalDateTime, RunStatsUiState.AccumulatedRunStatisticsOnDate>,
+    dateRange: ClosedRange<LocalDateTime>,
     statisticsToShow: RunStatsUiState.Statistic,
-    modifier: Modifier = Modifier,
+    modifier: Modifier
 ) {
     ElevatedCard(
         modifier = modifier
@@ -95,16 +87,16 @@ fun RunStatsGraphCard(
 
 @Composable
 private fun RunStatsGraph(
-    runStats: Map<Date, RunStatsUiState.AccumulatedRunStatisticsOnDate>,
-    dateRange: ClosedRange<Date>,
+    runStats: Map<LocalDateTime, RunStatsUiState.AccumulatedRunStatisticsOnDate>,
+    dateRange: ClosedRange<LocalDateTime>,
     statisticsToShow: RunStatsUiState.Statistic,
     modifier: Modifier = Modifier,
 ) {
     val graphPrimaryColor = MaterialTheme.colorScheme.primary
-    val extraStoreKey = remember { ExtraStore.Key<List<Date>>() }
+    val extraStoreKey = remember { ExtraStore.Key<List<LocalDateTime>>() }
     val modelProducer = remember { CartesianChartModelProducer.build() }
     val dateList = remember(dateRange) {
-        (dateRange.start.toCalendar()..dateRange.endInclusive.toCalendar()).toList()
+        (dateRange.start..dateRange.endInclusive).toList()
     }
     val markerIndicatorSize = LocalDensity.current.run { 3.dp.toPx() }
     val marker = remember(graphPrimaryColor, markerIndicatorSize) {
@@ -119,7 +111,7 @@ private fun RunStatsGraph(
     val markers = remember(runStats, marker) {
         buildMap {
             dateList.forEachIndexed { i, c ->
-                if (runStats.contains(c.time)) {
+                if (runStats.contains(c)) {
                     this[i.toFloat()] = marker
                 }
             }
@@ -164,16 +156,16 @@ private fun RunStatsGraph(
 
 @Composable
 private fun CartesianChartModelProducer.ProduceRunStateModel(
-    runStats: Map<Date, RunStatsUiState.AccumulatedRunStatisticsOnDate>,
-    extraStoreKey: ExtraStore.Key<List<Date>>,
-    dateList: List<Calendar>,
+    runStats: Map<LocalDateTime, RunStatsUiState.AccumulatedRunStatisticsOnDate>,
+    extraStoreKey: ExtraStore.Key<List<LocalDateTime>>,
+    dateList: List<LocalDateTime>,
     statisticsToShow: RunStatsUiState.Statistic,
 ) {
     LaunchedEffect(runStats, extraStoreKey, statisticsToShow) {
         withContext(Dispatchers.Default) {
             tryRunTransaction {
                 val y = dateList.map {
-                    val currentStats = runStats[it.time] ?: return@map 0
+                    val currentStats = runStats[it] ?: return@map 0
                     when (statisticsToShow) {
                         CALORIES -> currentStats.caloriesBurned
                         DURATION -> convertMillisToMinutes(currentStats.durationInMillis)
@@ -184,7 +176,7 @@ private fun CartesianChartModelProducer.ProduceRunStateModel(
                 }
                 lineSeries {
                     series(y)
-                    updateExtras { it[extraStoreKey] = dateList.map { c -> c.time } }
+                    updateExtras { it[extraStoreKey] = dateList }
                 }
             }
         }
@@ -193,26 +185,25 @@ private fun CartesianChartModelProducer.ProduceRunStateModel(
 
 @Composable
 private fun rememberBottomAxisValueFormatter(
-    extraStoreKey: ExtraStore.Key<List<Date>>,
-    dateFormatter: SimpleDateFormat = remember { SimpleDateFormat("EEE", Locale.getDefault()) },
+    extraStoreKey: ExtraStore.Key<List<LocalDateTime>>,
 ) = remember(extraStoreKey) {
     AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, chartValues, _ ->
         chartValues.model.extraStore[extraStoreKey][x.toInt()].let {
-            dateFormatter.format(it)
+            DateUtils.formatDay(it.date)
         }
     }
 }
 
 @Composable
 private fun TopStatistics(
-    dateRange: ClosedRange<Date>,
+    dateRange: ClosedRange<LocalDateTime>,
     runStats: Collection<RunStatsUiState.AccumulatedRunStatisticsOnDate>,
     statisticsToShow: RunStatsUiState.Statistic,
 ) {
     val total by remember(runStats, statisticsToShow) {
         derivedStateOf {
             when (statisticsToShow) {
-                CALORIES -> {
+                RunStatsUiState.Statistic.CALORIES -> {
                     runStats.sumOf { it.caloriesBurned }.toString()
                 }
 
@@ -228,9 +219,8 @@ private fun TopStatistics(
             }
         }
     }
-    val dateFormatter = remember { SimpleDateFormat("MMM dd", Locale.ENGLISH) }
     val formattedDateText = remember(dateRange) {
-        dateFormatter.format(dateRange.start) + " - " + dateFormatter.format(dateRange.endInclusive)
+        DateUtils.formatDay(dateRange.start.date) + " - " + DateUtils.formatDay(dateRange.endInclusive.date)
     }
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -274,73 +264,15 @@ private fun TopStatistics(
     }
 }
 
-@Composable
-@Preview(
-    showBackground = true
-)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-private fun RunStatsGraphPreview() = AppTheme {
-    val from = Calendar.getInstance().setDateToWeekFirstDay()
-    val to = Calendar.getInstance().setDateToWeekLastDay()
-    val calendar = from.clone() as Calendar
-
-    RunStatsGraphCard(
-        runStats = mutableMapOf(
-            calendar.time to RunStatsUiState.AccumulatedRunStatisticsOnDate(
-                date = calendar.time,
-                distanceInMeters = 200
-            ),
-            calendar.apply {
-                add(
-                    Calendar.DAY_OF_WEEK,
-                    1
-                )
-            }.time to RunStatsUiState.AccumulatedRunStatisticsOnDate(
-                date = calendar.time,
-                distanceInMeters = 2000
-            ),
-            calendar.apply {
-                add(
-                    Calendar.DAY_OF_WEEK,
-                    2
-                )
-            }.time to RunStatsUiState.AccumulatedRunStatisticsOnDate(
-                date = calendar.time,
-                distanceInMeters = 2500
-            ),
-            calendar.apply {
-                add(
-                    Calendar.DAY_OF_WEEK,
-                    1
-                )
-            }.time to RunStatsUiState.AccumulatedRunStatisticsOnDate(
-                date = calendar.time,
-                distanceInMeters = 1000
-            ),
-            calendar.apply {
-                add(
-                    Calendar.DAY_OF_WEEK,
-                    1
-                )
-            }.time to RunStatsUiState.AccumulatedRunStatisticsOnDate(
-                date = calendar.time,
-                distanceInMeters = 1000
-            ),
-        ),
-        dateRange = from.time..to.time,
-        statisticsToShow = DISTANCE
-    )
+private fun convertMeterToKm(value: Long): Float {
+    return (value / 1000f).roundTo(3)
 }
 
-private fun convertMeterToKm(value: Long) = value
-    .toBigDecimal()
-    .divide(1000.toBigDecimal(), 3, RoundingMode.HALF_DOWN)
-    .toFloat()
+private fun convertMillisToMinutes(value: Long): Float {
+    return (value / 60000f).roundTo(1)
+}
 
-private fun convertMillisToMinutes(value: Long) = value
-    .toBigDecimal()
-    .divide(60000.toBigDecimal(), 1, RoundingMode.HALF_DOWN)
-    .toFloat()
+private fun Float.roundTo(decimals: Int): Float {
+    val multiplier = 10f.pow(decimals)
+    return (this * multiplier).roundToInt() / multiplier
+}

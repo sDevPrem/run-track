@@ -41,6 +41,9 @@ kotlin {
                 implementation(libs.hilt.android)
                 implementation(libs.androidx.lifecycle.service)
                 implementation(libs.ktor.client.android)
+                implementation(libs.vico.compose)
+                implementation(libs.vico.compose.m3)
+                implementation(libs.vico.core)
             }
         }
         commonMain {
@@ -64,7 +67,9 @@ kotlin {
                 implementation(libs.coil3.compose)
                 implementation(libs.coil.network.ktor)
                 implementation(libs.compose.backhandler)
-                implementation(libs.filekit.core)
+//                implementation(libs.vico.multiplatform.m3)
+//                implementation(libs.vico.multiplatform)
+//                implementation(libs.filekit.core)
 //                implementation(libs.filekit.dialogs)
 //                implementation(libs.filekit.dialogs.compose)
 //                implementation("network.chaintech:cmpfilepicker:1.0.0")

@@ -10,10 +10,10 @@ import androidx.navigation.compose.composable
 import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardScreen
 import com.sdevprem.runtrack.shared.ui.screen.profile.ProfileScreen
+import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsScreen
 import com.sdevprem.runtrack.ui.di.ViewModelProvider
 import com.sdevprem.runtrack.ui.nav.Destination.CurrentRun
 import com.sdevprem.runtrack.ui.screen.currentrun.CurrentRunScreen
-import com.sdevprem.runtrack.ui.screen.runstats.RunStatsScreen
 
 @Composable
 fun Navigation(

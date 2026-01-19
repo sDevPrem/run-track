@@ -5,6 +5,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.di.ApplicationScope
+import com.sdevprem.runtrack.di.DefaultDispatcher
 import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
@@ -15,6 +16,7 @@ import com.sdevprem.runtrack.shared.ui.screen.home.HomeViewModel
 import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardingViewModel
 import com.sdevprem.runtrack.shared.ui.screen.profile.ProfileViewModel
 import com.sdevprem.runtrack.shared.ui.screen.runninghistory.RunningHistoryVM
+import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +43,10 @@ object ViewModelProvider : VMProvider {
             HomeViewModel::class -> {
                 hiltViewModel<AndroidHomeVM>()
                     .vm as T
+            }
+            RunStatsViewModel::class -> {
+                hiltViewModel<AndroidRunStatsViewModel>()
+                    .runStatsViewModel as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${kClass.qualifiedName}")
@@ -92,5 +98,17 @@ class AndroidHomeVM @Inject constructor(
         ioDispatcher,
         userRepository,
         getCurrentRunStateWithCaloriesUseCase
+    )
+}
+
+@HiltViewModel
+class AndroidRunStatsViewModel @Inject constructor(
+    repository: AppRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
+) : ViewModel() {
+    val runStatsViewModel = RunStatsViewModel(
+        repository,
+        defaultDispatcher,
+        viewModelScope
     )
 }

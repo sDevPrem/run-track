@@ -1,14 +1,14 @@
-package com.sdevprem.runtrack.ui.screen.runstats.utils
+package com.sdevprem.runtrack.shared.ui.screen.runstats.utils
 
-import com.sdevprem.runtrack.data.model.Run
-import com.sdevprem.runtrack.ui.screen.runstats.RunStatsUiState.AccumulatedRunStatisticsOnDate
-import java.util.Date
+import com.sdevprem.runtrack.shared.data.model.Run
+import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsUiState.AccumulatedRunStatisticsOnDate
+import kotlinx.datetime.LocalDateTime
 
 object RunStatsAccumulator {
 
     fun accumulateRunByDate(
         list: List<Run>
-    ): Map<Date, AccumulatedRunStatisticsOnDate> {
+    ): Map<LocalDateTime, AccumulatedRunStatisticsOnDate> {
         return buildMap {
             list.forEach { run ->
                 val newStats = AccumulatedRunStatisticsOnDate.fromRun(run)

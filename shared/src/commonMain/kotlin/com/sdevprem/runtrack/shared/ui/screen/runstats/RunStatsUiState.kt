@@ -1,24 +1,23 @@
-package com.sdevprem.runtrack.ui.screen.runstats
+package com.sdevprem.runtrack.shared.ui.screen.runstats
 
 import androidx.compose.runtime.Immutable
-import com.sdevprem.runtrack.common.extension.setDateToWeekFirstDay
-import com.sdevprem.runtrack.common.extension.setDateToWeekLastDay
-import com.sdevprem.runtrack.common.extension.setMinimumTime
-import com.sdevprem.runtrack.common.extension.toCalendar
-import com.sdevprem.runtrack.data.model.Run
-import java.util.Calendar
-import java.util.Date
+import com.sdevprem.runtrack.shared.common.extension.now
+import com.sdevprem.runtrack.shared.common.extension.setMinimumTime
+import com.sdevprem.runtrack.shared.common.extension.toWeekFirstDay
+import com.sdevprem.runtrack.shared.common.extension.toWeekLastDay
+import com.sdevprem.runtrack.shared.data.model.Run
+import kotlinx.datetime.LocalDateTime
 
 @Immutable
 data class RunStatsUiState(
-    val dateRange: ClosedRange<Date>,
+    val dateRange: ClosedRange<LocalDateTime>,
     val runStats: List<Run>,
     val statisticToShow: Statistic,
-    val runStatisticsOnDate: Map<Date, AccumulatedRunStatisticsOnDate>,
+    val runStatisticsOnDate: Map<LocalDateTime, AccumulatedRunStatisticsOnDate>,
 ) {
 
     data class AccumulatedRunStatisticsOnDate(
-        val date: Date = Date(),
+        val date: LocalDateTime = LocalDateTime.Companion.now(),
         val distanceInMeters: Int = 0,
         val durationInMillis: Long = 0L,
         val caloriesBurned: Int = 0
@@ -34,7 +33,7 @@ data class RunStatsUiState(
 
         companion object {
             fun fromRun(run: Run) = AccumulatedRunStatisticsOnDate(
-                date = run.timestamp.toCalendar().setMinimumTime().time,
+                date = run.timestamp.setMinimumTime(),
                 distanceInMeters = run.distanceInMeters,
                 durationInMillis = run.durationInMillis,
                 caloriesBurned = run.caloriesBurned
@@ -51,8 +50,8 @@ data class RunStatsUiState(
     companion object {
         val EMPTY_STATE
             get() = RunStatsUiState(
-                dateRange = Calendar.getInstance().setDateToWeekFirstDay().time..
-                        Calendar.getInstance().setDateToWeekLastDay().time,
+                dateRange = LocalDateTime.Companion.now().toWeekFirstDay()..
+                        LocalDateTime.Companion.now().toWeekLastDay(),
                 runStats = emptyList(),
                 statisticToShow = Statistic.DISTANCE,
                 runStatisticsOnDate = emptyMap()

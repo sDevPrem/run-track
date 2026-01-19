@@ -32,6 +32,14 @@ fun LocalDateTime.toWeekLastDay(): LocalDateTime {
     return lastDay.atTime(23, 59, 59, 999_999_999)
 }
 
+fun LocalDateTime.setMinimumTime(): LocalDateTime {
+    return this.date.atTime(0, 0, 0, 0)
+}
+
+fun LocalDateTime.setMaximumTime(): LocalDateTime {
+    return this.date.atTime(23, 59, 59, 999_999_999)
+}
+
 @OptIn(ExperimentalTime::class)
 fun LocalDateTime.Companion.now(): LocalDateTime {
     return Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault())
@@ -43,4 +51,24 @@ fun LocalDate.Companion.now(): LocalDate {
 
 fun LocalTime.Companion.now(): LocalTime {
     return LocalDateTime.now().time
+}
+
+operator fun ClosedRange<LocalDateTime>.iterator() = object : Iterator<LocalDateTime> {
+    var current = start
+
+    override fun hasNext(): Boolean {
+        (1..2).toList()
+        return current <= endInclusive
+    }
+
+    override fun next(): LocalDateTime {
+        val temp = current
+        current = current.date.plus(DatePeriod(days = 1))
+            .atTime(current.time)
+        return temp
+    }
+}
+
+fun ClosedRange<LocalDateTime>.toList(): List<LocalDateTime> = buildList {
+    for (c in this@toList) add(c)
 }
