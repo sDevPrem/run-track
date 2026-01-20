@@ -1,12 +1,11 @@
 package com.sdevprem.runtrack.ui.screen.currentrun
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.data.db.mapper.toEntity
-import com.sdevprem.runtrack.data.model.Run
 import com.sdevprem.runtrack.di.ApplicationScope
 import com.sdevprem.runtrack.di.IoDispatcher
+import com.sdevprem.runtrack.shared.common.extension.now
+import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
@@ -17,8 +16,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import java.math.RoundingMode
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,11 +44,11 @@ class CurrentRunViewModel @Inject constructor(
         else trackingManager.startResumeTracking()
     }
 
-    fun finishRun(bitmap: Bitmap) {
+    fun finishRun(trackImg: ByteArray) {
         trackingManager.pauseTracking()
         saveRun(
             Run(
-                img = bitmap,
+                img = trackImg,
                 avgSpeedInKMH = currentRunStateWithCalories.value.currentRunState.distanceInMeters
                     .toBigDecimal()
                     .multiply(3600.toBigDecimal())
@@ -57,7 +56,7 @@ class CurrentRunViewModel @Inject constructor(
                     .toFloat(),
                 distanceInMeters = currentRunStateWithCalories.value.currentRunState.distanceInMeters,
                 durationInMillis = runningDurationInMillis.value,
-                timestamp = Date(),
+                timestamp = LocalDateTime.now(),
                 caloriesBurned = currentRunStateWithCalories.value.caloriesBurnt
             )
         )
@@ -65,7 +64,7 @@ class CurrentRunViewModel @Inject constructor(
     }
 
     private fun saveRun(run: Run) = appCoroutineScope.launch(ioDispatcher) {
-        repository.insertRun(run.toEntity())
+        repository.insertRun(run)
     }
 
 }

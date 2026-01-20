@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.sdevprem.runtrack.common.extension.toLatLng
 import com.sdevprem.runtrack.shared.domain.tracking.model.PathPoint
 import kotlinx.coroutines.delay
+import java.io.ByteArrayOutputStream
 
 
 object GoogleMapUtils {
@@ -24,7 +25,7 @@ object GoogleMapUtils {
         map: GoogleMap,
         pathPoints: List<PathPoint>,
         mapCenter: Offset,
-        onSnapshot: (Bitmap) -> Unit,
+        onSnapshot: (ByteArray) -> Unit,
         snapshotSideLength: Float
     ) {
         val boundsBuilder = LatLngBounds.Builder()
@@ -59,7 +60,7 @@ object GoogleMapUtils {
                     snapshotSideLength.toInt(), //width
                     snapshotSideLength.toInt() //height
                 )
-                onSnapshot(croppedBitmap)
+                onSnapshot(croppedBitmap.toByteArray())
             }
         }
     }
@@ -89,5 +90,12 @@ object GoogleMapUtils {
         val canvas = Canvas(bitmap)
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
+    private fun Bitmap.toByteArray(): ByteArray {
+        return ByteArrayOutputStream().use {
+            compress(Bitmap.CompressFormat.PNG, 100, it)
+            return@use it.toByteArray()
+        }
     }
 }

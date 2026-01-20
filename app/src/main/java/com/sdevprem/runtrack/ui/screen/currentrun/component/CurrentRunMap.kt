@@ -1,6 +1,5 @@
 package com.sdevprem.runtrack.ui.screen.currentrun.component
 
-import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
@@ -54,7 +53,7 @@ fun Map(
     modifier: Modifier = Modifier,
     pathPoints: List<PathPoint>,
     isRunningFinished: Boolean,
-    onSnapshot: (Bitmap) -> Unit,
+    onSnapshot: (ByteArray) -> Unit,
 ) {
     var mapSize by remember { mutableStateOf(Size(0f, 0f)) }
     var mapCenter by remember { mutableStateOf(Offset(0f, 0f)) }
@@ -88,7 +87,7 @@ private fun Map(
     mapCenter: Offset,
     mapSize: Size,
     onMapLoaded: () -> Unit,
-    onSnapshot: (Bitmap) -> Unit,
+    onSnapshot: (ByteArray) -> Unit,
 ) {
 
     val mapUiSettings = remember {
@@ -139,7 +138,7 @@ private fun TakeScreenShot(
     mapCenter: Offset,
     mapSize: Size,
     pathPoints: List<PathPoint>,
-    onSnapshot: (Bitmap) -> Unit
+    onSnapshot: (ByteArray) -> Unit
 ) {
     MapEffect(key1 = take) { map ->
         if (take)
