@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.screen.currentrun.component
+package com.sdevprem.runtrack.shared.ui.screen.currentrun.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -38,19 +38,19 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.common.extension.toLatLng
+import com.sdevprem.runtrack.shared.R
+import com.sdevprem.runtrack.shared.common.extension.toLatLng
 import com.sdevprem.runtrack.shared.domain.tracking.model.LocationInfo
 import com.sdevprem.runtrack.shared.domain.tracking.model.PathPoint
 import com.sdevprem.runtrack.shared.domain.tracking.model.firstLocationPoint
 import com.sdevprem.runtrack.shared.domain.tracking.model.lasLocationPoint
 import com.sdevprem.runtrack.shared.ui.theme.RTColor
+import com.sdevprem.runtrack.shared.ui.theme.md_theme_light_primary
 import com.sdevprem.runtrack.shared.ui.utils.GoogleMapUtils
-import com.sdevprem.runtrack.ui.theme.md_theme_light_primary
 
 @Composable
-fun Map(
-    modifier: Modifier = Modifier,
+actual fun Map(
+    modifier: Modifier,
     pathPoints: List<PathPoint>,
     isRunningFinished: Boolean,
     onSnapshot: (ByteArray) -> Unit,
@@ -259,7 +259,7 @@ private fun DrawPathPoints(
             state = rememberMarkerState(position = it.locationInfo.toLatLng()),
             anchor = flagOffset,
 
-        )
+            )
     }
 }
 

@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.common.utils
+package com.sdevprem.runtrack.shared.ui.utils
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,16 +6,15 @@ import android.graphics.Canvas
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.geometry.Offset
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
-import com.sdevprem.runtrack.common.extension.toLatLng
+import com.sdevprem.runtrack.shared.common.extension.toLatLng
 import com.sdevprem.runtrack.shared.domain.tracking.model.PathPoint
 import kotlinx.coroutines.delay
-import java.io.ByteArrayOutputStream
-
 
 object GoogleMapUtils {
 
@@ -81,10 +80,9 @@ object GoogleMapUtils {
             sizeInPx ?: vectorDrawable.intrinsicHeight
         )
 
-        val bitmap = Bitmap.createBitmap(
+        val bitmap = createBitmap(
             sizeInPx ?: vectorDrawable.intrinsicWidth,
-            sizeInPx ?: vectorDrawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
+            sizeInPx ?: vectorDrawable.intrinsicHeight
         )
 
         val canvas = Canvas(bitmap)
@@ -93,7 +91,7 @@ object GoogleMapUtils {
     }
 
     private fun Bitmap.toByteArray(): ByteArray {
-        return ByteArrayOutputStream().use {
+        return java.io.ByteArrayOutputStream().use {
             compress(Bitmap.CompressFormat.PNG, 100, it)
             return@use it.toByteArray()
         }

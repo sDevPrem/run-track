@@ -41,6 +41,9 @@ kotlin {
                 implementation(libs.hilt.android)
                 implementation(libs.androidx.lifecycle.service)
                 implementation(libs.ktor.client.android)
+                implementation(libs.maps.compose)
+                implementation(libs.play.services.maps)
+                implementation(libs.play.services.location)
             }
         }
         commonMain {

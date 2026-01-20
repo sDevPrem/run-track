@@ -1,6 +1,5 @@
-package com.sdevprem.runtrack.ui.screen.currentrun
+package com.sdevprem.runtrack.shared.ui.screen.currentrun
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,43 +17,38 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.data.tracking.location.LocationUtils
-import com.sdevprem.runtrack.ui.common.compose.animation.ComposeUtils
-import com.sdevprem.runtrack.ui.screen.currentrun.component.CurrentRunStatsCard
-import com.sdevprem.runtrack.ui.screen.currentrun.component.Map
-import com.sdevprem.runtrack.ui.theme.AppTheme
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
+import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.CurrentRunStatsCard
+import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.Map
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_back
 
-@Composable
-@Preview(showBackground = true)
-private fun CurrentRunComposable() {
-    AppTheme {
-        Surface {
-            CurrentRunScreen(rememberNavController())
-        }
-    }
-}
+//@Composable
+//@Preview(showBackground = true)
+//private fun CurrentRunComposable() {
+//    AppTheme {
+//        Surface {
+//            CurrentRunScreen(rememberNavController())
+//        }
+//    }
+//}
 
 @Composable
 fun CurrentRunScreen(
-    navController: NavController,
-    viewModel: CurrentRunViewModel = hiltViewModel()
+    navigateUp: () -> Unit,
+    viewModel: CurrentRunViewModel = LocalVMProvider.current
+        .provideViewModel(CurrentRunViewModel::class)
 ) {
-    val context = LocalContext.current
-
-    LaunchedEffect(key1 = true) {
-        LocationUtils.checkAndRequestLocationSetting(context as Activity)
-    }
+//    val context = LocalContext.current
+//
+//    LaunchedEffect(key1 = true) {
+//        LocationUtils.checkAndRequestLocationSetting(context as Activity)
+//    }
     var isRunningFinished by rememberSaveable { mutableStateOf(false) }
     var shouldShowRunningCard by rememberSaveable { mutableStateOf(false) }
     val runState by viewModel.currentRunStateWithCalories.collectAsStateWithLifecycle()
@@ -72,13 +65,13 @@ fun CurrentRunScreen(
             isRunningFinished = isRunningFinished,
         ) {
             viewModel.finishRun(it)
-            navController.navigateUp()
+            navigateUp()
         }
         TopBar(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(24.dp),
-            onNavigateUp = navController::navigateUp
+            onNavigateUp = navigateUp
         )
         ComposeUtils.SlideUpAnimatedVisibility(
             modifier = Modifier
@@ -118,7 +111,7 @@ private fun TopBar(
             .padding(4.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+            imageVector = vectorResource(Res.drawable.ic_back),
             contentDescription = "",
             tint = MaterialTheme.colorScheme.onSurface
         )

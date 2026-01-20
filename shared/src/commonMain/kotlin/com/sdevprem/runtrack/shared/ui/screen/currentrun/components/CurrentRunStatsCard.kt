@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.screen.currentrun.component
+package com.sdevprem.runtrack.shared.ui.screen.currentrun.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,18 +24,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sdevprem.runtrack.R
-import com.sdevprem.runtrack.common.utils.DateTimeUtils
+import com.sdevprem.runtrack.shared.common.extension.roundTo
+import com.sdevprem.runtrack.shared.common.utils.DateUtils.getFormattedStopwatchTime
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.domain.tracking.model.CurrentRunState
-import com.sdevprem.runtrack.ui.common.compose.component.RunningStatsItem
-import java.math.RoundingMode
+import com.sdevprem.runtrack.shared.ui.common.compose.components.RunningStatsItem
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.bolt
+import runtrack.shared.generated.resources.fire
+import runtrack.shared.generated.resources.ic_finish
+import runtrack.shared.generated.resources.ic_pause
+import runtrack.shared.generated.resources.ic_play
+import runtrack.shared.generated.resources.running_boy
 
 @Composable
 fun CurrentRunStatsCard(
@@ -88,7 +92,7 @@ private fun RunningStats(
     ) {
         RunningStatsItem(
             modifier = Modifier,
-            painter = painterResource(id = R.drawable.running_boy),
+            painter = painterResource(Res.drawable.running_boy),
             unit = "km",
             value = (runState.currentRunState.distanceInMeters / 1000f).toString()
         )
@@ -99,7 +103,7 @@ private fun RunningStats(
         )
         RunningStatsItem(
             modifier = Modifier,
-            painter = painterResource(id = R.drawable.fire),
+            painter = painterResource(Res.drawable.fire),
             unit = "kcal",
             value = runState.caloriesBurnt.toString()
         )
@@ -111,7 +115,7 @@ private fun RunningStats(
         )
         RunningStatsItem(
             modifier = Modifier,
-            painter = painterResource(id = R.drawable.bolt),
+            painter = painterResource(Res.drawable.bolt),
             unit = "km/hr",
             value = runState.currentRunState.speedInKMH.toString()
         )
@@ -131,7 +135,7 @@ private fun RunningCardTime(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = DateTimeUtils.getFormattedStopwatchTime(durationInMillis),
+            text = getFormattedStopwatchTime(durationInMillis),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
         )
@@ -158,9 +162,7 @@ private fun TrackingControlButton(
                     )
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(
-                        id = R.drawable.ic_finish
-                    ),
+                    imageVector = vectorResource(Res.drawable.ic_finish),
                     contentDescription = "",
                     modifier = Modifier
                         .size(16.dp),
@@ -179,8 +181,8 @@ private fun TrackingControlButton(
                 )
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    id = if (isRunning) R.drawable.ic_pause else R.drawable.ic_play
+                imageVector = vectorResource(
+                    if (isRunning) Res.drawable.ic_pause else Res.drawable.ic_play
                 ),
                 contentDescription = "",
                 modifier = Modifier
@@ -192,7 +194,7 @@ private fun TrackingControlButton(
 }
 
 @Composable
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 private fun CurrentRunStatsCardPreview() {
     var isRunning by rememberSaveable { mutableStateOf(false) }
     CurrentRunStatsCard(
@@ -200,9 +202,9 @@ private fun CurrentRunStatsCardPreview() {
         runState = CurrentRunStateWithCalories(
             currentRunState = CurrentRunState(
                 distanceInMeters = 600,
-                speedInKMH = (6.935 /* m/s */ * 3.6).toBigDecimal()
-                    .setScale(2, RoundingMode.HALF_UP)
-                    .toFloat(),
+                speedInKMH = (6.935 /* m/s */ * 3.6)
+                    .toFloat()
+                    .roundTo(2),
                 isTracking = isRunning
             ),
             caloriesBurnt = 532

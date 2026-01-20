@@ -8,12 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.screen.currentrun.CurrentRunScreen
 import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardScreen
 import com.sdevprem.runtrack.shared.ui.screen.profile.ProfileScreen
 import com.sdevprem.runtrack.shared.ui.screen.runstats.RunStatsScreen
 import com.sdevprem.runtrack.ui.di.ViewModelProvider
 import com.sdevprem.runtrack.ui.nav.Destination.CurrentRun
-import com.sdevprem.runtrack.ui.screen.currentrun.CurrentRunScreen
 
 @Composable
 fun Navigation(
@@ -48,7 +48,9 @@ private fun SetupNavGraph(
             route = CurrentRun.route,
             deepLinks = CurrentRun.deepLinks
         ) {
-            CurrentRunScreen(navController)
+            CurrentRunScreen(
+                navigateUp = { navController.navigateUp() }
+            )
         }
 
         composable(

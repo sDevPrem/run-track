@@ -1,35 +1,27 @@
-package com.sdevprem.runtrack.ui.screen.currentrun
+package com.sdevprem.runtrack.shared.ui.screen.currentrun
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sdevprem.runtrack.di.ApplicationScope
-import com.sdevprem.runtrack.di.IoDispatcher
 import com.sdevprem.runtrack.shared.common.extension.now
+import com.sdevprem.runtrack.shared.common.extension.roundTo
 import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
-import java.math.RoundingMode
-import javax.inject.Inject
 
-@HiltViewModel
-class CurrentRunViewModel @Inject constructor(
+class CurrentRunViewModel(
     private val trackingManager: TrackingManager,
     private val repository: AppRepository,
-    @ApplicationScope
     private val appCoroutineScope: CoroutineScope,
-    @IoDispatcher
     private val ioDispatcher: CoroutineDispatcher,
+    viewModelScope: CoroutineScope,
     getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
-) : ViewModel() {
+) {
     val currentRunStateWithCalories = getCurrentRunStateWithCaloriesUseCase()
         .stateIn(
             viewModelScope,
@@ -50,9 +42,9 @@ class CurrentRunViewModel @Inject constructor(
             Run(
                 img = trackImg,
                 avgSpeedInKMH = currentRunStateWithCalories.value.currentRunState.distanceInMeters
-                    .toBigDecimal()
-                    .multiply(3600.toBigDecimal())
-                    .divide(runningDurationInMillis.value.toBigDecimal(), 2, RoundingMode.HALF_UP)
+                    .times(3600f)
+                    .div(runningDurationInMillis.value)
+                    .roundTo(2)
                     .toFloat(),
                 distanceInMeters = currentRunStateWithCalories.value.currentRunState.distanceInMeters,
                 durationInMillis = runningDurationInMillis.value,

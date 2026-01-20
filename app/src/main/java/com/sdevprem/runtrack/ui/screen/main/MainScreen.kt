@@ -42,7 +42,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.ui.common.compose.animation.ComposeUtils
+import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
 import com.sdevprem.runtrack.ui.common.extension.navigateToBottomNavDestination
 import com.sdevprem.runtrack.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.ui.nav.Destination

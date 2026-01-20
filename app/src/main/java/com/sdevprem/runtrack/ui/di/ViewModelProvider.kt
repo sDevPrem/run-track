@@ -12,6 +12,7 @@ import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
 import com.sdevprem.runtrack.shared.ui.common.VMProvider
+import com.sdevprem.runtrack.shared.ui.screen.currentrun.CurrentRunViewModel
 import com.sdevprem.runtrack.shared.ui.screen.home.HomeViewModel
 import com.sdevprem.runtrack.shared.ui.screen.onboard.OnBoardingViewModel
 import com.sdevprem.runtrack.shared.ui.screen.profile.ProfileViewModel
@@ -47,6 +48,10 @@ object ViewModelProvider : VMProvider {
             RunStatsViewModel::class -> {
                 hiltViewModel<AndroidRunStatsViewModel>()
                     .runStatsViewModel as T
+            }
+            CurrentRunViewModel::class -> {
+                hiltViewModel<AndroidCurrentRunViewModel>()
+                    .viewModel as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${kClass.qualifiedName}")
@@ -110,5 +115,23 @@ class AndroidRunStatsViewModel @Inject constructor(
         repository,
         defaultDispatcher,
         viewModelScope
+    )
+}
+
+@HiltViewModel
+class AndroidCurrentRunViewModel @Inject constructor(
+    trackingManager: TrackingManager,
+    repository: AppRepository,
+    @ApplicationScope appCoroutineScope: CoroutineScope,
+    @IoDispatcher ioDispatcher: CoroutineDispatcher,
+    getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
+) : ViewModel() {
+    val viewModel = CurrentRunViewModel(
+        trackingManager,
+        repository,
+        appCoroutineScope,
+        ioDispatcher,
+        viewModelScope,
+        getCurrentRunStateWithCaloriesUseCase
     )
 }
