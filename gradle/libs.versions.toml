@@ -49,6 +49,7 @@ ksp = "2.2.21-2.0.4"
 
 #chart
 vico = "2.0.0-alpha.12"
+vico2 = "2.3.6"
 
 compose-multiplatform = "1.7.0"
 jetbrains-backhandler = "1.10.0"
@@ -139,8 +140,8 @@ vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 
-vico-multiplatform = { group = "com.patrykandpatrick.vico", name = "multiplatform", version.ref = "vico" }
-vico-multiplatform-m3 = { group = "com.patrykandpatrick.vico", name = "multiplatform-m3", version.ref = "vico" }
+vico-multiplatform = { group = "com.patrykandpatrick.vico", name = "multiplatform", version.ref = "vico2" }
+vico-multiplatform-m3 = { group = "com.patrykandpatrick.vico", name = "multiplatform-m3", version.ref = "vico2" }
 
 #multiplatforms
 
