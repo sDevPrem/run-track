@@ -1,6 +1,0 @@
-framework module Pods_run_track {
-  umbrella header "Pods-run-track-umbrella.h"
-
-  export *
-  module * { export * }
-}
