@@ -1,6 +1,6 @@
 [versions]
 activity-compose = "1.7.2"
-compose-bom = "2023.06.01"
+compose-bom = "2026.01.01"
 core-ktx = "1.10.1"
 
 espresso-core = "3.5.1"
@@ -21,7 +21,7 @@ ktor = "3.0.1"
 hilt = "2.57"
 hilt-navigation-compose = "1.3.0"
 
-kotlin-bom = "2.0.21"
+kotlin-bom = "2.2.21"
 
 navigation-compose = "2.7.6"
 
@@ -45,7 +45,7 @@ pagingCommonVersion = "3.3.0-alpha02-0.4.0"
 accompanist-permissions = "0.31.5-beta"
 
 #plugin
-android-gradle = "8.6.0"
+android-gradle = "8.9.3"
 kotlin = "2.2.21"
 maps-secret = "2.0.1"
 ksp = "2.2.21-2.0.4"

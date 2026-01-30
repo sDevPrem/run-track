@@ -22,7 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
 import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.CurrentRunStatsCard
-import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.Map
+//import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.Map
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.vectorResource
 import runtrack.shared.generated.resources.Res
@@ -60,13 +60,13 @@ fun CurrentRunScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Map(
-            pathPoints = runState.currentRunState.pathPoints,
-            isRunningFinished = isRunningFinished,
-        ) {
-            viewModel.finishRun(it)
-            navigateUp()
-        }
+//        Map(
+//            pathPoints = runState.currentRunState.pathPoints,
+//            isRunningFinished = isRunningFinished,
+//        ) {
+//            viewModel.finishRun(it)
+//            navigateUp()
+//        }
         TopBar(
             modifier = Modifier
                 .align(Alignment.TopStart)
