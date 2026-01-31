@@ -38,9 +38,6 @@ class SnapshotReadyViewController: UIViewController {
 
     mapView.delegate = self
 
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
-
     // Add status label, initially hidden.
     statusLabel.alpha = 0
     statusLabel.autoresizingMask = .flexibleWidth

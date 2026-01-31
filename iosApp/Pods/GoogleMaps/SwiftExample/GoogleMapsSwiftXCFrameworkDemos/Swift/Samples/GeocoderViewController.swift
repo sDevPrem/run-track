@@ -27,9 +27,6 @@ class GeocoderViewController: UIViewController {
   override func loadView() {
     view = mapView
     mapView.delegate = self
-
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
   }
 }
 

@@ -44,9 +44,6 @@ class FitBoundsViewController: UIViewController {
     mapView.delegate = self
     view = mapView
 
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
-
     // Creates a button that, when pressed, updates the camera to fit the bounds.
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: "Fit Bounds", style: .plain, target: self, action: #selector(fitBounds))

@@ -51,8 +51,6 @@ static NSString *const kEncodedPathForWalkingDirections =
                                                                       zoom:kZoom];
 
   GMSMapView *map = [GMSMapView mapWithFrame:self.view.bounds camera:defaultCamera];
-  // Opt the MapView in automatic dark mode switching.
-  map.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
   map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   [self.view addSubview:map];
 

@@ -26,7 +26,7 @@
 @implementation DemoAppDelegate
 
 - (BOOL)application:(UIApplication *)application
-    didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> *)launchOptions {
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   NSLog(@"Build version: %s", __VERSION__);
   if (kAPIKey.length == 0) {
     // Blow up if APIKey has not yet been set.

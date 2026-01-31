@@ -61,8 +61,6 @@
   [super viewDidLoad];
   _mapView = [[GMSMapView alloc] init];
   _mapView.camera = [GMSCameraPosition cameraWithLatitude:50.6042 longitude:3.9599 zoom:5];
-  // Opt the MapView in automatic dark mode switching.
-  _mapView.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
   _mapView.delegate = self;
   self.view = _mapView;
 

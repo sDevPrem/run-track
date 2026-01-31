@@ -164,14 +164,13 @@ static NSString *_Nullable ExtractPlaceIDFromSearchResponse(id JSONResponse) {
   _name = [name copy];
   _textField.text = name;
 
-  if (!name || name.length == 0) {
+  if (!name.length) {
     return;
   }
 
   __weak __typeof__(self) weakSelf = self;
-  NSString *nonNilName = name;
   NSURLSessionDataTask *dataTask = [_controller.URLSession
-      dataTaskWithRequest:BuildSearchRequestForPlaceName(nonNilName)
+      dataTaskWithRequest:BuildSearchRequestForPlaceName(name)
         completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
           __weak __typeof__(self) strongSelf = weakSelf;
           if (!strongSelf) {

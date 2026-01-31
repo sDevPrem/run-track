@@ -39,9 +39,6 @@ class MyLocationViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
-
     mapView.delegate = self
     mapView.settings.compassButton = true
     mapView.settings.myLocationButton = true

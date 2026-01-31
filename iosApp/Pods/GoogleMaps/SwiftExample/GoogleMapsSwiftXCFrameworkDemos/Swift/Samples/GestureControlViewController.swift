@@ -27,9 +27,6 @@ class GestureControlViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
-
     view.addSubview(mapView)
 
     let holder = UIView(frame: .zero)

@@ -38,10 +38,7 @@ static bool kAnimate = true;
 
 - (void)tick {
   for (GMSPolyline *poly in _polys) {
-    GMSPath *polyPath = poly.path;
-    if (polyPath) {
-      poly.spans = GMSStyleSpansOffset(polyPath, _styles, _lengths, kGMSLengthGeodesic, _pos);
-    }
+    poly.spans = GMSStyleSpansOffset(poly.path, _styles, _lengths, kGMSLengthGeodesic, _pos);
   }
   _pos -= _step;
   if (kAnimate) {
@@ -81,8 +78,6 @@ static bool kAnimate = true;
   [super viewDidLoad];
   GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-30 longitude:-175 zoom:3];
   GMSMapView *mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
-  // Opt the MapView in automatic dark mode switching.
-  mapView.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
   mapView.accessibilityElementsHidden = YES;
   self.view = mapView;
   _mapView = mapView;

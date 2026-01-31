@@ -55,8 +55,6 @@ static NSString *const kNightType = @"Night";
                                                                zoom:18];
 
   _mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
-  // Opt the MapView in automatic dark mode switching.
-  _mapView.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
 
   UIBarButtonItem *styleButton = [[UIBarButtonItem alloc] initWithTitle:@"Style"
                                                                   style:UIBarButtonItemStylePlain

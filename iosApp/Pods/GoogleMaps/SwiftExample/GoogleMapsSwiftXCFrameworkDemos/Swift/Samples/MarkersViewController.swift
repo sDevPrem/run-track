@@ -30,9 +30,6 @@ class MarkersViewController: UIViewController {
   override func loadView() {
     view = mapView
 
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
-
     sydneyMarker.title = "Sydney"
     sydneyMarker.snippet = "Population: 4,605,992"
     sydneyMarker.isFlat = false

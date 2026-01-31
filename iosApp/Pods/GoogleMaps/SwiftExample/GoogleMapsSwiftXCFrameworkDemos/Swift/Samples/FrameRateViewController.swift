@@ -25,9 +25,6 @@ class FrameRateViewController: UIViewController {
   override func loadView() {
     view = mapView
 
-    // Opt the MapView into automatic dark mode switching.
-    mapView.overrideUserInterfaceStyle = .unspecified
-
     statusTextView.text = ""
     statusTextView.textAlignment = .center
     statusTextView.backgroundColor = UIColor(white: 1, alpha: 0.8)

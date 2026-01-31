@@ -80,7 +80,7 @@ extension SampleListViewController: UITableViewDelegate {
     shouldCollapseDetailViewController = false
     tableView.deselectRow(at: indexPath, animated: true)
     if let sample = sample(at: indexPath) {
-      let viewController = sample.viewController
+      let viewController = sample.viewControllerClass.init()
       viewController.title = sample.title
       let navController = UINavigationController(rootViewController: viewController)
       navController.navigationBar.isTranslucent = false
@@ -135,6 +135,7 @@ extension SampleListViewController: UISearchResultsUpdating {
 
 extension Sample {
   func matches(_ filter: String) -> Bool {
-    return searchString.lowercased().contains(filter)
+    return title.lowercased().contains(filter)
+      || String(describing: viewControllerClass).lowercased().contains(filter)
   }
 }
