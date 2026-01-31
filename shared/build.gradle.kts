@@ -31,17 +31,6 @@ kotlin {
             baseName = "shared"
             isStatic = false
         }
-
-        pod("GoogleMaps") {
-            version = libs.versions.pods.google.maps.get()
-            extraOpts += listOf("-compiler-option", "-fmodules")
-
-            pod("Google-Maps-iOS-Utils") {
-                moduleName = "GoogleMapsUtils"
-                version = libs.versions.pods.google.ios.maps.utils.get()
-                extraOpts = listOf("-compiler-option", "-fmodules")
-            }
-        }
     }
 
     sourceSets {

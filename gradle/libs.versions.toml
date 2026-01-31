@@ -29,9 +29,6 @@ maps-compose = "5.0.3"
 play-services-location = "21.3.0"
 play-services-maps = "18.2.0"
 
-pods-google-maps = "9.1.1"
-pods-google-ios-maps-utils = "6.0.0"
-
 timber = "5.0.1"
 
 room = "2.8.4"
