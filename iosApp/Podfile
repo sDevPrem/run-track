@@ -6,6 +6,9 @@ target 'run-track' do
   use_frameworks!
   pod 'shared', :path => '../shared'
 
+  pod 'GoogleMaps', '9.1.1'
+  pod 'Google-Maps-iOS-Utils', '6.0.0'
+
   # Pods for run-track
 
 end

@@ -23,7 +23,7 @@ Packages/
 # CocoaPods
 # We ignore the actual Pods source code, but keep the Podfile.lock
 # to ensure the team uses the exact same library versions.
-Pods/
+#Pods/
 
 # Kotlin Multiplatform Integration
 # If you are embedding the framework manually or via script,
