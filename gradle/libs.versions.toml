@@ -52,7 +52,7 @@ vico = "2.0.0-alpha.12"
 vico2 = "2.3.6"
 
 compose-multiplatform = "1.7.0"
-jetbrains-backhandler = "1.10.0"
+jetbrains-backhandler = "1.8.2"
 compose-plugin = "1.8.2"
 filekit = "0.12.0"
 
