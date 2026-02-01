@@ -83,6 +83,14 @@ kotlin {
                 implementation(compose.animation)
                 implementation(compose.materialIconsExtended)
                 api(libs.multiplatform.navigation.compose)
+
+                implementation(project.dependencies.platform(libs.koin.bom))
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.navigation)
+                api(libs.koin.annotations)
+
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
 //                implementation(libs.filekit.core)
 //                implementation(libs.filekit.dialogs)
@@ -110,6 +118,16 @@ dependencies {
     add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
     add("kspAndroid", libs.hilt.compiler)
+
+    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+    add("kspAndroid", libs.koin.ksp.compiler)
+    add("kspIosX64", libs.koin.ksp.compiler)
+    add("kspIosArm64", libs.koin.ksp.compiler)
+    add("kspIosSimulatorArm64", libs.koin.ksp.compiler)
+}
+
+tasks.matching { it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata" }.configureEach {
+    dependsOn("kspCommonMainKotlinMetadata")
 }
 
 android {
