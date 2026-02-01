@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.screen.main
+package com.sdevprem.runtrack.shared.ui.screen.main
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -15,8 +15,8 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -28,46 +28,43 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.sdevprem.runtrack.R
 import com.sdevprem.runtrack.shared.common.extension.navigateToBottomNavDestination
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
 import com.sdevprem.runtrack.shared.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.shared.ui.nav.Destination
 import com.sdevprem.runtrack.shared.ui.nav.Navigation
-import com.sdevprem.runtrack.ui.theme.AppTheme
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_run
 
-@Composable
-@Preview(showBackground = true)
-private fun MainScreenPreview() {
-    AppTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            MainScreen(rememberNavController())
-        }
-    }
-}
+//@Composable
+//@Preview(showBackground = true)
+//private fun MainScreenPreview() {
+//    AppTheme {
+//        // A surface container using the 'background' color from the theme
+//        Surface(
+//            modifier = Modifier.fillMaxSize(),
+//            color = MaterialTheme.colorScheme.background
+//        ) {
+//            MainScreen(rememberNavController())
+//        }
+//    }
+//}
 
 @Composable
 fun MainScreen(
     navHostController: NavHostController,
-    viewModel: MainScreenViewModel = hiltViewModel(),
+    viewModel: MainScreenViewModel = LocalVMProvider.current.provideViewModel(MainScreenViewModel::class),
     exitApp: () -> Unit = { }
 ) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
@@ -116,8 +113,9 @@ fun MainScreen(
                     backgroundColor = MaterialTheme.colorScheme.primary
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_run),
+                        imageVector = vectorResource(Res.drawable.ic_run),
                         contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
 
                 }

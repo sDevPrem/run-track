@@ -27,10 +27,10 @@ import com.sdevprem.runtrack.common.extension.openAppSetting
 import com.sdevprem.runtrack.common.utils.PermissionUtils
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
+import com.sdevprem.runtrack.shared.ui.screen.main.MainScreen
+import com.sdevprem.runtrack.shared.ui.theme.AppTheme
 import com.sdevprem.runtrack.ui.common.compose.component.LocationPermissionRequestDialog
 import com.sdevprem.runtrack.ui.di.ViewModelProvider
-import com.sdevprem.runtrack.ui.screen.main.MainScreen
-import com.sdevprem.runtrack.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

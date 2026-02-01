@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.theme
+package com.sdevprem.runtrack.shared.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

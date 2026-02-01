@@ -1,17 +1,14 @@
-package com.sdevprem.runtrack.ui.screen.main
+package com.sdevprem.runtrack.shared.ui.screen.main
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
-@HiltViewModel
-class MainScreenViewModel @Inject constructor(
-    userRepository: UserRepository
-) : ViewModel() {
+class MainScreenViewModel(
+    userRepository: UserRepository,
+    viewModelScope: CoroutineScope
+) {
     val doesUserExist = userRepository.doesUserExist
         .stateIn(
             viewModelScope,
