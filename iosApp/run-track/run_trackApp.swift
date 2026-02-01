@@ -12,7 +12,7 @@ import GoogleMaps
 struct run_trackApp: App {
 
     init() {
-        let apiKey = Bundle.main.object(forInfoDictionaryKey: "GoogleMapsApiKey") as ?String ?? ""
+        let apiKey = Bundle.main.object(forInfoDictionaryKey: "GoogleMapsApiKey") as? String ?? ""
         GMSServices.provideAPIKey(apiKey)
     }
     
