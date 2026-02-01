@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +26,9 @@ import com.sdevprem.runtrack.common.extension.hasLocationPermission
 import com.sdevprem.runtrack.common.extension.openAppSetting
 import com.sdevprem.runtrack.common.utils.PermissionUtils
 import com.sdevprem.runtrack.data.tracking.location.LocationUtils
+import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.ui.common.compose.component.LocationPermissionRequestDialog
+import com.sdevprem.runtrack.ui.di.ViewModelProvider
 import com.sdevprem.runtrack.ui.screen.main.MainScreen
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +45,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(rememberNavController())
+                    CompositionLocalProvider(
+                        LocalVMProvider provides ViewModelProvider
+                    ) {
+                        MainScreen(rememberNavController()) {
+                            finish()
+                        }
+                    }
                 }
             }
         }

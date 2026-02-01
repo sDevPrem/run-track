@@ -1,8 +1,8 @@
-package com.sdevprem.runtrack.ui.common.extension
+package com.sdevprem.runtrack.shared.common.extension
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.sdevprem.runtrack.ui.nav.BottomNavDestination
+import com.sdevprem.runtrack.shared.ui.nav.BottomNavDestination
 
 fun NavController.navigateToBottomNavDestination(item: BottomNavDestination) {
     navigate(item.route) {

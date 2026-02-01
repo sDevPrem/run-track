@@ -41,12 +41,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdevprem.runtrack.R
+import com.sdevprem.runtrack.shared.common.extension.navigateToBottomNavDestination
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
 import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
-import com.sdevprem.runtrack.ui.common.extension.navigateToBottomNavDestination
-import com.sdevprem.runtrack.ui.nav.BottomNavDestination
-import com.sdevprem.runtrack.ui.nav.Destination
-import com.sdevprem.runtrack.ui.nav.Navigation
+import com.sdevprem.runtrack.shared.ui.nav.BottomNavDestination
+import com.sdevprem.runtrack.shared.ui.nav.Destination
+import com.sdevprem.runtrack.shared.ui.nav.Navigation
 import com.sdevprem.runtrack.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 
@@ -67,7 +67,8 @@ private fun MainScreenPreview() {
 @Composable
 fun MainScreen(
     navHostController: NavHostController,
-    viewModel: MainScreenViewModel = hiltViewModel()
+    viewModel: MainScreenViewModel = hiltViewModel(),
+    exitApp: () -> Unit = { }
 ) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
 
@@ -133,7 +134,7 @@ fun MainScreen(
             CompositionLocalProvider(
                 LocalScaffoldBottomPadding provides it.calculateBottomPadding()
             ) {
-                Navigation(navHostController)
+                Navigation(navHostController, exitApp)
             }
         }
     }

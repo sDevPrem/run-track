@@ -1,22 +1,22 @@
-package com.sdevprem.runtrack.ui.nav
+package com.sdevprem.runtrack.shared.ui.nav
 
-import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
-import com.sdevprem.runtrack.R
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.vectorResource
+import runtrack.shared.generated.resources.Res
+import runtrack.shared.generated.resources.ic_menu
+import runtrack.shared.generated.resources.ic_profile
 
 sealed class BottomNavDestination(
     route: String,
-    @DrawableRes
-    val icon: Int
+    val icon: DrawableResource
 ) : Destination(route) {
 
     @Composable
-    fun getIconVector() = ImageVector.vectorResource(icon)
+    fun getIconVector() = vectorResource(icon)
 
-    object Home : BottomNavDestination(route = "home", icon = R.drawable.ic_menu) {
+    object Home : BottomNavDestination(route = "home", icon = Res.drawable.ic_menu) {
 
         fun navigateToOnBoardingScreen(navController: NavController) {
             navController.navigate(OnBoardingDestination.route)
@@ -36,6 +36,6 @@ sealed class BottomNavDestination(
 
     }
 
-    object Profile : BottomNavDestination(route = "profile", icon = R.drawable.ic_profile)
+    object Profile : BottomNavDestination(route = "profile", icon = Res.drawable.ic_profile)
 
 }

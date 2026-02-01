@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.nav
+package com.sdevprem.runtrack.shared.ui.nav
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

@@ -28,8 +28,8 @@ import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackin
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
+import com.sdevprem.runtrack.shared.ui.nav.Destination
 import com.sdevprem.runtrack.ui.MainActivity
-import com.sdevprem.runtrack.ui.nav.Destination
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
