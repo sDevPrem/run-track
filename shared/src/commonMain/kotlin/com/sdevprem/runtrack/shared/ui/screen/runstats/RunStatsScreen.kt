@@ -34,16 +34,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.shared.common.extension.now
 import com.sdevprem.runtrack.shared.common.extension.toList
 import com.sdevprem.runtrack.shared.common.utils.DateUtils
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.extension.conditional
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RunStatsScreen(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RunStatsViewModel = LocalVMProvider.current.provideViewModel(RunStatsViewModel::class),
+    viewModel: RunStatsViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     RunStatsContent(

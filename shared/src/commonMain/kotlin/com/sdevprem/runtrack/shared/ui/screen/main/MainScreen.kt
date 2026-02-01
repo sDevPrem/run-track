@@ -37,13 +37,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sdevprem.runtrack.shared.common.extension.navigateToBottomNavDestination
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
 import com.sdevprem.runtrack.shared.ui.nav.BottomNavDestination
 import com.sdevprem.runtrack.shared.ui.nav.Destination
 import com.sdevprem.runtrack.shared.ui.nav.Navigation
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.viewmodel.koinViewModel
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_run
 
@@ -64,7 +64,7 @@ import runtrack.shared.generated.resources.ic_run
 @Composable
 fun MainScreen(
     navHostController: NavHostController,
-    viewModel: MainScreenViewModel = LocalVMProvider.current.provideViewModel(MainScreenViewModel::class),
+    viewModel: MainScreenViewModel = koinViewModel<MainScreenViewModel>(),
     exitApp: () -> Unit = { }
 ) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()

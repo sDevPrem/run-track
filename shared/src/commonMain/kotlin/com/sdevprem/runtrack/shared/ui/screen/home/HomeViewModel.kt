@@ -8,9 +8,9 @@ import com.sdevprem.runtrack.shared.common.extension.toWeekLastDay
 import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
+import com.sdevprem.runtrack.shared.di.CoroutineDispatchers
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,12 +19,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.Named
 
+@KoinViewModel
 class HomeViewModel(
     private val repository: AppRepository,
     trackingManager: TrackingManager,
-    private val externalScope: CoroutineScope,
-    private val ioDispatcher: CoroutineDispatcher,
+    @Named("ApplicationScope") private val externalScope: CoroutineScope,
+    private val dispatchers: CoroutineDispatchers,
     userRepository: UserRepository,
     getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
 ) : ViewModel() {
@@ -65,7 +68,7 @@ class HomeViewModel(
         HomeScreenState()
     )
 
-    fun deleteRun(run: Run) = externalScope.launch(ioDispatcher) {
+    fun deleteRun(run: Run) = externalScope.launch(dispatchers.io) {
         dismissRunDialog()
         repository.deleteRun(run)
     }

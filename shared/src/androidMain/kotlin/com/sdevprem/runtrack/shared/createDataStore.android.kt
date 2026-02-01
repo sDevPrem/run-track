@@ -10,9 +10,10 @@ import kotlinx.coroutines.CoroutineScope
 fun createDataStore(
     context: Context,
     coroutineScope: CoroutineScope,
-    migrations: List<DataMigration<Preferences>> = listOf()
+    migrations: List<DataMigration<Preferences>> = listOf(),
+    name: String = userDataStoreName
 ) = createUserDatastore(
-    producePath = { context.filesDir.resolve(userDataStoreName).absolutePath },
+    producePath = { context.filesDir.resolve(name).absolutePath },
     coroutineScope = coroutineScope,
     migrations
 )

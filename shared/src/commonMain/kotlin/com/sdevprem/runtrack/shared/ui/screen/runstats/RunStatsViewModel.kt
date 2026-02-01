@@ -1,12 +1,13 @@
 package com.sdevprem.runtrack.shared.ui.screen.runstats
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.shared.common.extension.now
 import com.sdevprem.runtrack.shared.common.extension.toWeekFirstDay
 import com.sdevprem.runtrack.shared.common.extension.toWeekLastDay
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
+import com.sdevprem.runtrack.shared.di.CoroutineDispatchers
 import com.sdevprem.runtrack.shared.ui.screen.runstats.utils.RunStatsAccumulator
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,12 +17,13 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.plus
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class RunStatsViewModel(
     private val repository: AppRepository,
-    private val defaultDispatcher: CoroutineDispatcher,
-    private val viewModelScope: CoroutineScope
-) {
+    private val dispatchers: CoroutineDispatchers,
+): ViewModel() {
 
     private val _state = MutableStateFlow(RunStatsUiState.EMPTY_STATE)
     val state = _state.asStateFlow()
@@ -37,7 +39,7 @@ class RunStatsViewModel(
                 toDate = it.dateRange.endInclusive
             )
         }
-        withContext(defaultDispatcher) {
+        withContext(dispatchers.default) {
             _state.update {
                 it.copy(
                     runStats = runList,

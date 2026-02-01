@@ -1,6 +1,7 @@
-package com.sdevprem.runtrack.data.migration
+package com.sdevprem.runtrack.shared.data.migration
 
 import androidx.datastore.core.DataMigration
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -14,7 +15,7 @@ import javax.inject.Qualifier
 annotation class OldPrefs
 
 class DataStoreMigration(
-    private val oldPrefs: androidx.datastore.core.DataStore<Preferences>
+    private val oldPrefs: DataStore<Preferences>
 ) : DataMigration<Preferences> {
     override suspend fun shouldMigrate(currentData: Preferences) =
         oldPrefs.data.first().asMap().isEmpty().not()

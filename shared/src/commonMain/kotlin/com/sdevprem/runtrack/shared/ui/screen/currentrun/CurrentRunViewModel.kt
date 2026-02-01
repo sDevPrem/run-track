@@ -1,27 +1,31 @@
 package com.sdevprem.runtrack.shared.ui.screen.currentrun
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sdevprem.runtrack.shared.common.extension.now
 import com.sdevprem.runtrack.shared.common.extension.roundTo
 import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
+import com.sdevprem.runtrack.shared.di.CoroutineDispatchers
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.Named
 
+@KoinViewModel
 class CurrentRunViewModel(
     private val trackingManager: TrackingManager,
     private val repository: AppRepository,
-    private val appCoroutineScope: CoroutineScope,
-    private val ioDispatcher: CoroutineDispatcher,
-    viewModelScope: CoroutineScope,
+    @Named("ApplicationScope") private val appCoroutineScope: CoroutineScope,
+    private val dispatchers: CoroutineDispatchers,
     getCurrentRunStateWithCaloriesUseCase: GetCurrentRunStateWithCaloriesUseCase
-) {
+): ViewModel() {
     val currentRunStateWithCalories = getCurrentRunStateWithCaloriesUseCase()
         .stateIn(
             viewModelScope,
@@ -55,7 +59,7 @@ class CurrentRunViewModel(
         trackingManager.stop()
     }
 
-    private fun saveRun(run: Run) = appCoroutineScope.launch(ioDispatcher) {
+    private fun saveRun(run: Run) = appCoroutineScope.launch(dispatchers.io) {
         repository.insertRun(run)
     }
 

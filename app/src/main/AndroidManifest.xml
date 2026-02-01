@@ -20,7 +20,7 @@
         android:theme="@style/Theme.RunTrack"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".shared.ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleInstance"

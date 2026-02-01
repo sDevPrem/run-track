@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.common.extension
+package com.sdevprem.runtrack.shared.common.extension
 
 import android.content.Context
 import android.content.Intent
@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
-import com.sdevprem.runtrack.common.utils.PermissionUtils
+import com.sdevprem.runtrack.shared.common.utils.PermissionUtils
 
 fun Context.hasNotificationPermission() =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

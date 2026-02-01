@@ -19,12 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.common.animation.ComposeUtils
 import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.CurrentRunStatsCard
 import com.sdevprem.runtrack.shared.ui.screen.currentrun.components.Map
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.viewmodel.koinViewModel
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_back
 
@@ -41,8 +41,7 @@ import runtrack.shared.generated.resources.ic_back
 @Composable
 fun CurrentRunScreen(
     navigateUp: () -> Unit,
-    viewModel: CurrentRunViewModel = LocalVMProvider.current
-        .provideViewModel(CurrentRunViewModel::class)
+    viewModel: CurrentRunViewModel = koinViewModel()
 ) {
 //    val context = LocalContext.current
 //

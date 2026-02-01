@@ -43,9 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.shared.data.model.Gender
 import com.sdevprem.runtrack.shared.data.model.User
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.viewmodel.koinViewModel
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_arrow_backward
 import runtrack.shared.generated.resources.ic_arrow_forward
@@ -60,7 +60,7 @@ private const val TOTAL_PAGE = 2
 fun OnBoardScreen(
     navigateToHome: () -> Unit,
     exitApp: () -> Unit,
-    viewModel: OnBoardingViewModel = LocalVMProvider.current.provideViewModel(OnBoardingViewModel::class)
+    viewModel: OnBoardingViewModel = koinViewModel()
 ) {
 //    val context = LocalContext.current
     val user by viewModel.user.collectAsStateWithLifecycle()

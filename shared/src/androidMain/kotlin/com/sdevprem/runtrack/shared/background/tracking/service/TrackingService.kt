@@ -5,13 +5,11 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.sdevprem.runtrack.shared.background.notification.TrackingNotificationHelper
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-@AndroidEntryPoint
 class TrackingService : LifecycleService() {
 
     companion object {
@@ -20,11 +18,8 @@ class TrackingService : LifecycleService() {
         const val ACTION_START_SERVICE = "action_start_service"
     }
 
-    @Inject
-    lateinit var trackingManager: TrackingManager
-
-    @Inject
-    lateinit var notificationHelper: TrackingNotificationHelper
+    val trackingManager: TrackingManager by inject()
+    val notificationHelper: TrackingNotificationHelper by inject()
     private var job: Job? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

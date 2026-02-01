@@ -38,18 +38,18 @@ import app.cash.paging.compose.collectAsLazyPagingItems
 import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.utils.RunSortOrder
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.compose.components.DropDownList
 import com.sdevprem.runtrack.shared.ui.common.compose.components.RunInfoDialog
 import com.sdevprem.runtrack.shared.ui.common.compose.components.RunItem
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.viewmodel.koinViewModel
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_arrow_backward
 
 @Composable
 fun RunningHistoryScreen(
     navigateUp: () -> Unit,
-    viewModel: RunningHistoryVM = LocalVMProvider.current.provideViewModel(RunningHistoryVM::class)
+    viewModel: RunningHistoryVM = koinViewModel()
 ) {
     val runItems = viewModel.runList.collectAsLazyPagingItems()
 

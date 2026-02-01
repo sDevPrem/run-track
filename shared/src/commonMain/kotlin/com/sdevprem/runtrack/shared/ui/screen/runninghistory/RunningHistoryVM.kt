@@ -1,21 +1,23 @@
 package com.sdevprem.runtrack.shared.ui.screen.runninghistory
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.utils.RunSortOrder
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@KoinViewModel
 class RunningHistoryVM(
     private val repository: AppRepository,
-    private val viewModelScope: CoroutineScope
-) {
+): ViewModel() {
 
     private val _runSortOrder = MutableStateFlow(RunSortOrder.DATE)
 

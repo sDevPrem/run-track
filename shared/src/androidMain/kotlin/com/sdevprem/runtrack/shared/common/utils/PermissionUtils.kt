@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.common.utils
+package com.sdevprem.runtrack.shared.common.utils
 
 import android.Manifest
 import android.os.Build

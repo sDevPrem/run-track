@@ -57,12 +57,12 @@ import com.sdevprem.runtrack.shared.data.model.Run
 import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.shared.domain.model.CurrentRunStateWithCalories
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.compose.components.RunInfoDialog
 import com.sdevprem.runtrack.shared.ui.common.compose.components.RunItem
 import com.sdevprem.runtrack.shared.ui.common.compose.components.UserProfilePic
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.viewmodel.koinViewModel
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_arrow_forward
 import runtrack.shared.generated.resources.ic_calendar
@@ -77,7 +77,7 @@ fun HomeScreen(
     navigateToRunScreen: () -> Unit,
     navigateToRunStats: () -> Unit,
     navigateToOnBoardingScreen: () -> Unit,
-    viewModel: HomeViewModel = LocalVMProvider.current.provideViewModel(HomeViewModel::class),
+    viewModel: HomeViewModel = koinViewModel()
 ) {
     val doesUserExist by viewModel.doesUserExist.collectAsStateWithLifecycle()
     val state by viewModel.homeScreenState.collectAsStateWithLifecycle()

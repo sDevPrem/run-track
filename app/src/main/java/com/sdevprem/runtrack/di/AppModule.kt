@@ -11,25 +11,25 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.sdevprem.runtrack.data.migration.DataStoreMigration
-import com.sdevprem.runtrack.data.migration.OldPrefs
-import com.sdevprem.runtrack.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.shared.background.DefaultBackgroundTrackingManager
 import com.sdevprem.runtrack.shared.background.notification.TrackingNotificationHelper
 import com.sdevprem.runtrack.shared.createDataStore
 import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.db.dao.RunDao
+import com.sdevprem.runtrack.shared.data.migration.DataStoreMigration
+import com.sdevprem.runtrack.shared.data.migration.OldPrefs
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.data.tracking.location.DefaultLocationTrackingManager
+import com.sdevprem.runtrack.shared.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.shared.data.tracking.timer.DefaultTimeTracker
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.timer.TimeTracker
 import com.sdevprem.runtrack.shared.domain.usecase.GetCurrentRunStateWithCaloriesUseCase
+import com.sdevprem.runtrack.shared.ui.MainActivity
 import com.sdevprem.runtrack.shared.ui.nav.Destination
-import com.sdevprem.runtrack.ui.MainActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,7 +49,7 @@ abstract class AppModule {
 
     companion object {
 
-        private const val USER_PREFERENCES_FILE_NAME = "user_preferences"
+        private const val USER_PREFERENCES_FILE_NAME = "user_preferencess"
 
         @Singleton
         @Provides
@@ -103,7 +103,8 @@ abstract class AppModule {
         ): DataStore<Preferences> = createDataStore(
             context,
             scope.plus(ioDispatcher + SupervisorJob()),
-            listOf(DataStoreMigration(oldPrefs))
+            listOf(DataStoreMigration(oldPrefs)),
+            name = "user_preferencess.preferences_pb"
         )
 
         @Singleton

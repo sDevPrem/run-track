@@ -131,4 +131,7 @@ dependencies {
     implementation(libs.vico.core)
 
     implementation(projects.shared)
+
+    implementation(project.dependencies.platform(libs.koin.bom))
+    api(libs.koin.android)
 }

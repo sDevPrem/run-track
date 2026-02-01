@@ -36,10 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sdevprem.runtrack.shared.ui.common.LocalScaffoldBottomPadding
-import com.sdevprem.runtrack.shared.ui.common.LocalVMProvider
 import com.sdevprem.runtrack.shared.ui.common.compose.components.RunningStatsItem
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.viewmodel.koinViewModel
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.fire
 import runtrack.shared.generated.resources.ic_arrow_forward
@@ -54,7 +54,7 @@ import runtrack.shared.generated.resources.stopwatch
 fun ProfileScreen() {
 //    val context = LocalContext.current
     val viewModel: ProfileViewModel =
-        LocalVMProvider.current.provideViewModel(ProfileViewModel::class)
+        koinViewModel()
     val state by viewModel.profileScreenState.collectAsStateWithLifecycle()
 
     ProfileScreenContent(

@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.ui.common.compose.component
+package com.sdevprem.runtrack.shared.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.sdevprem.runtrack.data.tracking.location
+package com.sdevprem.runtrack.shared.data.tracking.location
 
 import android.app.Activity
 import android.content.IntentSender
