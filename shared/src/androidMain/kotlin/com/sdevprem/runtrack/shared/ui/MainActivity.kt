@@ -26,9 +26,7 @@ import com.sdevprem.runtrack.shared.data.tracking.location.LocationUtils
 import com.sdevprem.runtrack.shared.ui.component.LocationPermissionRequestDialog
 import com.sdevprem.runtrack.shared.ui.screen.main.MainScreen
 import com.sdevprem.runtrack.shared.ui.theme.AppTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
