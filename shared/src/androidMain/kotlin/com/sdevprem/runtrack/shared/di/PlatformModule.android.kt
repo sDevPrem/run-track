@@ -35,7 +35,7 @@ import org.koin.core.annotation.Single
 
 @Module
 @ComponentScan("com.sdevprem.runtrack.shared")
-class PlatformModule {
+object PlatformModule {
 
     @Single
     @Named("OldPreferenceDataStore")
@@ -79,10 +79,6 @@ class PlatformModule {
     ): RunTrackDB = getRoomDatabase(
         getDatabaseBuilder(context)
     )
-
-    @Single
-    fun provideSharedRunDao(db: RunTrackDB) =
-        db.getRunDao()
 
     @Single
     fun provideLocationTrackingManager(

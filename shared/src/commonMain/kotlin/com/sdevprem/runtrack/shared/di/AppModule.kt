@@ -2,6 +2,7 @@ package com.sdevprem.runtrack.shared.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.db.dao.RunDao
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
@@ -48,6 +49,10 @@ class AppModule {
     fun provideUserRepository(
         datastore: DataStore<Preferences>
     ) = UserRepository(datastore)
+
+    @Single
+    fun provideSharedRunDao(db: RunTrackDB) =
+        db.getRunDao()
 
 
     @Single

@@ -19,7 +19,7 @@ class RunTrackApp : Application() {
         startKoin {
             androidContext(this@RunTrackApp)
             androidLogger()
-            modules(PlatformModule().module)
+            modules(PlatformModule.module)
             modules(AppModule().module)
         }
         notificationHelper.createNotificationChannel()

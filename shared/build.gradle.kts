@@ -109,7 +109,6 @@ kotlin {
 }
 
 dependencies {
-    add("kspCommonMainMetadata", libs.androidx.room.compiler)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     add("kspIosX64", libs.androidx.room.compiler)
@@ -122,9 +121,9 @@ dependencies {
     add("kspIosSimulatorArm64", libs.koin.ksp.compiler)
 }
 
-//tasks.matching { it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata" }.configureEach {
-//    dependsOn("kspCommonMainKotlinMetadata")
-//}
+tasks.matching { it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata" }.configureEach {
+    dependsOn("kspCommonMainKotlinMetadata")
+}
 
 android {
     namespace = "com.sdevprem.runtrack.shared"
@@ -141,11 +140,3 @@ android {
 room {
     schemaDirectory("$projectDir/schemas")
 }
-
-//// Make common source sets depend on KSP generated code
-//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-//    if (name != "kspCommonMainKotlinMetadata") {
-//        dependsOn("kspCommonMainKotlinMetadata")
-//    }
-//}
-
