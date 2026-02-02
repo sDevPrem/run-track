@@ -6,6 +6,12 @@
 	<true/>
 	<key>GoogleMapsApiKey</key>
 	<string>$(MAPS_API_KEY)</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to track your runs.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to track your runs in the background.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to track your runs in the background.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
