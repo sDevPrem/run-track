@@ -25,11 +25,14 @@ class DefaultLocationTrackingManager(
 
         locationDelegate = object : NSObject(), CLLocationManagerDelegateProtocol {
             override fun locationManager(manager: CLLocationManager, didUpdateLocations: List<*>) {
+                println("Debug Location: $didUpdateLocations")
                 val locations = didUpdateLocations.filterIsInstance<CLLocation>()
                 val trackingInfoList = locations.map { location ->
                     val (lat, long) = location.coordinate().useContents {
                         latitude to longitude
                     }
+
+                    println("Debug Location: $lat, $long")
                     LocationTrackingInfo(
                         locationInfo = LocationInfo(
                             latitude = lat,
@@ -44,6 +47,9 @@ class DefaultLocationTrackingManager(
             }
 
             override fun locationManager(manager: CLLocationManager, didFailWithError: platform.Foundation.NSError) {
+                println("Debug Location: failure happened ${didFailWithError.localizedDescription}")
+                println("Debug Location: failure happened ${didFailWithError.code}")
+                println("Debug Location: ${locationManager.authorizationStatus}")
                 // Handle error - could log or notify callback
             }
         }
