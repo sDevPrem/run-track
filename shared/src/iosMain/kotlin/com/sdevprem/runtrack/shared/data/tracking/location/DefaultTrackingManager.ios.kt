@@ -13,7 +13,7 @@ import platform.CoreLocation.kCLLocationAccuracyBest
 import platform.darwin.NSObject
 
 class DefaultLocationTrackingManager(
-    private val locationManager: CLLocationManager = CLLocationManager()
+    private val locationManager: CLLocationManager
 ) : LocationTrackingManager {
 
     private var locationCallback: LocationTrackingManager.LocationCallback? = null
