@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.uikit.LocalUIViewController
+import com.sdevprem.runtrack.shared.di.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.compose.koinInject
 import platform.Foundation.NSDate
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -31,7 +31,8 @@ actual fun rememberImagePicker(
     onImageSaved: (String?) -> Unit
 ): () -> Unit {
     val coroutineScope = rememberCoroutineScope()
-    val pickerDelegate = remember { ImagePickerDelegate(onImageSaved, coroutineScope) }
+    val dispatchers = koinInject<CoroutineDispatchers>()
+    val pickerDelegate = remember { ImagePickerDelegate(onImageSaved, coroutineScope, dispatchers) }
     val uiViewController = LocalUIViewController.current
     return remember {
         {
@@ -50,7 +51,8 @@ actual fun rememberImagePicker(
 
 private class ImagePickerDelegate(
     private val onImageSaved: (String?) -> Unit,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    private val dispatchers: CoroutineDispatchers,
 ) : NSObject(), PHPickerViewControllerDelegateProtocol {
     override fun picker(
         picker: PHPickerViewController,
@@ -69,10 +71,10 @@ private class ImagePickerDelegate(
                     println("error on loading image err = $err data = $data")
                     return@loadDataRepresentationForTypeIdentifier
                 }
-                coroutineScope.launch(Dispatchers.IO) {
+                coroutineScope.launch(dispatchers.io) {
                     val image = UIImage(data = data)
                     val filePath = saveImage(image)
-                    withContext(Dispatchers.Main) {
+                    withContext(dispatchers.main) {
                         onImageSaved(filePath)
                     }
                 }

@@ -8,9 +8,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Dispatchers
+import com.sdevprem.runtrack.shared.di.CoroutineDispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.compose.koinInject
 import java.io.File
 
 @Composable
@@ -19,13 +20,14 @@ actual fun rememberImagePicker(
 ): () -> Unit {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val dispatchers = koinInject<CoroutineDispatchers>()
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri ->
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(dispatchers.io) {
             uri ?: return@launch
             val path = saveImage(uri, context)
-            withContext(Dispatchers.Main) {
+            withContext(dispatchers.main) {
                 onImageSaved(path)
             }
         }
