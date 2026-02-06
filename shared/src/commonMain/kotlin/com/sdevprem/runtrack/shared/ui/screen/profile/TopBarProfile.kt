@@ -42,6 +42,7 @@ import coil3.toUri
 import com.sdevprem.runtrack.shared.data.model.User
 import com.sdevprem.runtrack.shared.ui.common.compose.components.UserProfilePic
 import com.sdevprem.runtrack.shared.ui.common.extension.bottomBorder
+import com.sdevprem.runtrack.shared.ui.utils.rememberImagePicker
 import org.jetbrains.compose.resources.vectorResource
 import runtrack.shared.generated.resources.Res
 import runtrack.shared.generated.resources.ic_edit
@@ -124,6 +125,10 @@ private fun TopBarProfileContent(
 //        onPermissionDenied = { deniedPermission -> }
 //    )
 
+    val imagePicker = rememberImagePicker {
+        profileEditActions.updateImgUri(it)
+    }
+
     LaunchedEffect(key1 = isEditMode) {
         if (isEditMode)
             userNameFocusRequester.requestFocus()
@@ -164,6 +169,7 @@ private fun TopBarProfileContent(
                 IconButton(
                     onClick = {
 //                        pickerState.pickImage(maxCount = 1)
+                        imagePicker()
                     },
                     modifier = Modifier
                         .background(

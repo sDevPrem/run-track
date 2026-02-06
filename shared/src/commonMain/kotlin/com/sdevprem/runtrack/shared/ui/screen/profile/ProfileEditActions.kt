@@ -1,7 +1,5 @@
 package com.sdevprem.runtrack.shared.ui.screen.profile
 
-import coil3.Uri
-
 interface ProfileEditActions {
     fun startEditing()
 
@@ -9,7 +7,7 @@ interface ProfileEditActions {
 
     fun updateUserName(newName: String)
 
-    fun updateImgUri(newUri: Uri?)
+    fun updateImgUri(newUri: String?)
 
     fun cancelEditing()
 }

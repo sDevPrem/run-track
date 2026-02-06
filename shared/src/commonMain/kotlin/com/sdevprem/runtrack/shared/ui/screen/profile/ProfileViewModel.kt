@@ -2,7 +2,6 @@ package com.sdevprem.runtrack.shared.ui.screen.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil3.Uri
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,8 +65,8 @@ class ProfileViewModel(
         _profileScreenState.update { it.copy(user = it.user.copy(name = newName)) }
     }
 
-    override fun updateImgUri(newUri: Uri?) {
-        _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri?.toString())) }
+    override fun updateImgUri(newUri: String?) {
+        _profileScreenState.update { it.copy(user = it.user.copy(imgUri = newUri)) }
     }
 
     override fun cancelEditing() {
