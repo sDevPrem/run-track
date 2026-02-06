@@ -18,6 +18,8 @@ import com.sdevprem.runtrack.shared.data.db.RunTrackDB
 import com.sdevprem.runtrack.shared.data.migration.DataStoreMigration
 import com.sdevprem.runtrack.shared.data.tracking.location.DefaultLocationTrackingManager
 import com.sdevprem.runtrack.shared.data.tracking.location.LocationUtils
+import com.sdevprem.runtrack.shared.data.utils.AndroidLocalFileProcessor
+import com.sdevprem.runtrack.shared.data.utils.LocalFileProcessor
 import com.sdevprem.runtrack.shared.di.AppModule.Companion.USER_PREFERENCES_FILE_NAME
 import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
@@ -109,5 +111,12 @@ object PlatformModule {
             MainActivity::class.java
         )
     )
+
+    @Single
+    fun providesLocalFileProcessor(
+        context: Context
+    ): LocalFileProcessor {
+        return AndroidLocalFileProcessor(context)
+    }
 
 }

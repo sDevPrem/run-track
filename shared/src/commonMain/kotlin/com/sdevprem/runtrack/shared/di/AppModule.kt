@@ -7,6 +7,7 @@ import com.sdevprem.runtrack.shared.data.db.dao.RunDao
 import com.sdevprem.runtrack.shared.data.repository.AppRepository
 import com.sdevprem.runtrack.shared.data.repository.UserRepository
 import com.sdevprem.runtrack.shared.data.tracking.timer.DefaultTimeTracker
+import com.sdevprem.runtrack.shared.data.utils.LocalFileProcessor
 import com.sdevprem.runtrack.shared.domain.tracking.TrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.background.BackgroundTrackingManager
 import com.sdevprem.runtrack.shared.domain.tracking.location.LocationTrackingManager
@@ -47,8 +48,9 @@ class AppModule {
 
     @Single
     fun provideUserRepository(
-        datastore: DataStore<Preferences>
-    ) = UserRepository(datastore)
+        datastore: DataStore<Preferences>,
+        localFileProcessor: LocalFileProcessor
+    ) = UserRepository(datastore, localFileProcessor)
 
     @Single
     fun provideSharedRunDao(db: RunTrackDB) =

@@ -41,7 +41,7 @@ actual fun rememberImagePicker(
 private fun saveImage(uri: Uri, context: Context): String? {
     val contentResolver = context.contentResolver ?: return null
     contentResolver.openInputStream(uri)?.use { inputStream ->
-        val localDir = context.cacheDir
+        val localDir = context.filesDir
         val file = File(localDir, "photo${System.currentTimeMillis()}.jpg")
 
         file.outputStream().use {
