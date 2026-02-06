@@ -112,19 +112,6 @@ private fun TopBarProfileContent(
     profileEditActions: ProfileEditActions
 ) {
     val userNameFocusRequester = remember { FocusRequester() }
-//    val pickerState = rememberMediaPickerState()
-//
-//    MediaPicker(
-//        state = pickerState,
-//        onResult = { result ->
-//            when (result) {
-//                is MediaResult.Image -> { result }
-//                else -> {}
-//            }
-//        },
-//        onPermissionDenied = { deniedPermission -> }
-//    )
-
     val imagePicker = rememberImagePicker {
         profileEditActions.updateImgUri(it)
     }
@@ -168,7 +155,6 @@ private fun TopBarProfileContent(
             ) {
                 IconButton(
                     onClick = {
-//                        pickerState.pickImage(maxCount = 1)
                         imagePicker()
                     },
                     modifier = Modifier
