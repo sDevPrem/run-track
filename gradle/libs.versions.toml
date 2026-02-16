@@ -7,38 +7,59 @@ espresso-core = "3.5.1"
 androidx-junit = "1.1.5"
 junit = "4.13.2"
 
+kotlinx-datetime = "0.7.1"
+kotlinx-coroutines = "1.9.0"
 lifecycle = "2.6.1"
+jetBrains-lifecycle = "2.9.6"
 
 coil-compose = "2.4.0"
+coil = "3.0.4"
 
-hilt = "2.49"
-hilt-navigation-compose = "1.0.0"
+ktor = "3.0.1"
 
-kotlin-bom = "1.8.0"
+kotlin-bom = "2.0.21"
 
 navigation-compose = "2.7.6"
+multiplatform-navigation = "2.9.1"
 
 maps-compose = "5.0.3"
 play-services-location = "21.3.0"
 play-services-maps = "18.2.0"
 
+pods-google-maps = "9.1.1"
+pods-google-ios-maps-utils = "6.0.0"
+
 timber = "5.0.1"
 
-room = "2.6.1"
+room = "2.8.4"
+sqlite = "2.6.2"
 
-datstore = "1.0.0"
+datstore = "1.2.0"
 
 paging = "3.2.0"
+pagingCommonVersion = "3.3.0-alpha02-0.4.0"
 
 accompanist-permissions = "0.31.5-beta"
 
 #plugin
-android-gradle = "8.3.0"
-kotlin = "1.9.0"
+android-gradle = "8.6.0"
+kotlin = "2.2.21"
 maps-secret = "2.0.1"
+ksp = "2.2.21-2.0.4"
 
 #chart
 vico = "2.0.0-alpha.12"
+vico2 = "2.3.6"
+
+compose-multiplatform = "1.7.0"
+jetbrains-backhandler = "1.8.2"
+compose-plugin = "1.8.2"
+filekit = "0.12.0"
+
+#koin
+koin-annotations = "2.3.1"
+koin-bom = "4.1.1"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -51,6 +72,8 @@ androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graph
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
+#multiplatform compose
+
 #compose test
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
@@ -67,19 +90,19 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
+jetBrains-lifecycle = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jetBrains-lifecycle" }
 
 #Timber
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 #navigation
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
-
-#hilt
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+multiplatform-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "multiplatform-navigation" }
 
 #room
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -88,10 +111,16 @@ androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "ro
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin-bom" }
 
 #datastore
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datstore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datstore" }
 
 #coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
 
 #maps
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "maps-compose" }
@@ -101,6 +130,7 @@ play-services-maps = { module = "com.google.android.gms:play-services-maps", ver
 #paging
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingCommonVersion" }
 
 #accompanist
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
@@ -110,10 +140,45 @@ vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 
+vico-multiplatform = { group = "com.patrykandpatrick.vico", name = "multiplatform", version.ref = "vico2" }
+vico-multiplatform-m3 = { group = "com.patrykandpatrick.vico", name = "multiplatform-m3", version.ref = "vico2" }
+
+#multiplatforms
+
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version.ref = "compose-multiplatform" }
+compose-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "jetbrains-backhandler" }
+
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
+
+#koin
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+koin-compose-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
 jetbrains-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 maps-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "maps-secret" }
-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
+
+#multiplatform
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
