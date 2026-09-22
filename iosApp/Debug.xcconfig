@@ -1,0 +1,14 @@
+//
+//  Secrets.xcconfig
+//  run-track
+//
+//  Created by Prem Thakur on 01/02/26.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+// 1. Include the Pods defaults (Standard Path)
+#include "Pods/Target Support Files/Pods-run-track/Pods-run-track.debug.xcconfig"
+
+// 2. Include your secrets
+#include "Secrets.xcconfig"

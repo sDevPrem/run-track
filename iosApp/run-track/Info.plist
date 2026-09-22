@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>GoogleMapsApiKey</key>
+	<string>$(MAPS_API_KEY)</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to track your runs.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to track your runs in the background.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to track your runs in the background.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
+</dict>
+</plist>

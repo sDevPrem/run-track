@@ -1,0 +1,32 @@
+# macOS system files
+.DS_Store
+
+# Xcode User settings (Personal config that shouldn't be shared)
+*.users/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+
+# Xcode Build generated files
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+Packages/
+.swiftpm/
+
+# CocoaPods
+# We ignore the actual Pods source code, but keep the Podfile.lock
+# to ensure the team uses the exact same library versions.
+Pods/
+
+# Kotlin Multiplatform Integration
+# If you are embedding the framework manually or via script,
+# you generally want to ignore the compiled framework artifact.
+*.framework
+*.dSYM
